@@ -2,6 +2,7 @@ import { useLaunch } from '../state/LaunchContext.jsx';
 import PlaybookView from './PlaybookView.jsx';
 import FunnelView from './FunnelView.jsx';
 import LinksView from './LinksView.jsx';
+import DatesView from './DatesView.jsx';
 
 export default function LivePanel() {
   const { livePanelView, setLivePanelView } = useLaunch();
@@ -11,7 +12,7 @@ export default function LivePanel() {
       className="card"
       style={{ position: 'sticky', top: 16, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto' }}
     >
-      <header className="flex items-center justify-between mb-3 gap-2">
+      <header className="flex items-center justify-between mb-3 gap-2 flex-wrap">
         <h3 className="font-display text-lg text-brand-navy">Live build</h3>
         <div
           className="inline-flex items-center"
@@ -26,12 +27,16 @@ export default function LivePanel() {
           <ToggleBtn active={livePanelView === 'links'} onClick={() => setLivePanelView('links')}>
             Links
           </ToggleBtn>
+          <ToggleBtn active={livePanelView === 'dates'} onClick={() => setLivePanelView('dates')}>
+            Dates
+          </ToggleBtn>
         </div>
       </header>
 
       {livePanelView === 'playbook' && <PlaybookView />}
       {livePanelView === 'funnel' && <FunnelView />}
       {livePanelView === 'links' && <LinksView />}
+      {livePanelView === 'dates' && <DatesView />}
     </aside>
   );
 }

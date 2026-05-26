@@ -93,6 +93,7 @@ export const taskConfig = {
     inputType: 'date',
     helper: 'Optional: a registration deadline that creates urgency. Leave blank if you don’t want one.',
     playbookField: 'bookIt.registrationDeadline',
+    dateLabel: 'Registration Deadline',
   },
   'mbymi-03-3': {
     inputType: 'text',
@@ -114,15 +115,49 @@ export const taskConfig = {
   },
 
   // ---- Chunk It (mostly internal scheduling — acknowledge) ----------------
-  'mbymi-04-1': { inputType: 'acknowledge', helper: 'Reserved time for the post-launch debrief.' },
-  'mbymi-04-2': { inputType: 'acknowledge', helper: 'Reserved time for close day execution.' },
-  'mbymi-04-3': { inputType: 'acknowledge', helper: 'Reserved time for the 4-day follow-up sequence.' },
-  'mbymi-04-4': { inputType: 'acknowledge', helper: 'Reserved time for webinars (optional).' },
-  'mbymi-04-5': { inputType: 'acknowledge', helper: 'Reserved time for the flash sale email push.' },
+  'mbymi-04-1': {
+    inputType: 'date',
+    helper: 'Reserve your date for the post-launch debrief.',
+    dateLabel: 'Launch Debrief',
+  },
+  'mbymi-04-2': {
+    inputType: 'date',
+    helper: 'Reserve your close day — when the cart closes for new founders.',
+    dateLabel: 'Close Day',
+  },
+  'mbymi-04-3': {
+    inputType: 'date',
+    helper: 'Reserve the start of your 4-day follow-up sequence.',
+    dateLabel: '4-Day Follow-Up Starts',
+  },
+  'mbymi-04-4': {
+    inputType: 'date',
+    helper: 'Reserve your webinar day (optional — skip with a blank date).',
+    dateLabel: 'Webinar Day',
+  },
+  'mbymi-04-5': {
+    inputType: 'date',
+    helper: 'Reserve the day(s) you’ll send the flash-sale email push.',
+    dateLabel: 'Flash Sale Day',
+  },
   'mbymi-04-6': { inputType: 'acknowledge', helper: 'Reserved time to design the payment + delivery process.' },
-  'mbymi-04-7': { inputType: 'acknowledge', helper: 'Reserved time to draft your product outline.' },
+  'mbymi-04-7': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Sketch your product outline — modules, lessons, sequence…',
+    helper: 'Doesn’t need to be perfect — a rough outline now is enough to start selling.',
+    aiBot: { name: 'Outline Bot', url: '' },
+    playbookField: 'product.outlineDraft',
+  },
   'mbymi-04-8': { inputType: 'acknowledge', helper: 'Reserved time to plan your priority-waitlist promotion.' },
-  'mbymi-04-9': { inputType: 'acknowledge', helper: 'Reserved time to write the priority-waitlist follow-up emails.' },
+  'mbymi-04-9': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft the priority-waitlist follow-up emails (broad strokes)…',
+    helper: 'A draft of the emails that nurture the waitlist after they sign up. You can refine in the Nurture phase.',
+    aiBot: { name: 'Email Bot', url: '' },
+    playbookField: 'waitlistSequence.draft',
+  },
   'mbymi-04-10': { inputType: 'acknowledge', helper: 'Reserved time for the optional Facebook group setup.' },
   'mbymi-04-11': { inputType: 'acknowledge', helper: 'Reserved time to design the priority-list opt-in page.' },
 
@@ -256,7 +291,13 @@ export const taskConfig = {
   'mbymi-10-1': { inputType: 'note', placeholder: 'Checkout page URL (optional)', helper: 'External build — Kajabi / your checkout.', linkLabel: 'Checkout Page' },
   'mbymi-10-2': { inputType: 'note', placeholder: 'Thank-you page URL (optional)', helper: 'Confirms purchase and sets the first step.', linkLabel: 'Post-Purchase Thank You' },
   'mbymi-10-3': { inputType: 'note', placeholder: 'Portal URL (optional)', helper: 'Where members go to access the program.', linkLabel: 'Member Portal' },
-  'mbymi-10-4': { inputType: 'note', placeholder: 'Sales page URL (optional)', helper: 'The main page that does the convincing.', linkLabel: 'Sales Page' },
+  'mbymi-10-4': {
+    inputType: 'note',
+    placeholder: 'Sales page URL (optional)',
+    helper: 'The main page that does the convincing. Use the AI bot to draft sales-page copy, then drop the published URL here.',
+    linkLabel: 'Sales Page',
+    aiBot: { name: 'Sales Page Bot', url: '' },
+  },
   'mbymi-10-5': { inputType: 'acknowledge', helper: 'Test the full purchase flow with a $1 test charge before launch.' },
 
   // ---- Flash Sale ---------------------------------------------------------

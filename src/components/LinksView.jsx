@@ -89,10 +89,17 @@ export default function LinksView() {
                 >
                   {l.url}
                 </a>
-                <div className="mt-1.5 flex items-center gap-3 text-[0.7rem]">
+                <div className="mt-2 flex items-center gap-2 text-[0.7rem]">
                   <button
                     onClick={() => copy(l.url)}
-                    className="font-semibold uppercase tracking-wider text-brand-navy/70 hover:text-brand-pink"
+                    className="inline-flex items-center gap-1 font-semibold uppercase tracking-wider transition-colors"
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: 999,
+                      background: copiedUrl === l.url ? '#83CCBD' : '#E1228C',
+                      color: copiedUrl === l.url ? '#1D203F' : '#fff',
+                      border: 'none',
+                    }}
                   >
                     {copiedUrl === l.url ? '✓ Copied' : '📋 Copy'}
                   </button>
@@ -100,16 +107,22 @@ export default function LinksView() {
                     href={l.url}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="font-semibold uppercase tracking-wider text-brand-navy/70 hover:text-brand-pink"
+                    className="inline-flex items-center gap-1 font-semibold uppercase tracking-wider"
+                    style={{
+                      padding: '6px 12px',
+                      borderRadius: 999,
+                      background: 'rgba(29,32,63,0.08)',
+                      color: '#1D203F',
+                    }}
                   >
                     ↗ Open
                   </a>
                   <button
                     onClick={() => jumpToPhase(l.process)}
-                    className="font-semibold uppercase tracking-wider text-brand-navy/70 hover:text-brand-pink ml-auto"
+                    className="font-semibold uppercase tracking-wider text-brand-navy/55 hover:text-brand-pink ml-auto"
                     title="Edit this step"
                   >
-                    Edit
+                    ✎ Edit
                   </button>
                 </div>
               </li>

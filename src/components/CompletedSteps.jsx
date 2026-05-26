@@ -3,14 +3,21 @@ import { getTaskConfig } from '../data/mbymiTaskConfig.js';
 import { formatCurrency, formatDateShort, formatNumber } from '../lib/format.js';
 
 export default function CompletedSteps() {
-  const { completedTasksInCurrentPhase, uncompleteTask } = useLaunch();
+  const { completedTasksInCurrentPhase, tasksByPhase, currentPhase, uncompleteTask } = useLaunch();
 
   if (completedTasksInCurrentPhase.length === 0) return null;
+
+  // Position within the current phase (1-indexed) for the label. The phase's
+  // task list is already sorted by order, so the local step number matches
+  // what the StepCard shows ("Step 5 of 9 · PLAN").
+  const phaseTasks = tasksByPhase[currentPhase.id] ?? [];
+  const localStepNumber = (taskId) => phaseTasks.findIndex((p) => p.id === taskId) + 1;
 
   return (
     <div className="space-y-2">
       {completedTasksInCurrentPhase.map((t) => {
         const config = getTaskConfig(t.id);
+        const stepNum = localStepNumber(t.id);
         return (
           <div
             key={t.id}
@@ -39,7 +46,7 @@ export default function CompletedSteps() {
 
             <div className="flex-1 min-w-0">
               <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/60">
-                Step · {t.process}
+                Step {stepNum} · {t.process}
               </div>
               <div className="font-semibold text-brand-navy mt-0.5 truncate">{t.title}</div>
               <div className="text-sm text-brand-navy/70 mt-0.5">

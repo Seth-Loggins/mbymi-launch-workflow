@@ -16,11 +16,11 @@
 }
 
 @layer base {
-  html,
-  body,
-  #root {
-    height: 100%;
-  }
+  /* Intentionally NOT pinning html/body/#root to height: 100%. When the app is
+     embedded in an iframe (e.g. Kajabi), pinning to 100% would lock body's
+     scrollHeight to the iframe's height and prevent the auto-resize bridge
+     from shrinking the iframe back down when content gets shorter. The
+     Dashboard's outer wrapper uses min-h-screen for standalone use. */
 
   body {
     @apply bg-brand-paper text-brand-navy font-sans antialiased;

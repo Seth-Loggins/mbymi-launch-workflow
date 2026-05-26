@@ -127,31 +127,44 @@ export default function PlaybookView() {
         </div>
       </Section>
 
-      <Section
-        title="Key dates"
-        filled={
-          launch.dates?.listBuildingStart || launch.dates?.webinarDay || launch.dates?.closeDay || regDeadline
-        }
-      >
-        <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm text-brand-navy">
-          <div className="text-brand-navy/60">List building starts</div>
-          <div className="font-semibold text-right">
-            {launch.dates?.listBuildingStart ? formatDateShort(launch.dates.listBuildingStart) : <Empty>—</Empty>}
-          </div>
-          <div className="text-brand-navy/60">Registration deadline</div>
-          <div className="font-semibold text-right">
-            {regDeadline ? formatDateShort(regDeadline) : <Empty>—</Empty>}
-          </div>
-          <div className="text-brand-navy/60">Webinar day</div>
-          <div className="font-semibold text-right">
-            {launch.dates?.webinarDay ? formatDateShort(launch.dates.webinarDay) : <Empty>—</Empty>}
-          </div>
-          <div className="text-brand-navy/60">Close day</div>
-          <div className="font-semibold text-right">
-            {launch.dates?.closeDay ? formatDateShort(launch.dates.closeDay) : <Empty>—</Empty>}
-          </div>
-        </div>
-      </Section>
+      {(() => {
+        const debrief = answerOf(tasks, 'mbymi-04-1');
+        const closeDay = answerOf(tasks, 'mbymi-04-2');
+        const followUp = answerOf(tasks, 'mbymi-04-3');
+        const webinar = answerOf(tasks, 'mbymi-04-4');
+        const flashSale = answerOf(tasks, 'mbymi-04-5');
+        const filled = regDeadline || debrief || closeDay || followUp || webinar || flashSale;
+        return (
+          <Section title="Key dates" filled={filled}>
+            <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm text-brand-navy">
+              <div className="text-brand-navy/60">Registration deadline</div>
+              <div className="font-semibold text-right">
+                {regDeadline ? formatDateShort(regDeadline) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Flash sale day</div>
+              <div className="font-semibold text-right">
+                {flashSale ? formatDateShort(flashSale) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Webinar day</div>
+              <div className="font-semibold text-right">
+                {webinar ? formatDateShort(webinar) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">4-day follow-up starts</div>
+              <div className="font-semibold text-right">
+                {followUp ? formatDateShort(followUp) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Close day</div>
+              <div className="font-semibold text-right" style={{ color: '#E1228C' }}>
+                {closeDay ? formatDateShort(closeDay) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Launch debrief</div>
+              <div className="font-semibold text-right">
+                {debrief ? formatDateShort(debrief) : <Empty>—</Empty>}
+              </div>
+            </div>
+          </Section>
+        );
+      })()}
 
       <Section title="Map It · Momentum + Announcement" filled={momentum || announcement}>
         <div className="space-y-2">
