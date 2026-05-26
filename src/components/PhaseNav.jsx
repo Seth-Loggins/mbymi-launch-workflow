@@ -33,7 +33,7 @@ export default function PhaseNav() {
           <span className="font-display tracking-wider text-sm">Launch Workflow</span>
         </div>
 
-        <nav className="flex items-center gap-2 flex-1 overflow-x-auto">
+        <nav className="flex items-center gap-2 flex-1 flex-wrap">
           {phases.map((p, i) => {
             const stats = phaseStats[p.id];
             const unlocked = isPhaseUnlocked(p.id);

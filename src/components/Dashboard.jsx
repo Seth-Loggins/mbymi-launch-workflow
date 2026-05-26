@@ -25,12 +25,14 @@ export default function Dashboard() {
 
         <PhaseIntro phase={currentPhase} />
 
+        {/* Always two columns on desktop — md: (768px+) is wide enough for both
+            sides to be useful. Drops to stacked single-column only on phones. */}
         <div className="grid grid-cols-12 gap-6 mt-5">
-          <div className="col-span-12 lg:col-span-7 space-y-4">
+          <div className="col-span-12 md:col-span-7 space-y-4">
             <CompletedSteps />
             <StepCard />
           </div>
-          <div className="col-span-12 lg:col-span-5">
+          <div className="col-span-12 md:col-span-5">
             <LivePanel />
           </div>
         </div>
