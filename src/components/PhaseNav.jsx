@@ -37,7 +37,7 @@ export default function PhaseNav() {
       >
         {/* Brand */}
         <div
-          className="shrink-0 inline-flex items-center font-bold uppercase tracking-wider"
+          className="shrink-0 inline-flex items-center font-bold uppercase tracking-wider whitespace-nowrap"
           style={{
             background: '#E1228C',
             color: '#fff',
@@ -46,9 +46,9 @@ export default function PhaseNav() {
             fontSize: '0.7rem',
             letterSpacing: '0.08em',
           }}
-          title="MBYMI Launch Workflow"
+          title="MBYMI AI Assisted Workflow"
         >
-          MBYMI
+          MBYMI AI Assisted Workflow
         </div>
 
         {/* Phase nav */}
@@ -81,9 +81,9 @@ export default function PhaseNav() {
           <IconButton
             onClick={openAILibrary}
             icon="🤖"
-            label="AI"
+            label="AI Hub"
             accent="#F89A2A"
-            title="AI Library — all bots in one place"
+            title="AI Hub — all bots in one place"
           />
           <IconButton
             onClick={openMetricsDrawer}

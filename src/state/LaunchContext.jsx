@@ -109,6 +109,14 @@ export function LaunchProvider({ children }) {
   const [debriefDraft, setDebriefDraft] = useState(newDebriefDraft);
   const [debriefHistory, setDebriefHistory] = useState([]);
   const [workflowComplete, setWorkflowComplete] = useState(false);
+  // gateStep: 'welcome' → 'name-launch' → 'workflow'. Lets us run a 2-step
+  // intro flow without persisting auth state (no backend yet).
+  const [gateStep, setGateStep] = useState('welcome');
+  // userMode is 'demo' | 'google' | null — set when the user picks an entry
+  // point from the welcome modal. Currently informational only; later we'll
+  // hang real Google OAuth off the 'google' branch.
+  const [userMode, setUserMode] = useState(null);
+  const [userName, setUserName] = useState('');
 
   /* ---------- mutations ------------------------------------------------ */
 
@@ -229,6 +237,35 @@ export function LaunchProvider({ children }) {
 
   const dismissCelebration = useCallback(() => setWorkflowComplete(false), []);
 
+  /* ---- intro flow ---------------------------------------------------- */
+
+  const enterAsDemo = useCallback(() => {
+    setUserMode('demo');
+    setUserName('Demo user');
+    setGateStep('name-launch');
+  }, []);
+
+  const enterAsGoogle = useCallback((name = '') => {
+    // Stubbed for now — real OAuth wiring slots in here later.
+    setUserMode('google');
+    setUserName(name || 'Google user');
+    setGateStep('name-launch');
+  }, []);
+
+  const finishNamingLaunch = useCallback(
+    (name) => {
+      if (typeof name === 'string') {
+        setLaunch((prev) => ({ ...prev, offerName: name.trim() }));
+      }
+      setGateStep('workflow');
+    },
+    [],
+  );
+
+  const reopenWelcome = useCallback(() => {
+    setGateStep('welcome');
+  }, []);
+
   const resetLaunch = useCallback(() => {
     setLaunch(EMPTY_LAUNCH);
     setTasks(freshTasks());
@@ -241,6 +278,10 @@ export function LaunchProvider({ children }) {
     setDebriefDraft(newDebriefDraft());
     setDebriefHistory([]);
     setWorkflowComplete(false);
+    // Re-run the intro flow on full reset.
+    setGateStep('welcome');
+    setUserMode(null);
+    setUserName('');
   }, []);
 
   /* ---------- derived selectors ---------------------------------------- */
@@ -327,6 +368,9 @@ export function LaunchProvider({ children }) {
       debriefDraft,
       debriefHistory,
       workflowComplete,
+      gateStep,
+      userMode,
+      userName,
 
       // static-ish
       phases: mbymiPhases,
@@ -368,6 +412,10 @@ export function LaunchProvider({ children }) {
       removeLandingPage,
       saveDebrief,
       dismissCelebration,
+      enterAsDemo,
+      enterAsGoogle,
+      finishNamingLaunch,
+      reopenWelcome,
       resetLaunch,
     }),
     [
@@ -382,6 +430,9 @@ export function LaunchProvider({ children }) {
       debriefDraft,
       debriefHistory,
       workflowComplete,
+      gateStep,
+      userMode,
+      userName,
       tasksByPhase,
       phaseStats,
       currentPhase,
@@ -413,6 +464,10 @@ export function LaunchProvider({ children }) {
       removeLandingPage,
       saveDebrief,
       dismissCelebration,
+      enterAsDemo,
+      enterAsGoogle,
+      finishNamingLaunch,
+      reopenWelcome,
       resetLaunch,
     ],
   );

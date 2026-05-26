@@ -8,9 +8,13 @@ import MetricsDrawer from './MetricsDrawer.jsx';
 import AIBotModal from './AIBotModal.jsx';
 import AILibraryDrawer from './AILibraryDrawer.jsx';
 import WorkflowComplete from './WorkflowComplete.jsx';
+import DebriefView from './DebriefView.jsx';
+import DebriefSummary from './DebriefSummary.jsx';
+import WelcomeGate from './WelcomeGate.jsx';
 
 export default function Dashboard() {
-  const { launch, setOfferName, currentPhase, resetLaunch } = useLaunch();
+  const { launch, setOfferName, currentPhase, currentTask, resetLaunch } = useLaunch();
+  const onDebriefStep = currentTask?.id === 'mbymi-15-1';
 
   function handleReset() {
     if (window.confirm('Reset launch? This clears all answers, tasks, and metrics.')) {
@@ -29,21 +33,53 @@ export default function Dashboard() {
 
         {/* Always two columns on desktop — md: (768px+) is wide enough for both
             sides to be useful. Drops to stacked single-column only on phones. */}
-        <div className="grid grid-cols-12 gap-6 mt-5">
-          <div className="col-span-12 md:col-span-7 space-y-4">
-            <CompletedSteps />
-            <StepCard />
+        {onDebriefStep ? (
+          /* Debrief mode: form left, live summary right. Tabs are hidden — the
+             whole right column is dedicated to the read-only mirror so the user
+             can see everything they've entered at a glance while filling in. */
+          <div className="grid grid-cols-12 gap-6 mt-5">
+            <div className="col-span-12 md:col-span-7">
+              <DebriefStepHeader />
+              <div className="mt-4">
+                <DebriefView />
+              </div>
+            </div>
+            <div
+              className="col-span-12 md:col-span-5"
+              style={{
+                position: 'sticky',
+                top: 16,
+                alignSelf: 'flex-start',
+                maxHeight: 'calc(100vh - 32px)',
+                overflowY: 'auto',
+              }}
+            >
+              <div
+                className="card"
+                style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(2px)' }}
+              >
+                <DebriefSummary />
+              </div>
+            </div>
           </div>
-          <div className="col-span-12 md:col-span-5">
-            <LivePanel />
+        ) : (
+          <div className="grid grid-cols-12 gap-6 mt-5">
+            <div className="col-span-12 md:col-span-7 space-y-4">
+              <CompletedSteps />
+              <StepCard />
+            </div>
+            <div className="col-span-12 md:col-span-5">
+              <LivePanel />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       <MetricsDrawer />
       <AILibraryDrawer />
       <AIBotModal />
       <WorkflowComplete />
+      <WelcomeGate />
     </div>
   );
 }
@@ -95,6 +131,48 @@ function LaunchTitle({ launch, setOfferName, onReset }) {
       <button onClick={onReset} className="btn-ghost shrink-0">
         Reset
       </button>
+    </div>
+  );
+}
+
+function DebriefStepHeader() {
+  const { currentPhase, phaseStepIndex, phaseStats, currentTask, openBot } = useLaunch();
+  const stats = phaseStats[currentPhase.id];
+
+  return (
+    <div className="card" style={{ background: '#1D203F', color: '#fff' }}>
+      <div className="flex items-center gap-2 mb-2 flex-wrap">
+        <span className="chip bg-brand-pink text-white">
+          Step {phaseStepIndex} of {stats.total} · {currentPhase.label}
+        </span>
+        <span className="chip bg-white/10 text-white">{currentTask.process}</span>
+      </div>
+      <h2 className="font-display tracking-wide" style={{ fontSize: '1.6rem', lineHeight: 1.1 }}>
+        Launch debrief
+      </h2>
+      <p className="mt-2 text-white/75 text-sm max-w-2xl">
+        Fill in the structured debrief below. The right side mirrors back what you've entered. Hit{' '}
+        <span className="font-semibold">Save Debrief</span> at the bottom to finish the workflow.
+      </p>
+      <div className="mt-4">
+        <button
+          type="button"
+          onClick={() => openBot(currentTask.id)}
+          className="inline-flex items-center gap-2 font-bold uppercase tracking-wider"
+          style={{
+            padding: '8px 16px',
+            borderRadius: 'var(--radius-md)',
+            background: '#F89A2A',
+            color: '#1D203F',
+            border: 'none',
+            fontSize: '0.72rem',
+            letterSpacing: '0.06em',
+            boxShadow: '0 4px 12px rgba(248,154,42,0.30)',
+          }}
+        >
+          🤖 AI Assist
+        </button>
+      </div>
     </div>
   );
 }

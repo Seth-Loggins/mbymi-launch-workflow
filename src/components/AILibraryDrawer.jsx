@@ -81,7 +81,7 @@ export default function AILibraryDrawer() {
         <header className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink">
-              AI Library
+              AI Hub
             </div>
             <h2 className="font-display text-2xl text-brand-navy">All your launch bots</h2>
           </div>
