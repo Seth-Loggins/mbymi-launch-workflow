@@ -74,29 +74,11 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
 
   return (
     <div className="card" style={{ background: '#1D203F', color: '#fff' }}>
-      <div className="flex items-start justify-between gap-3 mb-3">
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="chip bg-brand-pink text-white">
-            Step {phaseStepIndex} of {stats.total} · {phase.label}
-          </span>
-          <span className="chip bg-white/10 text-white">{task.process}</span>
-        </div>
-        {config.aiBot && (
-          <button
-            onClick={() => onOpenBot(task.id)}
-            className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider"
-            style={{
-              padding: '6px 12px',
-              borderRadius: 999,
-              background: 'rgba(225,34,140,0.18)',
-              border: '1px solid rgba(225,34,140,0.5)',
-              color: '#fff',
-            }}
-            title={`Open ${config.aiBot.name}`}
-          >
-            <span>🤖</span> AI Assist
-          </button>
-        )}
+      <div className="flex items-center gap-2 mb-3 flex-wrap">
+        <span className="chip bg-brand-pink text-white">
+          Step {phaseStepIndex} of {stats.total} · {phase.label}
+        </span>
+        <span className="chip bg-white/10 text-white">{task.process}</span>
       </div>
 
       <h2 className="font-display tracking-wide" style={{ fontSize: '1.85rem', lineHeight: 1.15 }}>
@@ -162,7 +144,7 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
         </div>
       )}
 
-      <div className="mt-5 flex items-center gap-3">
+      <div className="mt-5 flex items-center gap-3 flex-wrap">
         <button
           className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={handleContinue}
@@ -170,7 +152,29 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
         >
           {config.inputType === 'acknowledge' ? 'Mark complete →' : 'Continue →'}
         </button>
-        <span className="text-xs text-white/50">
+
+        {config.aiBot && (
+          <button
+            type="button"
+            onClick={() => onOpenBot(task.id)}
+            className="inline-flex items-center gap-2 font-bold uppercase tracking-wider transition-transform hover:-translate-y-0.5"
+            style={{
+              padding: '10px 18px',
+              borderRadius: 'var(--radius-md)',
+              background: '#F89A2A',
+              color: '#1D203F',
+              border: 'none',
+              fontSize: '0.78rem',
+              letterSpacing: '0.06em',
+              boxShadow: '0 6px 18px rgba(248,154,42,0.30)',
+            }}
+            title={`Open ${config.aiBot.name}`}
+          >
+            <span style={{ fontSize: '1rem' }}>🤖</span> AI Assist
+          </button>
+        )}
+
+        <span className="text-xs text-white/50 ml-auto">
           {config.inputType === 'text' && config.minChars
             ? `${draftCharCount(draft)}/${config.minChars} chars`
             : ''}

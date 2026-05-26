@@ -140,7 +140,11 @@ export const taskConfig = {
     helper: 'Reserve the day(s) you’ll send the flash-sale email push.',
     dateLabel: 'Flash Sale Day',
   },
-  'mbymi-04-6': { inputType: 'acknowledge', helper: 'Reserved time to design the payment + delivery process.' },
+  'mbymi-04-6': {
+    inputType: 'date',
+    helper: 'Reserve the day(s) you’ll wire up the payment + delivery process.',
+    dateLabel: 'Payment + Delivery Setup',
+  },
   'mbymi-04-7': {
     inputType: 'text',
     minChars: 30,
@@ -149,7 +153,11 @@ export const taskConfig = {
     aiBot: { name: 'Outline Bot', url: '' },
     playbookField: 'product.outlineDraft',
   },
-  'mbymi-04-8': { inputType: 'acknowledge', helper: 'Reserved time to plan your priority-waitlist promotion.' },
+  'mbymi-04-8': {
+    inputType: 'date',
+    helper: 'Reserve the day you’ll kick off your priority-waitlist promotion.',
+    dateLabel: 'Priority Waitlist Promotion Starts',
+  },
   'mbymi-04-9': {
     inputType: 'text',
     minChars: 30,
@@ -158,21 +166,31 @@ export const taskConfig = {
     aiBot: { name: 'Email Bot', url: '' },
     playbookField: 'waitlistSequence.draft',
   },
-  'mbymi-04-10': { inputType: 'acknowledge', helper: 'Reserved time for the optional Facebook group setup.' },
-  'mbymi-04-11': { inputType: 'acknowledge', helper: 'Reserved time to design the priority-list opt-in page.' },
+  'mbymi-04-10': {
+    inputType: 'date',
+    helper: 'Reserve the day you’ll set up the optional Facebook group (skip with a blank date).',
+    dateLabel: 'Facebook Group Setup',
+  },
+  'mbymi-04-11': {
+    inputType: 'date',
+    helper: 'Reserve the day you’ll build the early-interest priority-list opt-in page.',
+    dateLabel: 'Priority Opt-in Page Build',
+  },
 
   // ---- Priority Waitlist Registration -------------------------------------
   'mbymi-05-1': {
     inputType: 'note',
     placeholder: 'Paste your opt-in page URL (optional)',
-    helper: 'External build in Kajabi/your funnel tool — mark complete when the opt-in page is live.',
+    helper: 'External build in Kajabi/your funnel tool — use the AI bot for the opt-in page copy, then drop the live URL here.',
     linkLabel: 'Priority Waitlist Opt-in Page',
+    aiBot: { name: 'Opt-in Page Bot', url: '' },
   },
   'mbymi-05-2': {
     inputType: 'note',
     placeholder: 'Paste your thank-you page URL (optional)',
-    helper: 'The page they land on after opting in — confirms expectations and sets the next step.',
+    helper: 'The page they land on after opting in. Use the AI bot for the copy, then drop the URL.',
     linkLabel: 'Waitlist Thank-You Page',
+    aiBot: { name: 'Thank-You Page Bot', url: '' },
   },
   'mbymi-05-3': {
     inputType: 'acknowledge',

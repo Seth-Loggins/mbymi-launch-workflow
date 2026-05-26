@@ -36,13 +36,57 @@ export default function LinksView() {
   const filled = linkSlots.filter((l) => l.url);
   const empty = linkSlots.filter((l) => !l.url);
 
-  function copy(url) {
-    if (!url) return;
-    if (navigator.clipboard?.writeText) {
-      navigator.clipboard.writeText(url).catch(() => {});
+  // Copy with a real fallback path. The modern Clipboard API silently fails
+  // inside cross-origin iframes when the parent's Permissions Policy doesn't
+  // explicitly grant clipboard-write (this is Kajabi's default). We try the
+  // modern API first, fall back to a hidden textarea + document.execCommand,
+  // and only flip the UI to "✓ Copied" on confirmed success.
+  function fallbackCopy(text) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.top = '0';
+      ta.style.left = '0';
+      ta.style.opacity = '0';
+      ta.style.pointerEvents = 'none';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      ta.setSelectionRange(0, ta.value.length);
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch {
+      return false;
     }
+  }
+
+  function flagCopied(url) {
     setCopiedUrl(url);
     setTimeout(() => setCopiedUrl((current) => (current === url ? null : current)), 1500);
+  }
+
+  async function copy(url) {
+    if (!url) return;
+    // Try modern Clipboard API; await so we actually know if it worked.
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(url);
+        flagCopied(url);
+        return;
+      } catch {
+        // fall through to execCommand
+      }
+    }
+    if (fallbackCopy(url)) {
+      flagCopied(url);
+    } else {
+      // Last-ditch: select the URL in the address-bar-style anchor so the
+      // user can hit ⌘C themselves.
+      window.prompt('Copy link (⌘C / Ctrl+C):', url);
+    }
   }
 
   function jumpToPhase(processName) {
