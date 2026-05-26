@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
-import { formatCurrency } from '../lib/format.js';
+import DebriefStepCard from './DebriefStepCard.jsx';
 
 export default function StepCard() {
   const {
@@ -35,6 +35,11 @@ export default function StepCard() {
         )}
       </div>
     );
+  }
+
+  const currentTaskConfig = getTaskConfig(currentTask.id);
+  if (currentTaskConfig.inputType === 'debrief') {
+    return <DebriefStepCard task={currentTask} phase={currentPhase} phaseStepIndex={phaseStepIndex} phaseStats={phaseStats} />;
   }
 
   return (
@@ -87,6 +92,9 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
       {config.helper && (
         <p className="mt-2 text-white/70 text-sm max-w-2xl">{config.helper}</p>
       )}
+      <div className="mt-3">
+        <TrainingVideoLink url={config.videoUrl} />
+      </div>
 
       <div className="mt-5 max-w-2xl">
         <StepInput config={config} draft={draft} setDraft={setDraft} task={task} />
@@ -184,9 +192,44 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
   );
 }
 
+/* ---------- Training video link --------------------------------------- */
+
+function TrainingVideoLink({ url }) {
+  // Placeholder when no URL is configured. The user will swap in real video
+  // links via the `videoUrl` field in mbymiTaskConfig.js.
+  if (!url) {
+    return (
+      <div
+        className="inline-flex items-center gap-2 text-xs text-white/55"
+        title="Training video coming soon"
+      >
+        <span style={{ fontSize: '0.95rem' }}>📹</span>
+        <span className="italic">Training video coming soon</span>
+      </div>
+    );
+  }
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noreferrer noopener"
+      className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-white hover:text-brand-pink transition-colors"
+      style={{
+        background: 'rgba(255,255,255,0.10)',
+        padding: '6px 12px',
+        borderRadius: 999,
+        textDecoration: 'none',
+      }}
+    >
+      <span style={{ fontSize: '0.95rem' }}>📹</span>
+      Watch the training
+    </a>
+  );
+}
+
 /* ---------- input renderers per type ----------------------------------- */
 
-function StepInput({ config, draft, setDraft, task }) {
+function StepInput({ config, draft, setDraft }) {
   const baseInput = {
     className:
       'w-full bg-white/10 text-white placeholder-white/40 text-base outline-none transition focus:bg-white/15',
@@ -210,11 +253,7 @@ function StepInput({ config, draft, setDraft, task }) {
         />
       );
 
-    case 'number': {
-      const previewRevenue =
-        config.playbookField === 'offer.price' || config.playbookField === 'offer.foundingMembersTarget'
-          ? null // handled by playbook live panel; not previewed inline
-          : null;
+    case 'number':
       return (
         <div className="flex items-center gap-2">
           {config.prefix && (
@@ -235,10 +274,8 @@ function StepInput({ config, draft, setDraft, task }) {
           {config.unit && (
             <span className="text-sm uppercase tracking-wider text-white/60">{config.unit}</span>
           )}
-          {previewRevenue}
         </div>
       );
-    }
 
     case 'date':
       return (

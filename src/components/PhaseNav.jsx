@@ -11,6 +11,7 @@ export default function PhaseNav() {
     totalDone,
     totalTasks,
     openMetricsDrawer,
+    openAILibrary,
   } = useLaunch();
 
   const pct = Math.round(overallProgress * 100);
@@ -117,6 +118,20 @@ export default function PhaseNav() {
               />
             </div>
           </div>
+          <button
+            onClick={openAILibrary}
+            className="shrink-0 text-xs font-semibold uppercase tracking-wider"
+            style={{
+              padding: '8px 14px',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid rgba(248,154,42,0.5)',
+              background: 'rgba(248,154,42,0.18)',
+              color: '#F89A2A',
+            }}
+            title="All AI bots in one place"
+          >
+            🤖 AI Library
+          </button>
           <button
             onClick={openMetricsDrawer}
             className="shrink-0 text-xs font-semibold uppercase tracking-wider"

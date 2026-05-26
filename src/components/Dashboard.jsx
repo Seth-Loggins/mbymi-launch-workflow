@@ -6,6 +6,8 @@ import CompletedSteps from './CompletedSteps.jsx';
 import LivePanel from './LivePanel.jsx';
 import MetricsDrawer from './MetricsDrawer.jsx';
 import AIBotModal from './AIBotModal.jsx';
+import AILibraryDrawer from './AILibraryDrawer.jsx';
+import WorkflowComplete from './WorkflowComplete.jsx';
 
 export default function Dashboard() {
   const { launch, setOfferName, currentPhase, resetLaunch } = useLaunch();
@@ -39,7 +41,9 @@ export default function Dashboard() {
       </div>
 
       <MetricsDrawer />
+      <AILibraryDrawer />
       <AIBotModal />
+      <WorkflowComplete />
     </div>
   );
 }

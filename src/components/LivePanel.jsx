@@ -3,6 +3,7 @@ import PlaybookView from './PlaybookView.jsx';
 import FunnelView from './FunnelView.jsx';
 import LinksView from './LinksView.jsx';
 import DatesView from './DatesView.jsx';
+import DebriefView from './DebriefView.jsx';
 
 export default function LivePanel() {
   const { livePanelView, setLivePanelView } = useLaunch();
@@ -21,6 +22,9 @@ export default function LivePanel() {
           <ToggleBtn active={livePanelView === 'playbook'} onClick={() => setLivePanelView('playbook')}>
             Playbook
           </ToggleBtn>
+          <ToggleBtn active={livePanelView === 'debrief'} onClick={() => setLivePanelView('debrief')}>
+            Debrief
+          </ToggleBtn>
           <ToggleBtn active={livePanelView === 'funnel'} onClick={() => setLivePanelView('funnel')}>
             Funnel
           </ToggleBtn>
@@ -34,6 +38,7 @@ export default function LivePanel() {
       </header>
 
       {livePanelView === 'playbook' && <PlaybookView />}
+      {livePanelView === 'debrief' && <DebriefView />}
       {livePanelView === 'funnel' && <FunnelView />}
       {livePanelView === 'links' && <LinksView />}
       {livePanelView === 'dates' && <DatesView />}

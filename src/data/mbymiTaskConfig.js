@@ -26,6 +26,10 @@
 // `promptMetricsUpdate` (optional) — when true, completing this task prompts
 // the user to open the metrics drawer (good for milestone tasks like webinar
 // delivered, flash sale sent, close day, etc.).
+//
+// `videoUrl` (optional) — link to the training video for this step. When set,
+// the StepCard shows a "📹 Watch the training" link beneath the helper. Until
+// real URLs are added, every step shows a placeholder version of the link.
 
 export const taskConfig = {
   // ---- Dream It -----------------------------------------------------------
@@ -377,13 +381,9 @@ export const taskConfig = {
 
   // ---- Launch Debrief -----------------------------------------------------
   'mbymi-15-1': {
-    inputType: 'text',
-    minChars: 60,
-    placeholder: 'What worked, what didn’t, what you’d change next launch…',
-    helper: 'Be specific. The debrief is where the real learning compounds.',
-    example:
-      "Worked: the Day 4 stats email got highest CTR.\nDidn’t: launch list was 40% short — content cadence dropped in week 2.\nChange next time: pre-write all waitlist emails before launch week.",
-    playbookField: 'debrief.notes',
+    inputType: 'debrief',
+    helper:
+      "This is the big one. Fill out the structured debrief in the Debrief tab of the Live Build panel on the right — every section captures something you'll want next launch. Hit Save Debrief when you're done.",
     aiBot: { name: 'Debrief Bot', url: '' },
   },
 };

@@ -20,6 +20,77 @@ const EMPTY_METRICS = {
   webinarShowUpsActual: 0,
 };
 
+// The full structured debrief — every section the screenshot showed.
+function newDebriefDraft() {
+  return {
+    launchDetails: {
+      campaignName: '',
+      campaignStartDate: '',
+      promotionType: '',
+      audienceSegment: '',
+    },
+    offers: [newOffer()],
+    listAudience: {
+      totalRegistrants: '',
+      listSizeAtStart: '',
+      listSizeToday: '',
+      paidPercent: '',
+      organicPercent: '',
+      partnerPercent: '',
+      totalAdSpend: '',
+      costPerLead: '',
+    },
+    registrationAttendance: {
+      landingPages: [],
+      liveAttendees: '',
+      replayViews: '',
+      avgWatchTime: '',
+    },
+    emailPerformance: {
+      totalEmailsSent: '',
+      bestSubject: '',
+      bestOpenRate: '',
+      worstSubject: '',
+      worstOpenRate: '',
+    },
+    salesConversions: {
+      salesPageVisitors: '',
+      checkoutPageVisitors: '',
+      orderBumpRate: '',
+      upsellConversion: '',
+      downsellConversion: '',
+    },
+    lessonsLearned: {
+      whatWorked: '',
+      whatDidntWork: '',
+      biggestSurprise: '',
+      customerFeedback: '',
+      techIssues: '',
+      teamCapacity: '',
+      whatToTest: '',
+    },
+  };
+}
+
+function newOffer() {
+  return {
+    id: cryptoId(),
+    offerName: '',
+    paymentStructure: 'One-Time',
+    offerPrice: '',
+    unitsSold: '',
+  };
+}
+
+function newLandingPage() {
+  return { id: cryptoId(), label: '', url: '' };
+}
+
+function cryptoId() {
+  // Cheap unique id (good enough for client-side keys).
+  return `id-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
+}
+
 function freshTasks() {
   return mbymiTasks.map((t) => ({ ...t, done: false, answer: null }));
 }
@@ -34,6 +105,10 @@ export function LaunchProvider({ children }) {
   const [metricsOpen, setMetricsOpen] = useState(false);
   const [livePanelView, setLivePanelView] = useState('playbook'); // 'playbook' | 'funnel' | 'links'
   const [openBotForTaskId, setOpenBotForTaskId] = useState(null);
+  const [aiLibraryOpen, setAILibraryOpen] = useState(false);
+  const [debriefDraft, setDebriefDraft] = useState(newDebriefDraft);
+  const [debriefHistory, setDebriefHistory] = useState([]);
+  const [workflowComplete, setWorkflowComplete] = useState(false);
 
   /* ---------- mutations ------------------------------------------------ */
 
@@ -71,6 +146,89 @@ export function LaunchProvider({ children }) {
   const openBot = useCallback((taskId) => setOpenBotForTaskId(taskId), []);
   const closeBot = useCallback(() => setOpenBotForTaskId(null), []);
 
+  const openAILibrary = useCallback(() => setAILibraryOpen(true), []);
+  const closeAILibrary = useCallback(() => setAILibraryOpen(false), []);
+
+  /* ---- debrief actions ----------------------------------------------- */
+
+  const setDebriefField = useCallback((section, field, value) => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      [section]: { ...prev[section], [field]: value },
+    }));
+  }, []);
+
+  const setOfferField = useCallback((offerId, field, value) => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      offers: prev.offers.map((o) => (o.id === offerId ? { ...o, [field]: value } : o)),
+    }));
+  }, []);
+
+  const addOffer = useCallback(() => {
+    setDebriefDraft((prev) => ({ ...prev, offers: [...prev.offers, newOffer()] }));
+  }, []);
+
+  const removeOffer = useCallback((offerId) => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      offers: prev.offers.length <= 1 ? prev.offers : prev.offers.filter((o) => o.id !== offerId),
+    }));
+  }, []);
+
+  const setLandingPageField = useCallback((pageId, field, value) => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      registrationAttendance: {
+        ...prev.registrationAttendance,
+        landingPages: prev.registrationAttendance.landingPages.map((p) =>
+          p.id === pageId ? { ...p, [field]: value } : p,
+        ),
+      },
+    }));
+  }, []);
+
+  const addLandingPage = useCallback(() => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      registrationAttendance: {
+        ...prev.registrationAttendance,
+        landingPages: [...prev.registrationAttendance.landingPages, newLandingPage()],
+      },
+    }));
+  }, []);
+
+  const removeLandingPage = useCallback((pageId) => {
+    setDebriefDraft((prev) => ({
+      ...prev,
+      registrationAttendance: {
+        ...prev.registrationAttendance,
+        landingPages: prev.registrationAttendance.landingPages.filter((p) => p.id !== pageId),
+      },
+    }));
+  }, []);
+
+  const saveDebrief = useCallback(() => {
+    const snapshot = JSON.parse(JSON.stringify(debriefDraft));
+    const record = {
+      id: cryptoId(),
+      savedAt: new Date().toISOString(),
+      data: snapshot,
+    };
+    setDebriefHistory((prev) => [record, ...prev]);
+    // Mark the Launch Debrief task as complete (stash a "saved" marker as answer).
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === 'mbymi-15-1' ? { ...t, done: true, answer: 'debrief-saved' } : t,
+      ),
+    );
+    // Flag workflow complete — triggers the celebration card.
+    setWorkflowComplete(true);
+    return record;
+  }, [debriefDraft]);
+
+  const dismissCelebration = useCallback(() => setWorkflowComplete(false), []);
+
   const resetLaunch = useCallback(() => {
     setLaunch(EMPTY_LAUNCH);
     setTasks(freshTasks());
@@ -78,6 +236,11 @@ export function LaunchProvider({ children }) {
     setCurrentPhaseId(FIRST_PHASE_ID);
     setMetricsOpen(false);
     setLivePanelView('playbook');
+    setOpenBotForTaskId(null);
+    setAILibraryOpen(false);
+    setDebriefDraft(newDebriefDraft());
+    setDebriefHistory([]);
+    setWorkflowComplete(false);
   }, []);
 
   /* ---------- derived selectors ---------------------------------------- */
@@ -160,6 +323,10 @@ export function LaunchProvider({ children }) {
       metricsOpen,
       livePanelView,
       openBotForTaskId,
+      aiLibraryOpen,
+      debriefDraft,
+      debriefHistory,
+      workflowComplete,
 
       // static-ish
       phases: mbymiPhases,
@@ -190,6 +357,17 @@ export function LaunchProvider({ children }) {
       setLivePanelView,
       openBot,
       closeBot,
+      openAILibrary,
+      closeAILibrary,
+      setDebriefField,
+      setOfferField,
+      addOffer,
+      removeOffer,
+      setLandingPageField,
+      addLandingPage,
+      removeLandingPage,
+      saveDebrief,
+      dismissCelebration,
       resetLaunch,
     }),
     [
@@ -200,6 +378,10 @@ export function LaunchProvider({ children }) {
       metricsOpen,
       livePanelView,
       openBotForTaskId,
+      aiLibraryOpen,
+      debriefDraft,
+      debriefHistory,
+      workflowComplete,
       tasksByPhase,
       phaseStats,
       currentPhase,
@@ -220,6 +402,17 @@ export function LaunchProvider({ children }) {
       closeMetricsDrawer,
       openBot,
       closeBot,
+      openAILibrary,
+      closeAILibrary,
+      setDebriefField,
+      setOfferField,
+      addOffer,
+      removeOffer,
+      setLandingPageField,
+      addLandingPage,
+      removeLandingPage,
+      saveDebrief,
+      dismissCelebration,
       resetLaunch,
     ],
   );
