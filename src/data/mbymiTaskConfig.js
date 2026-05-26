@@ -1,0 +1,340 @@
+// Per-task metadata layered ON TOP of mbymiLaunch.js — keeps James's verbatim
+// task titles untouched while letting each step render with the right guided
+// input, helper text, example, and (optional) playbook contribution.
+//
+// `inputType` values:
+//   - 'text'        long-form textarea (chars: minimum length to continue)
+//   - 'number'      numeric value (e.g. price, count)
+//   - 'date'        date picker
+//   - 'acknowledge' no input; user just confirms they've done this external step
+//   - 'note'        optional short note + acknowledge (for execution tasks where
+//                   the user might want to leave a reminder)
+//
+// `playbookField` (optional) — which playbook section/field this answer feeds.
+// `unit`, `prefix`, `placeholder` — input affordances.
+// `helper` — short why-this-matters sentence under the heading.
+// `example` — pre-baked example expanded behind "See an example".
+// `minChars` — for text inputs only.
+//
+// `aiBot` (optional) — { name, url } — when present, the StepCard shows an
+// "AI" button that opens the Mindpal bot in a popup. Leave `url: ''` to keep
+// a "coming soon" placeholder until the real Mindpal embed URL is ready.
+//
+// `linkLabel` (optional) — for note-type tasks that capture a URL. Surfaces
+// the answer in the Links panel under this label.
+//
+// `promptMetricsUpdate` (optional) — when true, completing this task prompts
+// the user to open the metrics drawer (good for milestone tasks like webinar
+// delivered, flash sale sent, close day, etc.).
+
+export const taskConfig = {
+  // ---- Dream It -----------------------------------------------------------
+  'mbymi-01-1': {
+    inputType: 'number',
+    unit: 'people',
+    placeholder: 'e.g. 600',
+    helper:
+      "How many people do you need on the priority waitlist for this launch to work? Sets your conversion target.",
+    example:
+      'Most BBD members land between 300–1,500 depending on offer price. Higher price → smaller list needed.',
+    playbookField: 'targets.launchListTarget',
+  },
+  'mbymi-01-2': {
+    inputType: 'number',
+    prefix: '$',
+    placeholder: 'e.g. 497',
+    helper:
+      "The price you'll charge founding members. Lower price = more leads needed, higher price = bigger commitment.",
+    example: 'A common BBD founding-member range is $297 – $997 for a beta cohort.',
+    playbookField: 'offer.price',
+  },
+  'mbymi-01-3': {
+    inputType: 'number',
+    unit: 'members',
+    placeholder: 'e.g. 30',
+    helper: 'How many founders are you willing to take on? Caps your revenue and your delivery load.',
+    example: '20–50 is typical for a first beta — small enough to give real attention, big enough to learn from.',
+    playbookField: 'offer.foundingMembersTarget',
+  },
+
+  // ---- Map It -------------------------------------------------------------
+  'mbymi-02-1': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Describe how you will build momentum leading up to the offer announcement…',
+    helper: 'Phase 1 is the lead-up: content, conversations, warming up your audience before you mention the offer.',
+    example:
+      'Three weeks of weekly podcasts + daily IG stories around the core problem, hosting one free live Q&A to surface objections.',
+    playbookField: 'mapIt.momentumPlan',
+    aiBot: { name: 'Momentum Plan Bot', url: '' },
+  },
+  'mbymi-02-2': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Describe how you will announce the beta program…',
+    helper: 'Phase 2 is the public announcement that the beta exists and how to get on the waitlist.',
+    example:
+      'Hard pivot in week 4: dedicated podcast episode + email blast + IG live announcing the beta and pointing at the waitlist page.',
+    playbookField: 'mapIt.announcementPlan',
+    aiBot: { name: 'Announcement Bot', url: '' },
+  },
+
+  // ---- Book It ------------------------------------------------------------
+  'mbymi-03-1': {
+    inputType: 'text',
+    minChars: 20,
+    placeholder: 'What will you post, where, and how often to drive priority list signups?',
+    helper: 'Pin down the cadence and channels — vague plans become missed posts.',
+    example: '3 IG posts + 2 Stories per day, 1 podcast/week, daily email — for the 21 days leading into the launch.',
+    playbookField: 'bookIt.contentSchedule',
+    aiBot: { name: 'Content Calendar Bot', url: '' },
+  },
+  'mbymi-03-2': {
+    inputType: 'date',
+    helper: 'Optional: a registration deadline that creates urgency. Leave blank if you don’t want one.',
+    playbookField: 'bookIt.registrationDeadline',
+  },
+  'mbymi-03-3': {
+    inputType: 'text',
+    minChars: 20,
+    placeholder: 'List the follow-up announcement posts/emails leading up to launch…',
+    helper: 'The drumbeat after your initial announcement — these are what actually convert latecomers.',
+    example: 'Week-out email + 3-days-out email + cart-open email + 24-hours-left email + final-call email.',
+    playbookField: 'bookIt.followUpAnnouncements',
+    aiBot: { name: 'Promo Copy Bot', url: '' },
+  },
+  'mbymi-03-4': {
+    inputType: 'text',
+    minChars: 20,
+    placeholder: 'Sketch the initial announcement post/email that opens the launch…',
+    helper: 'The big "we’re doing this!" beat. Should name the offer, the promise, and the waitlist link.',
+    example: 'Email + IG post telling the origin story behind the beta and pointing to the waitlist with a clear CTA.',
+    playbookField: 'bookIt.initialAnnouncement',
+    aiBot: { name: 'Announcement Bot', url: '' },
+  },
+
+  // ---- Chunk It (mostly internal scheduling — acknowledge) ----------------
+  'mbymi-04-1': { inputType: 'acknowledge', helper: 'Reserved time for the post-launch debrief.' },
+  'mbymi-04-2': { inputType: 'acknowledge', helper: 'Reserved time for close day execution.' },
+  'mbymi-04-3': { inputType: 'acknowledge', helper: 'Reserved time for the 4-day follow-up sequence.' },
+  'mbymi-04-4': { inputType: 'acknowledge', helper: 'Reserved time for webinars (optional).' },
+  'mbymi-04-5': { inputType: 'acknowledge', helper: 'Reserved time for the flash sale email push.' },
+  'mbymi-04-6': { inputType: 'acknowledge', helper: 'Reserved time to design the payment + delivery process.' },
+  'mbymi-04-7': { inputType: 'acknowledge', helper: 'Reserved time to draft your product outline.' },
+  'mbymi-04-8': { inputType: 'acknowledge', helper: 'Reserved time to plan your priority-waitlist promotion.' },
+  'mbymi-04-9': { inputType: 'acknowledge', helper: 'Reserved time to write the priority-waitlist follow-up emails.' },
+  'mbymi-04-10': { inputType: 'acknowledge', helper: 'Reserved time for the optional Facebook group setup.' },
+  'mbymi-04-11': { inputType: 'acknowledge', helper: 'Reserved time to design the priority-list opt-in page.' },
+
+  // ---- Priority Waitlist Registration -------------------------------------
+  'mbymi-05-1': {
+    inputType: 'note',
+    placeholder: 'Paste your opt-in page URL (optional)',
+    helper: 'External build in Kajabi/your funnel tool — mark complete when the opt-in page is live.',
+    linkLabel: 'Priority Waitlist Opt-in Page',
+  },
+  'mbymi-05-2': {
+    inputType: 'note',
+    placeholder: 'Paste your thank-you page URL (optional)',
+    helper: 'The page they land on after opting in — confirms expectations and sets the next step.',
+    linkLabel: 'Waitlist Thank-You Page',
+  },
+  'mbymi-05-3': {
+    inputType: 'acknowledge',
+    helper: 'Verify the form pushes signups into your CRM with the right tag.',
+  },
+  'mbymi-05-4': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft your confirmation email here…',
+    helper: "Sent immediately after signup. Should confirm they’re in and tease what's coming.",
+    example:
+      "Subject: You're on the waitlist 🎉\nBody: Confirms their spot, sets the timeline for what they'll receive over the next X days, links to one piece of pillar content while they wait.",
+    playbookField: 'waitlistSequence.confirmation',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+
+  // ---- Facebook Group Creation --------------------------------------------
+  'mbymi-06-1': {
+    inputType: 'note',
+    placeholder: 'Group URL (optional)',
+    helper: 'Optional — only if a FB group is part of your nurture plan.',
+    linkLabel: 'Facebook Group',
+  },
+  'mbymi-06-2': {
+    inputType: 'note',
+    placeholder: 'Notes on cadence / lives schedule',
+    helper: 'How often will you go live or post in the group leading up to launch?',
+  },
+
+  // ---- Waitlist (the nurture sequence — high-value content tasks) ---------
+  'mbymi-07-1': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft your Day 0 thank-you email…',
+    helper: 'The very first email after they join — the warmest moment of the whole sequence.',
+    example: "Hey [first name] — you're in. Here's what's coming over the next 10 days, and the one thing I want you to think about today…",
+    playbookField: 'waitlistSequence.day0',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+  'mbymi-07-2': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft your Day 2 origin-story email…',
+    helper: 'Your story — who you were, what changed, why this offer exists. The trust-builder.',
+    example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
+    playbookField: 'waitlistSequence.day2',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+  'mbymi-07-3': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft your Day 4 industry stats/trends email…',
+    helper: 'Why now? Use stats / trends to make the case that the timing matters.',
+    example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
+    playbookField: 'waitlistSequence.day4',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+  'mbymi-07-4': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft your Day 6–10 case study email(s)…',
+    helper: 'Show, don’t tell. Real (or composite) before/after stories.',
+    example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
+    playbookField: 'waitlistSequence.caseStudies',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+
+  // ---- Promote Priority Waitlist ------------------------------------------
+  'mbymi-08-1': {
+    inputType: 'text',
+    minChars: 10,
+    placeholder: 'List the channels you’ll use (podcast, social, email, partnerships…)',
+    helper: 'Pick the channels you actually have leverage in — better to do 2 well than 5 poorly.',
+    playbookField: 'promote.channels',
+  },
+  'mbymi-08-2': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft 1–2 promotion posts/emails using James’s copy formula…',
+    helper: 'Use the copy formula from the training — hook → problem → bridge → CTA.',
+    playbookField: 'promote.copy',
+    aiBot: { name: 'Promo Copy Bot', url: '' },
+  },
+  'mbymi-08-3': {
+    inputType: 'acknowledge',
+    helper: 'Schedule the posts. Once scheduled, mark this done.',
+    promptMetricsUpdate: true,
+  },
+
+  // ---- Create Your Product ------------------------------------------------
+  'mbymi-09-1': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Promise: …\nDeliverables: …\nPrice: …',
+    helper: 'The three pieces every offer needs. Write them in plain language.',
+    example:
+      "Promise: Launch your first paid program to 30 founding members in 6 weeks.\nDeliverables: 6 weekly live calls + Notion playbook + Slack community.\nPrice: $497 one-time.",
+    playbookField: 'offer.fullDefinition',
+    aiBot: { name: 'Offer Bot', url: '' },
+  },
+  'mbymi-09-2': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Sketch the full course outline / module agenda…',
+    helper: 'Modules, lessons, sequence. Doesn’t need to be perfect — a draft is enough to start selling.',
+    playbookField: 'product.outline',
+    aiBot: { name: 'Outline Bot', url: '' },
+  },
+  'mbymi-09-3': {
+    inputType: 'note',
+    placeholder: 'Notes on the welcome video (optional)',
+    helper: 'The first thing new members see in the portal. Sets expectations and reduces refunds.',
+  },
+
+  // ---- Payment + Delivery (mostly external Kajabi work) -------------------
+  'mbymi-10-1': { inputType: 'note', placeholder: 'Checkout page URL (optional)', helper: 'External build — Kajabi / your checkout.', linkLabel: 'Checkout Page' },
+  'mbymi-10-2': { inputType: 'note', placeholder: 'Thank-you page URL (optional)', helper: 'Confirms purchase and sets the first step.', linkLabel: 'Post-Purchase Thank You' },
+  'mbymi-10-3': { inputType: 'note', placeholder: 'Portal URL (optional)', helper: 'Where members go to access the program.', linkLabel: 'Member Portal' },
+  'mbymi-10-4': { inputType: 'note', placeholder: 'Sales page URL (optional)', helper: 'The main page that does the convincing.', linkLabel: 'Sales Page' },
+  'mbymi-10-5': { inputType: 'acknowledge', helper: 'Test the full purchase flow with a $1 test charge before launch.' },
+
+  // ---- Flash Sale ---------------------------------------------------------
+  'mbymi-11-1': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft the flash sale announcement email…',
+    helper: 'A short, punchy email that creates urgency — cart is opening for X days only.',
+    playbookField: 'flashSale.announcement',
+    aiBot: { name: 'Flash Sale Bot', url: '' },
+  },
+  'mbymi-11-2': {
+    inputType: 'acknowledge',
+    helper: 'Once scheduled in your CRM, mark this done.',
+    promptMetricsUpdate: true,
+  },
+
+  // ---- Webinar ------------------------------------------------------------
+  'mbymi-12-1': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Title, hook, key teaching points, pitch transition…',
+    helper: 'Your webinar plan: title, hook, 2–3 key teaching points, the pitch transition.',
+    playbookField: 'webinar.plan',
+    aiBot: { name: 'Webinar Bot', url: '' },
+  },
+  'mbymi-12-2': {
+    inputType: 'acknowledge',
+    helper: 'Show up, deliver, pitch. Mark done after the live session.',
+    promptMetricsUpdate: true,
+  },
+
+  // ---- 4-Day Follow-Up ----------------------------------------------------
+  'mbymi-13-1': { inputType: 'acknowledge', helper: 'Stripe / PayPal / Kajabi Payments — whichever you use.' },
+  'mbymi-13-2': {
+    inputType: 'text',
+    minChars: 30,
+    placeholder: 'Draft the 4–7 day follow-up email sequence outline…',
+    helper: 'The post-webinar nurture: objections, FAQs, social proof, urgency.',
+    playbookField: 'followUp.sequence',
+    aiBot: { name: 'Email Bot', url: '' },
+  },
+  'mbymi-13-3': {
+    inputType: 'acknowledge',
+    helper: 'Once the sequence is scheduled to send, mark this done.',
+    promptMetricsUpdate: true,
+  },
+
+  // ---- Close Day ----------------------------------------------------------
+  'mbymi-14-1': {
+    inputType: 'text',
+    minChars: 20,
+    placeholder: 'Draft the cart close day email…',
+    helper: 'The "this is your last chance" email. Short, urgent, direct.',
+    playbookField: 'closeDay.email',
+    aiBot: { name: 'Email Bot', url: '' },
+    promptMetricsUpdate: true,
+  },
+
+  // ---- Launch Debrief -----------------------------------------------------
+  'mbymi-15-1': {
+    inputType: 'text',
+    minChars: 60,
+    placeholder: 'What worked, what didn’t, what you’d change next launch…',
+    helper: 'Be specific. The debrief is where the real learning compounds.',
+    example:
+      "Worked: the Day 4 stats email got highest CTR.\nDidn’t: launch list was 40% short — content cadence dropped in week 2.\nChange next time: pre-write all waitlist emails before launch week.",
+    playbookField: 'debrief.notes',
+    aiBot: { name: 'Debrief Bot', url: '' },
+  },
+};
+
+// Fallback used when a task id isn't explicitly configured above.
+export const DEFAULT_TASK_CONFIG = {
+  inputType: 'acknowledge',
+  helper: '',
+};
+
+export function getTaskConfig(id) {
+  return taskConfig[id] ?? DEFAULT_TASK_CONFIG;
+}
