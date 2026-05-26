@@ -11,13 +11,20 @@ export default function LivePanel() {
   return (
     <aside
       className="card"
-      style={{ position: 'sticky', top: 16, maxHeight: 'calc(100vh - 32px)', overflowY: 'auto' }}
+      style={{
+        position: 'sticky',
+        top: 16,
+        maxHeight: 'calc(100vh - 32px)',
+        overflowY: 'auto',
+        overflowX: 'hidden',
+        minWidth: 0,
+      }}
     >
       <header className="flex items-center justify-between mb-3 gap-2 flex-wrap">
         <h3 className="font-display text-lg text-brand-navy">Live build</h3>
         <div
-          className="inline-flex items-center"
-          style={{ background: 'rgba(29,32,63,0.06)', borderRadius: 999, padding: 3 }}
+          className="inline-flex items-center flex-wrap"
+          style={{ background: 'rgba(29,32,63,0.06)', borderRadius: 12, padding: 3, maxWidth: '100%' }}
         >
           <ToggleBtn active={livePanelView === 'playbook'} onClick={() => setLivePanelView('playbook')}>
             Playbook

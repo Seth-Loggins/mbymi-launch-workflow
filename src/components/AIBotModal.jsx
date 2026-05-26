@@ -1,11 +1,20 @@
 import { useEffect } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
+import { scrollIframeIntoView } from '../lib/iframeBridge.js';
 
+/**
+ * Bot modal. Positioned at the TOP of the iframe (not the geometric center)
+ * because the iframe is auto-grown to fit content — its "center" is often
+ * deep inside Kajabi's scroll position and would render offscreen.
+ *
+ * On open we also post a message to the Kajabi parent asking it to scroll
+ * the iframe to the top of the viewport, so the user lands right on the
+ * modal.
+ */
 export default function AIBotModal() {
   const { openBotForTaskId, closeBot, tasks, completeTask } = useLaunch();
 
-  // Esc closes the modal.
   useEffect(() => {
     if (!openBotForTaskId) return;
     function onKey(e) {
@@ -14,6 +23,10 @@ export default function AIBotModal() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [openBotForTaskId, closeBot]);
+
+  useEffect(() => {
+    if (openBotForTaskId) scrollIframeIntoView();
+  }, [openBotForTaskId]);
 
   if (!openBotForTaskId) return null;
 
@@ -24,27 +37,40 @@ export default function AIBotModal() {
   if (!bot) return null;
 
   function handleComplete() {
-    // Mark the underlying task complete; bot closes via state change.
     completeTask(task.id, task.answer);
     closeBot();
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'rgba(29,32,63,0.55)', padding: 20 }}
-      onMouseDown={closeBot}
-    >
+    <>
+      {/* Backdrop — covers the whole iframe so click-outside closes. */}
+      <div
+        onMouseDown={closeBot}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(29,32,63,0.55)',
+          zIndex: 50,
+        }}
+      />
+      {/* Modal — pinned near the top of the iframe (= top of user viewport
+          after we scrolled the iframe into view). */}
       <div
         onMouseDown={(e) => e.stopPropagation()}
-        className="flex flex-col"
         style={{
-          width: 'min(900px, 96vw)',
-          height: 'min(720px, 92vh)',
+          position: 'absolute',
+          top: 24,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'min(900px, calc(100% - 32px))',
+          maxHeight: 'min(720px, 88vh)',
           background: '#fff',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 24px 60px rgba(29,32,63,0.30)',
           overflow: 'hidden',
+          zIndex: 51,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         {/* Header */}
@@ -74,8 +100,8 @@ export default function AIBotModal() {
           </button>
         </header>
 
-        {/* Body — Mindpal embed slot */}
-        <div className="flex-1 overflow-hidden" style={{ background: '#F4F2F2' }}>
+        {/* Body */}
+        <div className="flex-1 overflow-hidden" style={{ background: '#F4F2F2', minHeight: 360 }}>
           {bot.url ? (
             <iframe
               src={bot.url}
@@ -90,7 +116,7 @@ export default function AIBotModal() {
 
         {/* Footer */}
         <footer
-          className="flex items-center justify-between gap-3"
+          className="flex items-center justify-between gap-3 flex-wrap"
           style={{
             padding: '12px 18px',
             background: '#fff',
@@ -110,7 +136,7 @@ export default function AIBotModal() {
           </div>
         </footer>
       </div>
-    </div>
+    </>
   );
 }
 

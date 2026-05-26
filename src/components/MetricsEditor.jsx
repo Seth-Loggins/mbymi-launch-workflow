@@ -34,16 +34,29 @@ export default function MetricsEditor({ onClose }) {
   }
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: 'rgba(29, 32, 63, 0.5)' }}
-      onMouseDown={onClose}
-    >
+    <>
+      <div
+        onMouseDown={onClose}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(29, 32, 63, 0.5)',
+          zIndex: 60,
+        }}
+      />
       <form
         onMouseDown={(e) => e.stopPropagation()}
         onSubmit={handleSave}
-        className="card w-full max-w-md shadow-elevated"
-        style={{ borderRadius: 'var(--radius-lg)' }}
+        className="card shadow-elevated"
+        style={{
+          position: 'absolute',
+          top: 56,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 61,
+          borderRadius: 'var(--radius-lg)',
+          width: 'min(28rem, calc(100% - 32px))',
+        }}
       >
         <header className="flex items-center justify-between mb-4">
           <h3 className="font-display text-2xl text-brand-navy">Update metrics</h3>
@@ -101,7 +114,7 @@ export default function MetricsEditor({ onClose }) {
           </button>
         </div>
       </form>
-    </div>
+    </>
   );
 }
 

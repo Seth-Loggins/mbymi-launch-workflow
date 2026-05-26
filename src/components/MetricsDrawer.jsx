@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { computeAlerts, computeDerived } from '../lib/math.js';
+import { scrollIframeIntoView } from '../lib/iframeBridge.js';
 import MetricsGrid from './MetricsGrid.jsx';
 import RecoveryCalculator from './RecoveryCalculator.jsx';
 import RiskAlerts from './RiskAlerts.jsx';
@@ -28,6 +29,11 @@ export default function MetricsDrawer() {
     return () => window.removeEventListener('keydown', onKey);
   }, [metricsOpen, editorOpen, closeMetricsDrawer]);
 
+  // On open, ask Kajabi to scroll the iframe so the drawer lands in view.
+  useEffect(() => {
+    if (metricsOpen) scrollIframeIntoView();
+  }, [metricsOpen]);
+
   const derived = useMemo(() => computeDerived(launch, metrics, tasks), [launch, metrics, tasks]);
   const alerts = useMemo(
     () => computeAlerts({ launch, metrics, tasks, derived, processOrder }),
@@ -37,19 +43,29 @@ export default function MetricsDrawer() {
   if (!metricsOpen) return null;
 
   return (
-    <div
-      className="fixed inset-0 z-40 flex justify-end"
-      style={{ background: 'rgba(29,32,63,0.45)' }}
-      onMouseDown={closeMetricsDrawer}
-    >
+    <>
+      <div
+        onMouseDown={closeMetricsDrawer}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(29,32,63,0.45)',
+          zIndex: 40,
+        }}
+      />
       <div
         onMouseDown={(e) => e.stopPropagation()}
-        className="h-full overflow-y-auto"
+        className="overflow-y-auto"
         style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          height: '100vh',
           width: 'min(560px, 96vw)',
           background: '#F4F2F2',
           boxShadow: '-12px 0 32px rgba(29,32,63,0.20)',
           padding: '20px 24px 32px',
+          zIndex: 41,
         }}
       >
         <header className="flex items-center justify-between mb-4">
@@ -88,6 +104,6 @@ export default function MetricsDrawer() {
       </div>
 
       {editorOpen && <MetricsEditor onClose={() => setEditorOpen(false)} />}
-    </div>
+    </>
   );
 }

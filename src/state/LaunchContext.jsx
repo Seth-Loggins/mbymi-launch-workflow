@@ -237,6 +237,33 @@ export function LaunchProvider({ children }) {
 
   const dismissCelebration = useCallback(() => setWorkflowComplete(false), []);
 
+  /* ---- debrief clear + history loading ------------------------------ */
+
+  const clearDebriefDraft = useCallback(() => {
+    setDebriefDraft(newDebriefDraft());
+  }, []);
+
+  const deleteDebriefHistoryEntry = useCallback((id) => {
+    setDebriefHistory((prev) => prev.filter((r) => r.id !== id));
+  }, []);
+
+  const loadDebriefFromHistory = useCallback(
+    (id) => {
+      const record = debriefHistory.find((r) => r.id === id);
+      if (!record) return;
+      // Deep clone to detach the draft from the history snapshot.
+      const cloned = JSON.parse(JSON.stringify(record.data));
+      // Refresh ids on offers + landing pages so React keys stay unique vs the
+      // history record (otherwise editing the draft would also "move" entries
+      // visually in the history list).
+      cloned.offers = cloned.offers.map((o) => ({ ...o, id: cryptoId() }));
+      cloned.registrationAttendance.landingPages =
+        cloned.registrationAttendance.landingPages.map((p) => ({ ...p, id: cryptoId() }));
+      setDebriefDraft(cloned);
+    },
+    [debriefHistory],
+  );
+
   /* ---- intro flow ---------------------------------------------------- */
 
   const enterAsDemo = useCallback(() => {
@@ -411,6 +438,9 @@ export function LaunchProvider({ children }) {
       addLandingPage,
       removeLandingPage,
       saveDebrief,
+      clearDebriefDraft,
+      deleteDebriefHistoryEntry,
+      loadDebriefFromHistory,
       dismissCelebration,
       enterAsDemo,
       enterAsGoogle,
@@ -463,6 +493,9 @@ export function LaunchProvider({ children }) {
       addLandingPage,
       removeLandingPage,
       saveDebrief,
+      clearDebriefDraft,
+      deleteDebriefHistoryEntry,
+      loadDebriefFromHistory,
       dismissCelebration,
       enterAsDemo,
       enterAsGoogle,

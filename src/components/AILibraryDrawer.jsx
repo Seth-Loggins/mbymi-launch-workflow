@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
+import { scrollIframeIntoView } from '../lib/iframeBridge.js';
 
 /**
  * Centralised AI bot directory. Pulls every aiBot config from every task,
@@ -19,6 +20,10 @@ export default function AILibraryDrawer() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [aiLibraryOpen, closeAILibrary]);
+
+  useEffect(() => {
+    if (aiLibraryOpen) scrollIframeIntoView();
+  }, [aiLibraryOpen]);
 
   const bots = useMemo(() => {
     const byName = new Map();
@@ -63,19 +68,29 @@ export default function AILibraryDrawer() {
   }
 
   return (
-    <div
-      className="fixed inset-0 z-40 flex justify-end"
-      style={{ background: 'rgba(29,32,63,0.45)' }}
-      onMouseDown={closeAILibrary}
-    >
+    <>
+      <div
+        onMouseDown={closeAILibrary}
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(29,32,63,0.45)',
+          zIndex: 40,
+        }}
+      />
       <div
         onMouseDown={(e) => e.stopPropagation()}
-        className="h-full overflow-y-auto"
+        className="overflow-y-auto"
         style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          height: '100vh',
           width: 'min(640px, 96vw)',
           background: '#F4F2F2',
           boxShadow: '-12px 0 32px rgba(29,32,63,0.20)',
           padding: '20px 24px 32px',
+          zIndex: 41,
         }}
       >
         <header className="flex items-center justify-between mb-4">
@@ -192,6 +207,6 @@ export default function AILibraryDrawer() {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
+import { scrollIframeIntoView } from '../lib/iframeBridge.js';
 
 /**
  * Two-step intro shown on first mount:
@@ -10,15 +11,37 @@ import { useLaunch } from '../state/LaunchContext.jsx';
  */
 export default function WelcomeGate() {
   const { gateStep } = useLaunch();
+
+  useEffect(() => {
+    if (gateStep !== 'workflow') scrollIframeIntoView();
+  }, [gateStep]);
+
   if (gateStep === 'workflow') return null;
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center px-4"
-      style={{ background: 'rgba(29,32,63,0.55)' }}
-    >
-      {gateStep === 'welcome' ? <WelcomeStep /> : <NameLaunchStep />}
-    </div>
+    <>
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(29,32,63,0.55)',
+          zIndex: 50,
+        }}
+      />
+      <div
+        style={{
+          position: 'absolute',
+          top: 48,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 51,
+          padding: '0 16px',
+          width: 'min(560px, calc(100% - 32px))',
+        }}
+      >
+        {gateStep === 'welcome' ? <WelcomeStep /> : <NameLaunchStep />}
+      </div>
+    </>
   );
 }
 

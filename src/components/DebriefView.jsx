@@ -138,12 +138,36 @@ export default function DebriefView() {
     addLandingPage,
     removeLandingPage,
     saveDebrief,
+    clearDebriefDraft,
+    deleteDebriefHistoryEntry,
+    loadDebriefFromHistory,
   } = useLaunch();
 
   function handleSave() {
     saveDebrief();
-    // Scroll user into view of the success card — confetti fires from the
-    // workflowComplete effect on Dashboard.
+  }
+
+  function handleClear() {
+    if (
+      window.confirm(
+        'Clear the debrief form? Anything you saved already stays safe in history below.',
+      )
+    ) {
+      clearDebriefDraft();
+    }
+  }
+
+  function handleLoad(id, savedAt) {
+    const ok = window.confirm(
+      `Load the debrief from ${new Date(savedAt).toLocaleString()} into the form above? Anything you have in the form right now will be replaced (but it's not deleted — re-save to keep a new snapshot).`,
+    );
+    if (ok) loadDebriefFromHistory(id);
+  }
+
+  function handleDelete(id) {
+    if (window.confirm('Delete this debrief snapshot? This cannot be undone.')) {
+      deleteDebriefHistoryEntry(id);
+    }
   }
 
   // Auto-calc cost per lead if ad spend + total registrants are both filled and
@@ -642,14 +666,25 @@ export default function DebriefView() {
         </div>
       </Section>
 
-      <button
-        type="button"
-        onClick={handleSave}
-        className="btn-primary w-full mt-2"
-        style={{ padding: '12px', fontSize: '0.85rem' }}
-      >
-        Save debrief
-      </button>
+      <div className="mt-2 grid grid-cols-12 gap-2">
+        <button
+          type="button"
+          onClick={handleSave}
+          className="btn-primary col-span-12 sm:col-span-8"
+          style={{ padding: '12px', fontSize: '0.85rem' }}
+        >
+          Save debrief
+        </button>
+        <button
+          type="button"
+          onClick={handleClear}
+          className="btn-ghost col-span-12 sm:col-span-4"
+          style={{ padding: '12px', fontSize: '0.78rem' }}
+          title="Empty the form (history below stays safe)"
+        >
+          🧹 Clear form
+        </button>
+      </div>
 
       {/* ---- History ---- */}
       <div className="mt-5">
@@ -687,26 +722,53 @@ export default function DebriefView() {
             {debriefHistory.map((r) => (
               <li
                 key={r.id}
-                className="px-3 py-2"
+                className="overflow-hidden"
                 style={{
                   background: '#fff',
                   border: '1px solid rgba(131,204,189,0.4)',
                   borderRadius: 'var(--radius-md)',
                 }}
               >
-                <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/55">
-                  Saved {formatDateShort(r.savedAt)} at{' '}
-                  {new Date(r.savedAt).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                  })}
-                </div>
-                <div className="text-sm font-semibold text-brand-navy">
-                  {r.data.launchDetails.campaignName || '(no campaign name)'}
-                </div>
-                <div className="text-xs text-brand-navy/65 mt-0.5">
-                  {r.data.offers.length} offer{r.data.offers.length === 1 ? '' : 's'} ·{' '}
-                  {r.data.listAudience.totalRegistrants || 0} registrants
+                <button
+                  type="button"
+                  onClick={() => handleLoad(r.id, r.savedAt)}
+                  className="w-full text-left px-3 py-2 transition-colors hover:bg-brand-navy/[0.03]"
+                  title="Click to load this snapshot back into the form above"
+                >
+                  <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/55">
+                    Saved {formatDateShort(r.savedAt)} at{' '}
+                    {new Date(r.savedAt).toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}
+                  </div>
+                  <div className="text-sm font-semibold text-brand-navy mt-0.5">
+                    {r.data.launchDetails.campaignName || '(no campaign name)'}
+                  </div>
+                  <div className="text-xs text-brand-navy/65 mt-0.5">
+                    {r.data.offers.length} offer{r.data.offers.length === 1 ? '' : 's'} ·{' '}
+                    {r.data.listAudience.totalRegistrants || 0} registrants ·{' '}
+                    <span className="text-brand-pink font-semibold">Click to load ↑</span>
+                  </div>
+                </button>
+                <div
+                  className="px-3 py-1.5 flex items-center justify-end gap-3 text-[0.7rem]"
+                  style={{ borderTop: '1px solid rgba(29,32,63,0.06)', background: 'rgba(29,32,63,0.02)' }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => handleLoad(r.id, r.savedAt)}
+                    className="font-semibold uppercase tracking-wider text-brand-pink hover:underline"
+                  >
+                    ↑ Load
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(r.id)}
+                    className="font-semibold uppercase tracking-wider text-brand-navy/50 hover:text-[#F65556]"
+                  >
+                    🗑 Delete
+                  </button>
                 </div>
               </li>
             ))}
