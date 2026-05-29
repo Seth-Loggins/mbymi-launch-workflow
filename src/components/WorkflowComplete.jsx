@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import CenteredOverlay from './CenteredOverlay.jsx';
@@ -9,7 +9,8 @@ import CenteredOverlay from './CenteredOverlay.jsx';
  * corners using the BBD brand palette.
  */
 export default function WorkflowComplete() {
-  const { workflowComplete, dismissCelebration, launch, resetLaunch } = useLaunch();
+  const { workflowComplete, dismissCelebration, launch, resetLaunch, saveWorkflow } = useLaunch();
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (!workflowComplete) return;
@@ -95,7 +96,18 @@ export default function WorkflowComplete() {
           )}
         </p>
 
-        <div className="mt-6 flex items-center justify-center gap-3">
+        <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
+          <button
+            type="button"
+            onClick={() => {
+              saveWorkflow();
+              setSaved(true);
+              setTimeout(() => setSaved(false), 2000);
+            }}
+            className="btn-dark"
+          >
+            {saved ? '✓ Saved' : '💾 Save this workflow'}
+          </button>
           <button
             type="button"
             onClick={dismissCelebration}
@@ -108,7 +120,7 @@ export default function WorkflowComplete() {
             onClick={() => {
               if (
                 window.confirm(
-                  'Start a brand new launch? This clears all answers, tasks, dates, and metrics.',
+                  'Start a brand new launch? This clears all answers, tasks, dates, and metrics. (Save it first if you want to keep it.)',
                 )
               ) {
                 resetLaunch();

@@ -57,6 +57,8 @@ function Quote({ children }) {
         borderLeft: '2px solid #E1228C',
         padding: '8px 10px',
         borderRadius: 4,
+        overflowWrap: 'anywhere',
+        wordBreak: 'break-word',
       }}
     >
       {expanded ? text : preview}

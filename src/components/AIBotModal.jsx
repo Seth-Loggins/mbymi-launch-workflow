@@ -13,7 +13,7 @@ import CenteredOverlay from './CenteredOverlay.jsx';
  * modal.
  */
 export default function AIBotModal() {
-  const { openBotForTaskId, closeBot, tasks, completeTask } = useLaunch();
+  const { openBotForTaskId, closeBot, tasks } = useLaunch();
 
   useEffect(() => {
     if (!openBotForTaskId) return;
@@ -32,16 +32,11 @@ export default function AIBotModal() {
   const bot = config.aiBot;
   if (!bot) return null;
 
-  function handleComplete() {
-    completeTask(task.id, task.answer);
-    closeBot();
-  }
-
   return (
     <CenteredOverlay onClose={closeBot} width="min(900px, calc(100% - 32px))" zIndex={50}>
       <div
         style={{
-          maxHeight: 'min(720px, 84vh)',
+          height: 'min(700px, 82vh)',
           background: '#fff',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 24px 60px rgba(29,32,63,0.30)',
@@ -78,12 +73,12 @@ export default function AIBotModal() {
         </header>
 
         {/* Body */}
-        <div className="flex-1 overflow-hidden" style={{ background: '#F4F2F2', minHeight: 360 }}>
+        <div className="flex-1 min-h-0" style={{ background: '#F4F2F2' }}>
           {bot.url ? (
             <iframe
               src={bot.url}
               title={bot.name}
-              style={{ width: '100%', height: '100%', border: 0 }}
+              style={{ width: '100%', height: '100%', border: 0, display: 'block' }}
               allow="clipboard-read; clipboard-write"
             />
           ) : (
@@ -100,17 +95,12 @@ export default function AIBotModal() {
             borderTop: '1px solid rgba(29,32,63,0.08)',
           }}
         >
-          <div className="text-xs text-brand-navy/55">
-            Tip: paste your final draft back into the step before marking it complete.
+          <div className="text-xs text-brand-navy/70 font-semibold">
+            ✍️ Don't forget to copy &amp; paste the bot's answer back into your step.
           </div>
-          <div className="flex items-center gap-2">
-            <button onClick={closeBot} className="btn-ghost">
-              Close
-            </button>
-            <button onClick={handleComplete} className="btn-primary">
-              Mark task complete →
-            </button>
-          </div>
+          <button onClick={closeBot} className="btn-primary">
+            Close
+          </button>
         </footer>
       </div>
     </CenteredOverlay>

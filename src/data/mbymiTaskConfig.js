@@ -254,7 +254,7 @@ export const taskConfig = {
     example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
     playbookField: 'waitlistSequence.day2',
     emailLabel: 'Day 2 · Origin Story Email',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-07-3': {
     inputType: 'text',
@@ -264,7 +264,7 @@ export const taskConfig = {
     example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
     playbookField: 'waitlistSequence.day4',
     emailLabel: 'Day 4 · Stats/Trends Email',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-07-4': {
     inputType: 'text',
@@ -274,7 +274,7 @@ export const taskConfig = {
     example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
     playbookField: 'waitlistSequence.caseStudies',
     emailLabel: 'Day 6–10 · Case Study Email(s)',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
 
   // ---- Promote Priority Waitlist ------------------------------------------
@@ -345,7 +345,7 @@ export const taskConfig = {
     helper: 'A short, punchy email that creates urgency — cart is opening for X days only.',
     playbookField: 'flashSale.announcement',
     emailLabel: 'Flash Sale Announcement Email',
-    aiBot: { name: 'Promo Campaign Bot (Flash Sale)', url: BOT_URLS.promo },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-11-2': {
     inputType: 'acknowledge',
@@ -377,7 +377,7 @@ export const taskConfig = {
     helper: 'The post-webinar nurture: objections, FAQs, social proof, urgency.',
     playbookField: 'followUp.sequence',
     emailLabel: '4–7 Day Follow-Up Sequence',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-13-3': {
     inputType: 'acknowledge',
@@ -393,7 +393,7 @@ export const taskConfig = {
     helper: 'The "this is your last chance" email. Short, urgent, direct.',
     playbookField: 'closeDay.email',
     emailLabel: 'Cart Close Day Email',
-    aiBot: { name: 'Promo Campaign Bot (Cart Close)', url: BOT_URLS.promo },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     promptMetricsUpdate: true,
   },
 

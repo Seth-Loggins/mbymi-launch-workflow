@@ -130,9 +130,14 @@ export default function EmailsView() {
           )}
         </div>
 
-        <div style={{ maxHeight: 280, overflowY: 'auto', padding: '12px 14px' }}>
+        <div style={{ maxHeight: 280, overflowY: 'auto', overflowX: 'hidden', padding: '12px 14px' }}>
           {current.body ? (
-            <div className="text-sm text-brand-navy/85 whitespace-pre-line">{current.body}</div>
+            <div
+              className="text-sm text-brand-navy/85 whitespace-pre-line"
+              style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+            >
+              {current.body}
+            </div>
           ) : (
             <div className="text-sm italic text-brand-navy/40">
               Not written yet — head to the {current.process} step to draft it.
