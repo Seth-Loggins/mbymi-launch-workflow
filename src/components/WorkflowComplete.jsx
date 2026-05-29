@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { useLaunch } from '../state/LaunchContext.jsx';
-import { scrollIframeIntoView } from '../lib/iframeBridge.js';
+import CenteredOverlay from './CenteredOverlay.jsx';
 
 /**
  * Modal-style celebration shown when the user clicks "Save Debrief" and the
@@ -13,7 +13,6 @@ export default function WorkflowComplete() {
 
   useEffect(() => {
     if (!workflowComplete) return;
-    scrollIframeIntoView();
 
     const colors = ['#E1228C', '#83CCBD', '#F89A2A', '#F65556', '#1D203F'];
     const duration = 2200;
@@ -51,30 +50,14 @@ export default function WorkflowComplete() {
   if (!workflowComplete) return null;
 
   return (
-    <>
+    <CenteredOverlay onClose={dismissCelebration} width="min(560px, calc(100% - 32px))" zIndex={50}>
       <div
-        onMouseDown={dismissCelebration}
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(29,32,63,0.55)',
-          zIndex: 50,
-        }}
-      />
-      <div
-        onMouseDown={(e) => e.stopPropagation()}
         className="card text-center"
         style={{
-          position: 'absolute',
-          top: 48,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'min(560px, calc(100% - 32px))',
           padding: '32px 28px',
           background: '#fff',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 24px 60px rgba(29,32,63,0.30)',
-          zIndex: 51,
         }}
       >
         <div
@@ -137,6 +120,6 @@ export default function WorkflowComplete() {
           </button>
         </div>
       </div>
-    </>
+    </CenteredOverlay>
   );
 }

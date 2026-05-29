@@ -18,30 +18,22 @@ export default function WelcomeGate() {
 
   if (gateStep === 'workflow') return null;
 
+  // Full-navy compact screen rendered INSTEAD of the workflow. Min height is
+  // just enough to comfortably frame the card, so the embedded iframe stays
+  // short during sign-in.
   return (
-    <>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(29,32,63,0.55)',
-          zIndex: 50,
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 48,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 51,
-          padding: '0 16px',
-          width: 'min(560px, calc(100% - 32px))',
-        }}
-      >
+    <div
+      className="w-full flex items-center justify-center"
+      style={{
+        background: '#1D203F',
+        minHeight: 560,
+        padding: '40px 16px',
+      }}
+    >
+      <div style={{ width: 'min(560px, 100%)' }}>
         {gateStep === 'welcome' ? <WelcomeStep /> : <NameLaunchStep />}
       </div>
-    </>
+    </div>
   );
 }
 

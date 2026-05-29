@@ -11,9 +11,10 @@ import WorkflowComplete from './WorkflowComplete.jsx';
 import DebriefView from './DebriefView.jsx';
 import DebriefSummary from './DebriefSummary.jsx';
 import WelcomeGate from './WelcomeGate.jsx';
+import SavedWorkflowsDrawer from './SavedWorkflowsDrawer.jsx';
 
 export default function Dashboard() {
-  const { launch, setOfferName, currentPhase, currentTask, resetLaunch } = useLaunch();
+  const { launch, setOfferName, currentPhase, currentTask, resetLaunch, gateStep, openSavedWorkflows } = useLaunch();
   const onDebriefStep = currentTask?.id === 'mbymi-15-1';
 
   function handleReset() {
@@ -22,12 +23,19 @@ export default function Dashboard() {
     }
   }
 
+  // Pre-login: render ONLY the navy welcome screen. This keeps the workflow
+  // hidden (so the user can't see it before signing in) and keeps the iframe
+  // short (the gate is compact, so auto-resize keeps the embed small).
+  if (gateStep !== 'workflow') {
+    return <WelcomeGate />;
+  }
+
   return (
     <div className="min-h-screen w-full">
       <PhaseNav />
 
       <div className="mx-auto" style={{ maxWidth: '1280px', padding: '20px 24px 32px' }}>
-        <LaunchTitle launch={launch} setOfferName={setOfferName} onReset={handleReset} />
+        <LaunchTitle launch={launch} setOfferName={setOfferName} onReset={handleReset} onOpenSaved={openSavedWorkflows} />
 
         <PhaseIntro phase={currentPhase} />
 
@@ -79,12 +87,12 @@ export default function Dashboard() {
       <AILibraryDrawer />
       <AIBotModal />
       <WorkflowComplete />
-      <WelcomeGate />
+      <SavedWorkflowsDrawer />
     </div>
   );
 }
 
-function LaunchTitle({ launch, setOfferName, onReset }) {
+function LaunchTitle({ launch, setOfferName, onReset, onOpenSaved }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(launch.offerName);
 
@@ -128,9 +136,14 @@ function LaunchTitle({ launch, setOfferName, onReset }) {
           </button>
         )}
       </div>
-      <button onClick={onReset} className="btn-ghost shrink-0">
-        Reset
-      </button>
+      <div className="shrink-0 flex items-center gap-2">
+        <button onClick={onOpenSaved} className="btn-ghost" title="Save or resume a workflow">
+          💾 Saved
+        </button>
+        <button onClick={onReset} className="btn-ghost">
+          Reset
+        </button>
+      </div>
     </div>
   );
 }

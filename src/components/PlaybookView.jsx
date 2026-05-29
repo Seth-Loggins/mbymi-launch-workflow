@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { makeLaunchView } from '../lib/math.js';
 import { formatCurrency, formatDateShort, formatNumber, formatPercent } from '../lib/format.js';
@@ -30,7 +31,24 @@ function Empty({ children }) {
   return <div className="text-sm text-brand-navy/40 italic">{children}</div>;
 }
 
+// Returns the first sentence (or ~90 chars) of a string, for the collapsed
+// playbook preview.
+function firstSentence(text) {
+  const trimmed = text.trim().replace(/\s+/g, ' ');
+  const match = trimmed.match(/^.*?[.!?](\s|$)/);
+  let snippet = match ? match[0].trim() : trimmed;
+  if (snippet.length > 90) snippet = `${snippet.slice(0, 90).trim()}…`;
+  else if (snippet.length < trimmed.length) snippet = `${snippet} …`;
+  return snippet;
+}
+
 function Quote({ children }) {
+  const [expanded, setExpanded] = useState(false);
+  const text = typeof children === 'string' ? children : String(children ?? '');
+  const isLong = text.trim().replace(/\s+/g, ' ').length > 90 || /[.!?]/.test(text);
+  const preview = firstSentence(text);
+  const showToggle = isLong && preview !== text.trim();
+
   return (
     <div
       className="text-sm text-brand-navy/85 whitespace-pre-line"
@@ -41,7 +59,16 @@ function Quote({ children }) {
         borderRadius: 4,
       }}
     >
-      {children}
+      {expanded ? text : preview}
+      {showToggle && (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          className="ml-1 text-[0.7rem] font-semibold uppercase tracking-wider text-brand-pink hover:underline"
+        >
+          {expanded ? 'less' : 'more'}
+        </button>
+      )}
     </div>
   );
 }

@@ -31,6 +31,17 @@
 // the StepCard shows a "📹 Watch the training" link beneath the helper. Until
 // real URLs are added, every step shows a placeholder version of the link.
 
+// Real Mindpal bot endpoints. One bot may serve several steps.
+export const BOT_URLS = {
+  debrief: 'https://workflow.getmindpal.com/launch-debrief-analyzer-workflow-hefdkrlovsl4bfva',
+  offer: 'https://workflow.getmindpal.com/irresistible-offer-creation-workflow-jwyw07nx0rrguqy2',
+  webinar: 'https://workflow.getmindpal.com/webinar-outline-generator-f7wf5bwvajwejzmz',
+  salesPage: 'https://chatbot.getmindpal.com/sales-page-copy-bot-8t7',
+  promo: 'https://chatbot.getmindpal.com/promo-campaign-bot-ga2',
+  email: 'https://chatbot.getmindpal.com/general-communication-email-bot-0g1',
+  productOutline: 'https://chatbot.getmindpal.com/offer-product-builder-bot-vwj',
+};
+
 export const taskConfig = {
   // ---- Dream It -----------------------------------------------------------
   'mbymi-01-1': {
@@ -70,7 +81,6 @@ export const taskConfig = {
     example:
       'Three weeks of weekly podcasts + daily IG stories around the core problem, hosting one free live Q&A to surface objections.',
     playbookField: 'mapIt.momentumPlan',
-    aiBot: { name: 'Momentum Plan Bot', url: '' },
   },
   'mbymi-02-2': {
     inputType: 'text',
@@ -80,7 +90,6 @@ export const taskConfig = {
     example:
       'Hard pivot in week 4: dedicated podcast episode + email blast + IG live announcing the beta and pointing at the waitlist page.',
     playbookField: 'mapIt.announcementPlan',
-    aiBot: { name: 'Announcement Bot', url: '' },
   },
 
   // ---- Book It ------------------------------------------------------------
@@ -91,7 +100,6 @@ export const taskConfig = {
     helper: 'Pin down the cadence and channels — vague plans become missed posts.',
     example: '3 IG posts + 2 Stories per day, 1 podcast/week, daily email — for the 21 days leading into the launch.',
     playbookField: 'bookIt.contentSchedule',
-    aiBot: { name: 'Content Calendar Bot', url: '' },
   },
   'mbymi-03-2': {
     inputType: 'date',
@@ -106,7 +114,7 @@ export const taskConfig = {
     helper: 'The drumbeat after your initial announcement — these are what actually convert latecomers.',
     example: 'Week-out email + 3-days-out email + cart-open email + 24-hours-left email + final-call email.',
     playbookField: 'bookIt.followUpAnnouncements',
-    aiBot: { name: 'Promo Copy Bot', url: '' },
+    emailLabel: 'Follow-Up Announcements',
   },
   'mbymi-03-4': {
     inputType: 'text',
@@ -115,7 +123,8 @@ export const taskConfig = {
     helper: 'The big "we’re doing this!" beat. Should name the offer, the promise, and the waitlist link.',
     example: 'Email + IG post telling the origin story behind the beta and pointing to the waitlist with a clear CTA.',
     playbookField: 'bookIt.initialAnnouncement',
-    aiBot: { name: 'Announcement Bot', url: '' },
+    emailLabel: 'Initial Beta Announcement',
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
 
   // ---- Chunk It (mostly internal scheduling — acknowledge) ----------------
@@ -154,7 +163,7 @@ export const taskConfig = {
     minChars: 30,
     placeholder: 'Sketch your product outline — modules, lessons, sequence…',
     helper: 'Doesn’t need to be perfect — a rough outline now is enough to start selling.',
-    aiBot: { name: 'Outline Bot', url: '' },
+    aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
     playbookField: 'product.outlineDraft',
   },
   'mbymi-04-8': {
@@ -167,8 +176,9 @@ export const taskConfig = {
     minChars: 30,
     placeholder: 'Draft the priority-waitlist follow-up emails (broad strokes)…',
     helper: 'A draft of the emails that nurture the waitlist after they sign up. You can refine in the Nurture phase.',
-    aiBot: { name: 'Email Bot', url: '' },
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
     playbookField: 'waitlistSequence.draft',
+    emailLabel: 'Priority Waitlist Follow-Up Emails',
   },
   'mbymi-04-10': {
     inputType: 'date',
@@ -187,14 +197,14 @@ export const taskConfig = {
     placeholder: 'Paste your opt-in page URL (optional)',
     helper: 'External build in Kajabi/your funnel tool — use the AI bot for the opt-in page copy, then drop the live URL here.',
     linkLabel: 'Priority Waitlist Opt-in Page',
-    aiBot: { name: 'Opt-in Page Bot', url: '' },
+    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-05-2': {
     inputType: 'note',
     placeholder: 'Paste your thank-you page URL (optional)',
     helper: 'The page they land on after opting in. Use the AI bot for the copy, then drop the URL.',
     linkLabel: 'Waitlist Thank-You Page',
-    aiBot: { name: 'Thank-You Page Bot', url: '' },
+    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-05-3': {
     inputType: 'acknowledge',
@@ -208,7 +218,8 @@ export const taskConfig = {
     example:
       "Subject: You're on the waitlist 🎉\nBody: Confirms their spot, sets the timeline for what they'll receive over the next X days, links to one piece of pillar content while they wait.",
     playbookField: 'waitlistSequence.confirmation',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Waitlist Confirmation Email',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
 
   // ---- Facebook Group Creation --------------------------------------------
@@ -232,7 +243,8 @@ export const taskConfig = {
     helper: 'The very first email after they join — the warmest moment of the whole sequence.',
     example: "Hey [first name] — you're in. Here's what's coming over the next 10 days, and the one thing I want you to think about today…",
     playbookField: 'waitlistSequence.day0',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Day 0 · Thank You Email',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
   'mbymi-07-2': {
     inputType: 'text',
@@ -241,7 +253,8 @@ export const taskConfig = {
     helper: 'Your story — who you were, what changed, why this offer exists. The trust-builder.',
     example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
     playbookField: 'waitlistSequence.day2',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Day 2 · Origin Story Email',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
   'mbymi-07-3': {
     inputType: 'text',
@@ -250,7 +263,8 @@ export const taskConfig = {
     helper: 'Why now? Use stats / trends to make the case that the timing matters.',
     example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
     playbookField: 'waitlistSequence.day4',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Day 4 · Stats/Trends Email',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
   'mbymi-07-4': {
     inputType: 'text',
@@ -259,7 +273,8 @@ export const taskConfig = {
     helper: 'Show, don’t tell. Real (or composite) before/after stories.',
     example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
     playbookField: 'waitlistSequence.caseStudies',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Day 6–10 · Case Study Email(s)',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
 
   // ---- Promote Priority Waitlist ------------------------------------------
@@ -276,7 +291,7 @@ export const taskConfig = {
     placeholder: 'Draft 1–2 promotion posts/emails using James’s copy formula…',
     helper: 'Use the copy formula from the training — hook → problem → bridge → CTA.',
     playbookField: 'promote.copy',
-    aiBot: { name: 'Promo Copy Bot', url: '' },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-08-3': {
     inputType: 'acknowledge',
@@ -293,7 +308,7 @@ export const taskConfig = {
     example:
       "Promise: Launch your first paid program to 30 founding members in 6 weeks.\nDeliverables: 6 weekly live calls + Notion playbook + Slack community.\nPrice: $497 one-time.",
     playbookField: 'offer.fullDefinition',
-    aiBot: { name: 'Offer Bot', url: '' },
+    aiBot: { name: 'Irresistible Offer Bot', url: BOT_URLS.offer },
   },
   'mbymi-09-2': {
     inputType: 'text',
@@ -301,7 +316,7 @@ export const taskConfig = {
     placeholder: 'Sketch the full course outline / module agenda…',
     helper: 'Modules, lessons, sequence. Doesn’t need to be perfect — a draft is enough to start selling.',
     playbookField: 'product.outline',
-    aiBot: { name: 'Outline Bot', url: '' },
+    aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
   },
   'mbymi-09-3': {
     inputType: 'note',
@@ -318,7 +333,7 @@ export const taskConfig = {
     placeholder: 'Sales page URL (optional)',
     helper: 'The main page that does the convincing. Use the AI bot to draft sales-page copy, then drop the published URL here.',
     linkLabel: 'Sales Page',
-    aiBot: { name: 'Sales Page Bot', url: '' },
+    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-10-5': { inputType: 'acknowledge', helper: 'Test the full purchase flow with a $1 test charge before launch.' },
 
@@ -329,7 +344,8 @@ export const taskConfig = {
     placeholder: 'Draft the flash sale announcement email…',
     helper: 'A short, punchy email that creates urgency — cart is opening for X days only.',
     playbookField: 'flashSale.announcement',
-    aiBot: { name: 'Flash Sale Bot', url: '' },
+    emailLabel: 'Flash Sale Announcement Email',
+    aiBot: { name: 'Promo Campaign Bot (Flash Sale)', url: BOT_URLS.promo },
   },
   'mbymi-11-2': {
     inputType: 'acknowledge',
@@ -344,7 +360,7 @@ export const taskConfig = {
     placeholder: 'Title, hook, key teaching points, pitch transition…',
     helper: 'Your webinar plan: title, hook, 2–3 key teaching points, the pitch transition.',
     playbookField: 'webinar.plan',
-    aiBot: { name: 'Webinar Bot', url: '' },
+    aiBot: { name: 'Webinar Outline Bot', url: BOT_URLS.webinar },
   },
   'mbymi-12-2': {
     inputType: 'acknowledge',
@@ -360,7 +376,8 @@ export const taskConfig = {
     placeholder: 'Draft the 4–7 day follow-up email sequence outline…',
     helper: 'The post-webinar nurture: objections, FAQs, social proof, urgency.',
     playbookField: 'followUp.sequence',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: '4–7 Day Follow-Up Sequence',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
   'mbymi-13-3': {
     inputType: 'acknowledge',
@@ -375,7 +392,8 @@ export const taskConfig = {
     placeholder: 'Draft the cart close day email…',
     helper: 'The "this is your last chance" email. Short, urgent, direct.',
     playbookField: 'closeDay.email',
-    aiBot: { name: 'Email Bot', url: '' },
+    emailLabel: 'Cart Close Day Email',
+    aiBot: { name: 'Promo Campaign Bot (Cart Close)', url: BOT_URLS.promo },
     promptMetricsUpdate: true,
   },
 
@@ -384,7 +402,7 @@ export const taskConfig = {
     inputType: 'debrief',
     helper:
       "This is the big one. Fill out the structured debrief in the Debrief tab of the Live Build panel on the right — every section captures something you'll want next launch. Hit Save Debrief when you're done.",
-    aiBot: { name: 'Debrief Bot', url: '' },
+    aiBot: { name: 'Launch Debrief Analyzer', url: BOT_URLS.debrief },
   },
 };
 

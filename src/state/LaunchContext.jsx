@@ -112,6 +112,8 @@ export function LaunchProvider({ children }) {
   // gateStep: 'welcome' → 'name-launch' → 'workflow'. Lets us run a 2-step
   // intro flow without persisting auth state (no backend yet).
   const [gateStep, setGateStep] = useState('welcome');
+  const [savedWorkflows, setSavedWorkflows] = useState([]);
+  const [savedWorkflowsOpen, setSavedWorkflowsOpen] = useState(false);
   // userMode is 'demo' | 'google' | null — set when the user picks an entry
   // point from the welcome modal. Currently informational only; later we'll
   // hang real Google OAuth off the 'google' branch.
@@ -293,6 +295,46 @@ export function LaunchProvider({ children }) {
     setGateStep('welcome');
   }, []);
 
+  /* ---- saved workflows ----------------------------------------------- */
+
+  const openSavedWorkflows = useCallback(() => setSavedWorkflowsOpen(true), []);
+  const closeSavedWorkflows = useCallback(() => setSavedWorkflowsOpen(false), []);
+
+  const saveWorkflow = useCallback(() => {
+    const snapshot = {
+      id: cryptoId(),
+      savedAt: new Date().toISOString(),
+      launch: JSON.parse(JSON.stringify(launch)),
+      tasks: JSON.parse(JSON.stringify(tasks)),
+      metrics: JSON.parse(JSON.stringify(metrics)),
+      debriefDraft: JSON.parse(JSON.stringify(debriefDraft)),
+      debriefHistory: JSON.parse(JSON.stringify(debriefHistory)),
+    };
+    setSavedWorkflows((prev) => [snapshot, ...prev]);
+    return snapshot;
+  }, [launch, tasks, metrics, debriefDraft, debriefHistory]);
+
+  const loadWorkflow = useCallback(
+    (id) => {
+      const snap = savedWorkflows.find((w) => w.id === id);
+      if (!snap) return;
+      setLaunch(JSON.parse(JSON.stringify(snap.launch)));
+      setTasks(JSON.parse(JSON.stringify(snap.tasks)));
+      setMetrics(JSON.parse(JSON.stringify(snap.metrics)));
+      setDebriefDraft(JSON.parse(JSON.stringify(snap.debriefDraft ?? newDebriefDraft())));
+      setDebriefHistory(JSON.parse(JSON.stringify(snap.debriefHistory ?? [])));
+      setCurrentPhaseId(FIRST_PHASE_ID);
+      setGateStep('workflow');
+      setSavedWorkflowsOpen(false);
+      setWorkflowComplete(false);
+    },
+    [savedWorkflows],
+  );
+
+  const deleteSavedWorkflow = useCallback((id) => {
+    setSavedWorkflows((prev) => prev.filter((w) => w.id !== id));
+  }, []);
+
   const resetLaunch = useCallback(() => {
     setLaunch(EMPTY_LAUNCH);
     setTasks(freshTasks());
@@ -398,6 +440,8 @@ export function LaunchProvider({ children }) {
       gateStep,
       userMode,
       userName,
+      savedWorkflows,
+      savedWorkflowsOpen,
 
       // static-ish
       phases: mbymiPhases,
@@ -446,6 +490,11 @@ export function LaunchProvider({ children }) {
       enterAsGoogle,
       finishNamingLaunch,
       reopenWelcome,
+      openSavedWorkflows,
+      closeSavedWorkflows,
+      saveWorkflow,
+      loadWorkflow,
+      deleteSavedWorkflow,
       resetLaunch,
     }),
     [
@@ -463,6 +512,8 @@ export function LaunchProvider({ children }) {
       gateStep,
       userMode,
       userName,
+      savedWorkflows,
+      savedWorkflowsOpen,
       tasksByPhase,
       phaseStats,
       currentPhase,
@@ -501,6 +552,11 @@ export function LaunchProvider({ children }) {
       enterAsGoogle,
       finishNamingLaunch,
       reopenWelcome,
+      openSavedWorkflows,
+      closeSavedWorkflows,
+      saveWorkflow,
+      loadWorkflow,
+      deleteSavedWorkflow,
       resetLaunch,
     ],
   );

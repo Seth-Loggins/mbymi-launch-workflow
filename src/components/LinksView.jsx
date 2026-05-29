@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
+import { copyViaParent } from '../lib/iframeBridge.js';
 
 const URL_REGEX = /\bhttps?:\/\/[^\s)]+/i;
 
@@ -145,7 +146,19 @@ function LinkRow({ link, copied, onCopied, onEdit }) {
   async function handleCopy() {
     if (!link.url) return;
 
-    // Path 1 — modern Clipboard API
+    // Path 1 — hand the copy to the PARENT page (Kajabi), which isn't sandboxed
+    // and can reliably write to the clipboard. Confirmed via round-trip.
+    try {
+      const ok = await copyViaParent(link.url);
+      if (ok) {
+        onCopied();
+        return;
+      }
+    } catch {
+      /* fall through */
+    }
+
+    // Path 2 — modern Clipboard API in this frame
     if (navigator.clipboard?.writeText) {
       try {
         await navigator.clipboard.writeText(link.url);
@@ -156,7 +169,7 @@ function LinkRow({ link, copied, onCopied, onEdit }) {
       }
     }
 
-    // Path 2 — readonly input + execCommand (most reliable in iframes)
+    // Path 3 — readonly input + execCommand
     selectAll();
     try {
       const ok = document.execCommand('copy');
@@ -168,7 +181,7 @@ function LinkRow({ link, copied, onCopied, onEdit }) {
       /* fall through */
     }
 
-    // Path 3 — prompt with URL pre-selected
+    // Path 4 — prompt with URL pre-selected
     try {
       window.prompt('Copy link (⌘C / Ctrl+C):', link.url);
       return;
@@ -176,7 +189,6 @@ function LinkRow({ link, copied, onCopied, onEdit }) {
       /* swallow */
     }
 
-    // Last-resort: leave the input selected so the user can ⌘C.
     selectAll();
   }
 

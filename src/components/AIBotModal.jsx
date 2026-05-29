@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
-import { scrollIframeIntoView } from '../lib/iframeBridge.js';
+import CenteredOverlay from './CenteredOverlay.jsx';
 
 /**
  * Bot modal. Positioned at the TOP of the iframe (not the geometric center)
@@ -24,10 +24,6 @@ export default function AIBotModal() {
     return () => window.removeEventListener('keydown', onKey);
   }, [openBotForTaskId, closeBot]);
 
-  useEffect(() => {
-    if (openBotForTaskId) scrollIframeIntoView();
-  }, [openBotForTaskId]);
-
   if (!openBotForTaskId) return null;
 
   const task = tasks.find((t) => t.id === openBotForTaskId);
@@ -42,33 +38,14 @@ export default function AIBotModal() {
   }
 
   return (
-    <>
-      {/* Backdrop — covers the whole iframe so click-outside closes. */}
+    <CenteredOverlay onClose={closeBot} width="min(900px, calc(100% - 32px))" zIndex={50}>
       <div
-        onMouseDown={closeBot}
         style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'rgba(29,32,63,0.55)',
-          zIndex: 50,
-        }}
-      />
-      {/* Modal — pinned near the top of the iframe (= top of user viewport
-          after we scrolled the iframe into view). */}
-      <div
-        onMouseDown={(e) => e.stopPropagation()}
-        style={{
-          position: 'absolute',
-          top: 24,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: 'min(900px, calc(100% - 32px))',
-          maxHeight: 'min(720px, 88vh)',
+          maxHeight: 'min(720px, 84vh)',
           background: '#fff',
           borderRadius: 'var(--radius-lg)',
           boxShadow: '0 24px 60px rgba(29,32,63,0.30)',
           overflow: 'hidden',
-          zIndex: 51,
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -136,7 +113,7 @@ export default function AIBotModal() {
           </div>
         </footer>
       </div>
-    </>
+    </CenteredOverlay>
   );
 }
 

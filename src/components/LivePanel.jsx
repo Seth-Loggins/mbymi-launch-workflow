@@ -4,6 +4,7 @@ import FunnelView from './FunnelView.jsx';
 import LinksView from './LinksView.jsx';
 import DatesView from './DatesView.jsx';
 import DebriefView from './DebriefView.jsx';
+import EmailsView from './EmailsView.jsx';
 
 export default function LivePanel() {
   const { livePanelView, setLivePanelView } = useLaunch();
@@ -41,6 +42,9 @@ export default function LivePanel() {
           <ToggleBtn active={livePanelView === 'dates'} onClick={() => setLivePanelView('dates')}>
             Dates
           </ToggleBtn>
+          <ToggleBtn active={livePanelView === 'emails'} onClick={() => setLivePanelView('emails')}>
+            Emails
+          </ToggleBtn>
         </div>
       </header>
 
@@ -49,6 +53,7 @@ export default function LivePanel() {
       {livePanelView === 'funnel' && <FunnelView />}
       {livePanelView === 'links' && <LinksView />}
       {livePanelView === 'dates' && <DatesView />}
+      {livePanelView === 'emails' && <EmailsView />}
     </aside>
   );
 }
