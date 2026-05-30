@@ -61,10 +61,6 @@ const processGroups = [
       { id: "mbymi-07-2", title: "Write Day 2 Origin Story Email" },
       { id: "mbymi-07-3", title: "Write Day 4 Industry Stats/Trends Email" },
       { id: "mbymi-07-4", title: "Write Day 6-10 Case Study Email(s)" },
-      // Moved here from Chunk It — a planning-stage draft of the priority
-      // waitlist follow-up sequence (broader strokes than the individual emails
-      // above).
-      { id: "mbymi-04-9", title: "PRIORITY Waitlist Follow-Up Emails" },
     ],
   },
 
@@ -85,9 +81,6 @@ const processGroups = [
       { id: "mbymi-09-1", title: "Define Offer Promise, Deliverables & Price" },
       { id: "mbymi-09-2", title: "Build Full Course Outline / Agenda" },
       { id: "mbymi-09-3", title: "Create Welcome Video/Tutorial for Members" },
-      // Moved here from Chunk It — a rough-cut product outline drafted before
-      // the full course outline above.
-      { id: "mbymi-04-7", title: "Create Your Product Outline" },
     ],
   },
 
@@ -160,4 +153,4 @@ export const mbymiTasks = processGroups
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 39 tasks total across 14 process groups, organised into 10 macro-phases.
+// 37 tasks total across 14 process groups, organised into 10 macro-phases.

@@ -52,16 +52,7 @@ export default function Dashboard() {
                 <DebriefView />
               </div>
             </div>
-            <div
-              className="col-span-12 md:col-span-5"
-              style={{
-                position: 'sticky',
-                top: 16,
-                alignSelf: 'flex-start',
-                maxHeight: 'calc(100vh - 32px)',
-                overflowY: 'auto',
-              }}
-            >
+            <div className="col-span-12 md:col-span-5">
               <div
                 className="card"
                 style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(2px)' }}

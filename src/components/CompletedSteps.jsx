@@ -48,8 +48,16 @@ export default function CompletedSteps() {
               <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/60">
                 Step {stepNum} · {t.process}
               </div>
-              <div className="font-semibold text-brand-navy mt-0.5 truncate">{t.title}</div>
-              <div className="text-sm text-brand-navy/70 mt-0.5">
+              <div
+                className="font-semibold text-brand-navy mt-0.5"
+                style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+              >
+                {t.title}
+              </div>
+              <div
+                className="text-sm text-brand-navy/70 mt-0.5"
+                style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+              >
                 {formatAnswerSummary(t, config)}
               </div>
             </div>

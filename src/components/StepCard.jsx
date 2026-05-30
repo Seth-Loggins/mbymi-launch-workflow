@@ -86,11 +86,19 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
         <span className="chip bg-white/10 text-white">{task.process}</span>
       </div>
 
-      <h2 className="font-display tracking-wide" style={{ fontSize: '1.85rem', lineHeight: 1.15 }}>
+      <h2
+        className="font-display tracking-wide"
+        style={{ fontSize: '1.85rem', lineHeight: 1.15, overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+      >
         {task.title}
       </h2>
       {config.helper && (
-        <p className="mt-2 text-white/70 text-sm max-w-2xl">{config.helper}</p>
+        <p
+          className="mt-2 text-white/70 text-sm max-w-2xl"
+          style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+        >
+          {config.helper}
+        </p>
       )}
       {config.videoUrl && (
         <div className="mt-3">
@@ -229,6 +237,9 @@ function StepInput({ config, draft, setDraft }) {
       border: '1px solid rgba(255,255,255,0.18)',
       borderRadius: 'var(--radius-md)',
       padding: '10px 12px',
+      // Long unbroken text (e.g. a pasted URL) was visually escaping the box.
+      overflowWrap: 'anywhere',
+      wordBreak: 'break-word',
     },
   };
 

@@ -118,28 +118,6 @@ export const taskConfig = {
     dateLabel: 'Initial Beta Announcement',
   },
 
-  // ---- Folded-in from Chunk It (rest of Chunk It was deleted) -------------
-  // mbymi-04-7 now lives at the end of the Create Your Product group (Offer phase)
-  // and mbymi-04-9 at the end of the Waitlist group (Waitlist phase). Configs
-  // stay keyed by id.
-  'mbymi-04-7': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Sketch your product outline — modules, lessons, sequence…',
-    helper: 'Doesn’t need to be perfect — a rough outline now is enough to start selling.',
-    aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
-    playbookField: 'product.outlineDraft',
-  },
-  'mbymi-04-9': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft the priority-waitlist follow-up emails (broad strokes)…',
-    helper: 'A draft of the priority-waitlist follow-up emails — pairs with the individual Day 0–10 emails above.',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
-    playbookField: 'waitlistSequence.draft',
-    emailLabel: 'Priority Waitlist Follow-Up Emails',
-  },
-
   // ---- Priority Waitlist Registration -------------------------------------
   'mbymi-05-1': {
     inputType: 'note',
@@ -188,7 +166,7 @@ export const taskConfig = {
     example: "Hey [first name] — you're in. Here's what's coming over the next 10 days, and the one thing I want you to think about today…",
     playbookField: 'waitlistSequence.day0',
     emailLabel: 'Day 0 · Thank You Email',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
   },
   'mbymi-07-2': {
     inputType: 'text',
