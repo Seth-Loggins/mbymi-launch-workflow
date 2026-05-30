@@ -13,11 +13,12 @@ export default function LivePanel() {
     <aside
       className="card"
       style={{
-        // No sticky / maxHeight / overflowY — the iframe auto-resizes to fit
-        // content, so the right panel can grow naturally with whichever view
-        // is active (especially the long Debrief form) without an internal
-        // scrollbar. overflowX:hidden stays to suppress lateral overflow.
-        overflowX: 'hidden',
+        // No sticky / maxHeight / overflow constraints — the iframe auto-
+        // resizes to fit content, so the right panel grows naturally with
+        // whichever view is active. We do NOT set overflowX:hidden because
+        // when one axis is hidden CSS implicitly switches the other axis to
+        // 'auto', producing a phantom (and broken) scrollbar. Inner views all
+        // use overflow-wrap to keep long text inside their boxes instead.
         minWidth: 0,
       }}
     >
