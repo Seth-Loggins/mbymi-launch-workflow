@@ -1,5 +1,8 @@
-// Maps the 15 MBYMI process groups into 6 macro-phases for the top chip nav.
+// Maps process groups into macro-phases for the top chip nav.
 // Process group labels match the strings in mbymiLaunch.js exactly.
+//
+// As of the 2026-05-30 restructure: 10 phases, one process group per phase
+// (except Plan and Waitlist which each bundle a few related groups).
 
 export const mbymiPhases = [
   {
@@ -10,37 +13,60 @@ export const mbymiPhases = [
     groups: ['Dream It', 'Map It', 'Book It'],
   },
   {
-    id: 'build',
-    label: 'Build',
-    short: 'BUILD',
-    blurb: 'Stand up the waitlist mechanics, group, and product outline.',
-    groups: [
-      'Chunk It',
-      'Priority Waitlist Registration',
-      'Facebook Group Creation',
-      'Create Your Product',
-    ],
+    id: 'waitlist',
+    label: 'Waitlist',
+    short: 'WAITLIST',
+    blurb: 'Stand up the priority waitlist, FB group, and Day 0–10 nurture emails.',
+    groups: ['Priority Waitlist Registration', 'Facebook Group Creation', 'Waitlist'],
   },
   {
-    id: 'nurture',
-    label: 'Nurture',
-    short: 'NURTURE',
-    blurb: 'Write the waitlist sequence and promote the priority list.',
-    groups: ['Waitlist', 'Promote Priority Waitlist'],
+    id: 'promo',
+    label: 'Promo',
+    short: 'PROMO',
+    blurb: 'Pick channels, write the promo copy, get it scheduled.',
+    groups: ['Promote Priority Waitlist'],
   },
   {
-    id: 'sell',
-    label: 'Launch Week',
-    short: 'LAUNCH WEEK',
-    blurb: 'Stand up the checkout + sales page, run the flash sale, deliver the webinar.',
-    groups: ['Payment + Delivery', 'Flash Sale', 'Webinar'],
+    id: 'offer',
+    label: 'Offer',
+    short: 'OFFER',
+    blurb: 'Define the founding-member offer and outline the deliverable.',
+    groups: ['Create Your Product'],
+  },
+  {
+    id: 'pay',
+    label: 'Payment + Delivery',
+    short: 'PAY + DELIVERY',
+    blurb: 'Build the checkout, payment, thank-you, members portal, and sales page.',
+    groups: ['Payment + Delivery'],
+  },
+  {
+    id: 'flash',
+    label: 'Flash Sale',
+    short: 'FLASH SALE',
+    blurb: 'Write and send the 48–72 hour flash sale push.',
+    groups: ['Flash Sale'],
+  },
+  {
+    id: 'webinar',
+    label: 'Webinar',
+    short: 'WEBINAR',
+    blurb: 'Plan, promote, and deliver the webinar pitch.',
+    groups: ['Webinar'],
+  },
+  {
+    id: 'follow-up',
+    label: 'Follow Up',
+    short: 'FOLLOW UP',
+    blurb: 'Run the 4–7 day post-webinar follow-up email sequence.',
+    groups: ['4-Day Follow-Up'],
   },
   {
     id: 'close',
-    label: 'Close',
-    short: 'CLOSE',
-    blurb: 'Run the 4-day follow-up and close the cart.',
-    groups: ['4-Day Follow-Up', 'Close Day'],
+    label: 'Close Cart',
+    short: 'CLOSE CART',
+    blurb: 'Send the cart-close email and shut the doors.',
+    groups: ['Close Day'],
   },
   {
     id: 'debrief',

@@ -118,31 +118,10 @@ export const taskConfig = {
     dateLabel: 'Initial Beta Announcement',
   },
 
-  // ---- Chunk It (planning ack-only — actual dates live in Book It now) ----
-  'mbymi-04-1': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for the post-launch debrief in your calendar.',
-  },
-  'mbymi-04-2': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for close day — when the cart closes for new founders.',
-  },
-  'mbymi-04-3': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for the 4-day follow-up sequence.',
-  },
-  'mbymi-04-4': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for webinars (optional — skip if not running one).',
-  },
-  'mbymi-04-5': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for the flash-sale email push.',
-  },
-  'mbymi-04-6': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time to wire up the payment + delivery process.',
-  },
+  // ---- Folded-in from Chunk It (rest of Chunk It was deleted) -------------
+  // mbymi-04-7 now lives at the end of the Create Your Product group (Offer phase)
+  // and mbymi-04-9 at the end of the Waitlist group (Waitlist phase). Configs
+  // stay keyed by id.
   'mbymi-04-7': {
     inputType: 'text',
     minChars: 30,
@@ -151,26 +130,14 @@ export const taskConfig = {
     aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
     playbookField: 'product.outlineDraft',
   },
-  'mbymi-04-8': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time to plan + kick off your priority-waitlist promotion.',
-  },
   'mbymi-04-9': {
     inputType: 'text',
     minChars: 30,
     placeholder: 'Draft the priority-waitlist follow-up emails (broad strokes)…',
-    helper: 'A draft of the emails that nurture the waitlist after they sign up. You can refine in the Nurture phase.',
+    helper: 'A draft of the priority-waitlist follow-up emails — pairs with the individual Day 0–10 emails above.',
     aiBot: { name: 'Email Bot', url: BOT_URLS.email },
     playbookField: 'waitlistSequence.draft',
     emailLabel: 'Priority Waitlist Follow-Up Emails',
-  },
-  'mbymi-04-10': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time for the optional Facebook group setup.',
-  },
-  'mbymi-04-11': {
-    inputType: 'acknowledge',
-    helper: 'Reserve time to build the early-interest priority-list opt-in page.',
   },
 
   // ---- Priority Waitlist Registration -------------------------------------

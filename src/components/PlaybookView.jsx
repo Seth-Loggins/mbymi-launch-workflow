@@ -157,38 +157,27 @@ export default function PlaybookView() {
       </Section>
 
       {(() => {
-        const debrief = answerOf(tasks, 'mbymi-04-1');
-        const closeDay = answerOf(tasks, 'mbymi-04-2');
-        const followUp = answerOf(tasks, 'mbymi-04-3');
-        const webinar = answerOf(tasks, 'mbymi-04-4');
-        const flashSale = answerOf(tasks, 'mbymi-04-5');
-        const filled = regDeadline || debrief || closeDay || followUp || webinar || flashSale;
+        // After the 2026-05-30 restructure, the workflow only tracks 4 dates
+        // — all in Book It. The old Chunk It date reservations were removed.
+        const filled = initialAnnouncement || followUps || regDeadline || contentSched;
         return (
           <Section title="Key dates" filled={filled}>
             <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-sm text-brand-navy">
-              <div className="text-brand-navy/60">Registration deadline</div>
+              <div className="text-brand-navy/60">Initial beta announcement</div>
               <div className="font-semibold text-right">
+                {initialAnnouncement ? formatDateShort(initialAnnouncement) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Follow-up announcements</div>
+              <div className="font-semibold text-right">
+                {followUps ? formatDateShort(followUps) : <Empty>—</Empty>}
+              </div>
+              <div className="text-brand-navy/60">Registration deadline</div>
+              <div className="font-semibold text-right" style={{ color: '#E1228C' }}>
                 {regDeadline ? formatDateShort(regDeadline) : <Empty>—</Empty>}
               </div>
-              <div className="text-brand-navy/60">Flash sale day</div>
+              <div className="text-brand-navy/60">Content schedule starts</div>
               <div className="font-semibold text-right">
-                {flashSale ? formatDateShort(flashSale) : <Empty>—</Empty>}
-              </div>
-              <div className="text-brand-navy/60">Webinar day</div>
-              <div className="font-semibold text-right">
-                {webinar ? formatDateShort(webinar) : <Empty>—</Empty>}
-              </div>
-              <div className="text-brand-navy/60">4-day follow-up starts</div>
-              <div className="font-semibold text-right">
-                {followUp ? formatDateShort(followUp) : <Empty>—</Empty>}
-              </div>
-              <div className="text-brand-navy/60">Close day</div>
-              <div className="font-semibold text-right" style={{ color: '#E1228C' }}>
-                {closeDay ? formatDateShort(closeDay) : <Empty>—</Empty>}
-              </div>
-              <div className="text-brand-navy/60">Launch debrief</div>
-              <div className="font-semibold text-right">
-                {debrief ? formatDateShort(debrief) : <Empty>—</Empty>}
+                {contentSched ? formatDateShort(contentSched) : <Empty>—</Empty>}
               </div>
             </div>
           </Section>
@@ -199,14 +188,6 @@ export default function PlaybookView() {
         <div className="space-y-2">
           {momentum ? <Quote>{momentum}</Quote> : <Empty>Phase 1 plan not filled yet.</Empty>}
           {announcement ? <Quote>{announcement}</Quote> : <Empty>Phase 2 plan not filled yet.</Empty>}
-        </div>
-      </Section>
-
-      <Section title="Book It · Content + Announcements" filled={contentSched || initialAnnouncement || followUps}>
-        <div className="space-y-2">
-          {contentSched ? <Quote>{contentSched}</Quote> : <Empty>No content schedule yet.</Empty>}
-          {initialAnnouncement && <Quote>{initialAnnouncement}</Quote>}
-          {followUps && <Quote>{followUps}</Quote>}
         </div>
       </Section>
 
