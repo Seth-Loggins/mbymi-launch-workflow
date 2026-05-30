@@ -70,7 +70,6 @@ const processGroups = [
     process: "Facebook Group Creation", // verify exact label
     tasks: [
       { id: "mbymi-06-1", title: "Set Up Facebook Group" },
-      { id: "mbymi-06-2", title: "Engage Audience & Run FB Lives in Group" },
     ],
   },
   {
@@ -127,7 +126,6 @@ const processGroups = [
   {
     process: "4-Day Follow-Up",
     tasks: [
-      { id: "mbymi-13-1", title: "Connect Payment Processor (Stripe/PayPal)" },
       { id: "mbymi-13-2", title: "Write 4-7 Day Follow-Up Email Sequence" },
       { id: "mbymi-13-3", title: "Send Follow-Up Sequence" },
     ],
@@ -160,4 +158,5 @@ export const mbymiTasks = processGroups
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 50 tasks total across 15 process groups.
+// 48 tasks total across 15 process groups (was 50; removed mbymi-06-2 FB
+// engage step and mbymi-13-1 duplicate Connect Payment Processor).

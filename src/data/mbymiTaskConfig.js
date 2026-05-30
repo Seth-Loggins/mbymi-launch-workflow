@@ -47,9 +47,9 @@ export const taskConfig = {
   'mbymi-01-1': {
     inputType: 'number',
     unit: 'people',
-    placeholder: 'e.g. 600',
+    placeholder: 'e.g. 50',
     helper:
-      "How many people do you need on the priority waitlist for this launch to work? Sets your conversion target.",
+      "The # People Needed in Your Launch List (or Registered on Priority List). Rule of thumb: Founding Members × 10. e.g. 5 Founding Members × 10 = 50.",
     example:
       'Most BBD members land between 300–1,500 depending on offer price. Higher price → smaller list needed.',
     playbookField: 'targets.launchListTarget',
@@ -94,12 +94,10 @@ export const taskConfig = {
 
   // ---- Book It ------------------------------------------------------------
   'mbymi-03-1': {
-    inputType: 'text',
-    minChars: 20,
-    placeholder: 'What will you post, where, and how often to drive priority list signups?',
-    helper: 'Pin down the cadence and channels — vague plans become missed posts.',
-    example: '3 IG posts + 2 Stories per day, 1 podcast/week, daily email — for the 21 days leading into the launch.',
+    inputType: 'date',
+    helper: 'Reserve the date your content-posting schedule kicks off to build the priority list.',
     playbookField: 'bookIt.contentSchedule',
+    dateLabel: 'Content Schedule Starts',
   },
   'mbymi-03-2': {
     inputType: 'date',
@@ -108,55 +106,42 @@ export const taskConfig = {
     dateLabel: 'Registration Deadline',
   },
   'mbymi-03-3': {
-    inputType: 'text',
-    minChars: 20,
-    placeholder: 'List the follow-up announcement posts/emails leading up to launch…',
-    helper: 'The drumbeat after your initial announcement — these are what actually convert latecomers.',
-    example: 'Week-out email + 3-days-out email + cart-open email + 24-hours-left email + final-call email.',
+    inputType: 'date',
+    helper: 'Reserve the date you send your follow-up announcements about the beta offer.',
     playbookField: 'bookIt.followUpAnnouncements',
-    emailLabel: 'Follow-Up Announcements',
+    dateLabel: 'Follow-Up Announcements',
   },
   'mbymi-03-4': {
-    inputType: 'text',
-    minChars: 20,
-    placeholder: 'Sketch the initial announcement post/email that opens the launch…',
-    helper: 'The big "we’re doing this!" beat. Should name the offer, the promise, and the waitlist link.',
-    example: 'Email + IG post telling the origin story behind the beta and pointing to the waitlist with a clear CTA.',
+    inputType: 'date',
+    helper: 'Reserve the date you send the initial announcement that opens the launch.',
     playbookField: 'bookIt.initialAnnouncement',
-    emailLabel: 'Initial Beta Announcement',
-    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    dateLabel: 'Initial Beta Announcement',
   },
 
-  // ---- Chunk It (mostly internal scheduling — acknowledge) ----------------
+  // ---- Chunk It (planning ack-only — actual dates live in Book It now) ----
   'mbymi-04-1': {
-    inputType: 'date',
-    helper: 'Reserve your date for the post-launch debrief.',
-    dateLabel: 'Launch Debrief',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for the post-launch debrief in your calendar.',
   },
   'mbymi-04-2': {
-    inputType: 'date',
-    helper: 'Reserve your close day — when the cart closes for new founders.',
-    dateLabel: 'Close Day',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for close day — when the cart closes for new founders.',
   },
   'mbymi-04-3': {
-    inputType: 'date',
-    helper: 'Reserve the start of your 4-day follow-up sequence.',
-    dateLabel: '4-Day Follow-Up Starts',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for the 4-day follow-up sequence.',
   },
   'mbymi-04-4': {
-    inputType: 'date',
-    helper: 'Reserve your webinar day (optional — skip with a blank date).',
-    dateLabel: 'Webinar Day',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for webinars (optional — skip if not running one).',
   },
   'mbymi-04-5': {
-    inputType: 'date',
-    helper: 'Reserve the day(s) you’ll send the flash-sale email push.',
-    dateLabel: 'Flash Sale Day',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for the flash-sale email push.',
   },
   'mbymi-04-6': {
-    inputType: 'date',
-    helper: 'Reserve the day(s) you’ll wire up the payment + delivery process.',
-    dateLabel: 'Payment + Delivery Setup',
+    inputType: 'acknowledge',
+    helper: 'Reserve time to wire up the payment + delivery process.',
   },
   'mbymi-04-7': {
     inputType: 'text',
@@ -167,9 +152,8 @@ export const taskConfig = {
     playbookField: 'product.outlineDraft',
   },
   'mbymi-04-8': {
-    inputType: 'date',
-    helper: 'Reserve the day you’ll kick off your priority-waitlist promotion.',
-    dateLabel: 'Priority Waitlist Promotion Starts',
+    inputType: 'acknowledge',
+    helper: 'Reserve time to plan + kick off your priority-waitlist promotion.',
   },
   'mbymi-04-9': {
     inputType: 'text',
@@ -181,14 +165,12 @@ export const taskConfig = {
     emailLabel: 'Priority Waitlist Follow-Up Emails',
   },
   'mbymi-04-10': {
-    inputType: 'date',
-    helper: 'Reserve the day you’ll set up the optional Facebook group (skip with a blank date).',
-    dateLabel: 'Facebook Group Setup',
+    inputType: 'acknowledge',
+    helper: 'Reserve time for the optional Facebook group setup.',
   },
   'mbymi-04-11': {
-    inputType: 'date',
-    helper: 'Reserve the day you’ll build the early-interest priority-list opt-in page.',
-    dateLabel: 'Priority Opt-in Page Build',
+    inputType: 'acknowledge',
+    helper: 'Reserve time to build the early-interest priority-list opt-in page.',
   },
 
   // ---- Priority Waitlist Registration -------------------------------------
@@ -228,11 +210,6 @@ export const taskConfig = {
     placeholder: 'Group URL (optional)',
     helper: 'Optional — only if a FB group is part of your nurture plan.',
     linkLabel: 'Facebook Group',
-  },
-  'mbymi-06-2': {
-    inputType: 'note',
-    placeholder: 'Notes on cadence / lives schedule',
-    helper: 'How often will you go live or post in the group leading up to launch?',
   },
 
   // ---- Waitlist (the nurture sequence — high-value content tasks) ---------
@@ -369,7 +346,6 @@ export const taskConfig = {
   },
 
   // ---- 4-Day Follow-Up ----------------------------------------------------
-  'mbymi-13-1': { inputType: 'acknowledge', helper: 'Stripe / PayPal / Kajabi Payments — whichever you use.' },
   'mbymi-13-2': {
     inputType: 'text',
     minChars: 30,

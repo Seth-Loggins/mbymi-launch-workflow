@@ -30,9 +30,9 @@ export const mbymiPhases = [
   },
   {
     id: 'sell',
-    label: 'Sell',
-    short: 'SELL',
-    blurb: 'Build the checkout, sales page, flash sale, and run the webinar.',
+    label: 'Launch Week',
+    short: 'LAUNCH WEEK',
+    blurb: 'Stand up the checkout + sales page, run the flash sale, deliver the webinar.',
     groups: ['Payment + Delivery', 'Flash Sale', 'Webinar'],
   },
   {

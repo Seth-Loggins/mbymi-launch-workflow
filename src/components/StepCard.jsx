@@ -92,9 +92,11 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
       {config.helper && (
         <p className="mt-2 text-white/70 text-sm max-w-2xl">{config.helper}</p>
       )}
-      <div className="mt-3">
-        <TrainingVideoLink url={config.videoUrl} />
-      </div>
+      {config.videoUrl && (
+        <div className="mt-3">
+          <TrainingVideoLink url={config.videoUrl} />
+        </div>
+      )}
 
       <div className="mt-5 max-w-2xl">
         <StepInput config={config} draft={draft} setDraft={setDraft} task={task} />
@@ -195,19 +197,9 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
 /* ---------- Training video link --------------------------------------- */
 
 function TrainingVideoLink({ url }) {
-  // Placeholder when no URL is configured. The user will swap in real video
-  // links via the `videoUrl` field in mbymiTaskConfig.js.
-  if (!url) {
-    return (
-      <div
-        className="inline-flex items-center gap-2 text-xs text-white/55"
-        title="Training video coming soon"
-      >
-        <span style={{ fontSize: '0.95rem' }}>📹</span>
-        <span className="italic">Training video coming soon</span>
-      </div>
-    );
-  }
+  // Render nothing when no URL is configured — the placeholder was distracting.
+  // Real videos slot in via the `videoUrl` field in mbymiTaskConfig.js.
+  if (!url) return null;
   return (
     <a
       href={url}
