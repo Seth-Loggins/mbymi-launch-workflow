@@ -124,14 +124,14 @@ export const taskConfig = {
     placeholder: 'Paste your opt-in page URL (optional)',
     helper: 'External build in Kajabi/your funnel tool — use the AI bot for the opt-in page copy, then drop the live URL here.',
     linkLabel: 'Priority Waitlist Opt-in Page',
-    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
+    aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-05-2': {
     inputType: 'note',
     placeholder: 'Paste your thank-you page URL (optional)',
     helper: 'The page they land on after opting in. Use the AI bot for the copy, then drop the URL.',
     linkLabel: 'Waitlist Thank-You Page',
-    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
+    aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-05-3': {
     inputType: 'acknowledge',
@@ -255,7 +255,7 @@ export const taskConfig = {
     placeholder: 'Sales page URL (optional)',
     helper: 'The main page that does the convincing. Use the AI bot to draft sales-page copy, then drop the published URL here.',
     linkLabel: 'Sales Page',
-    aiBot: { name: 'Sales Page Copy Bot', url: BOT_URLS.salesPage },
+    aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
   },
   'mbymi-10-5': { inputType: 'acknowledge', helper: 'Test the full purchase flow with a $1 test charge before launch.' },
 

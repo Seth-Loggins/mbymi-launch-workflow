@@ -13,10 +13,10 @@ export default function LivePanel() {
     <aside
       className="card"
       style={{
-        position: 'sticky',
-        top: 16,
-        maxHeight: 'calc(100vh - 32px)',
-        overflowY: 'auto',
+        // No sticky / maxHeight / overflowY — the iframe auto-resizes to fit
+        // content, so the right panel can grow naturally with whichever view
+        // is active (especially the long Debrief form) without an internal
+        // scrollbar. overflowX:hidden stays to suppress lateral overflow.
         overflowX: 'hidden',
         minWidth: 0,
       }}
