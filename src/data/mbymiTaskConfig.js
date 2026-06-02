@@ -100,6 +100,43 @@ export const taskConfig = {
       },
     ],
   },
+  'mbymi-00-6': {
+    inputType: 'lesson',
+    lessonNumber: '04',
+    body: [
+      // First line has TWO inline hyperlinks behind "PDF Version" and
+      // "Excel Sheet Version" — the `parts` block type lets a paragraph mix
+      // plain text spans with hyperlinked spans inline.
+      {
+        parts: [
+          { text: 'The "Chunked" Projects For Your Monetize Before You Make It (' },
+          {
+            link: 'https://drive.google.com/file/d/1OUUtrkUIyxnB5q5N1lHZE0ynOU7RPBqC/view',
+            text: 'PDF Version',
+          },
+          { text: ' / ' },
+          {
+            link: 'https://docs.google.com/spreadsheets/d/18teZDL6RaDGMMv4x1F6YppEc9FRjJhre/edit?gid=1764815534#gid=1764815534',
+            text: 'Excel Sheet Version',
+          },
+          { text: '):' },
+        ],
+      },
+      // Numbered list — each item is its own paragraph so the layout matches
+      // the source lesson.
+      '1. Create "Early-Interest" PRIORITY LIST Opt-In Page',
+      '2. Facebook Group Creation (optional)',
+      '3. PRIORITY Waitlist Follow-Up Emails',
+      '4. Promote "PRIORITY WAITLIST"',
+      '5. Create Your Product Outline',
+      '6. Payment + Delivery Process',
+      '7. Flash Sale',
+      '8. Rock Your Webinars! (Optional)',
+      '9. 4-Day Follow-Up',
+      '10. Close Day',
+      '11. Launch Debrief',
+    ],
+  },
   'mbymi-00-5': {
     inputType: 'lesson',
     lessonNumber: '03',

@@ -433,6 +433,30 @@ function LessonBodyBlock({ block }) {
     );
   }
   if (block && typeof block === 'object') {
+    if (Array.isArray(block.parts)) {
+      // Paragraph with mixed plain-text and hyperlinked spans inline.
+      return (
+        <p className="text-white/85" style={baseParaStyle}>
+          {block.parts.map((part, i) => {
+            if (part && typeof part === 'object' && part.link) {
+              return (
+                <a
+                  key={i}
+                  href={part.link}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="font-bold hover:underline"
+                  style={{ color: '#83CCBD', textDecoration: 'underline' }}
+                >
+                  {part.text}
+                </a>
+              );
+            }
+            return <span key={i}>{part?.text ?? ''}</span>;
+          })}
+        </p>
+      );
+    }
     if (typeof block.image !== 'undefined') {
       if (block.image) {
         return (
