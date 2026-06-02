@@ -319,18 +319,7 @@ function LessonBody({ config, draft, setDraft }) {
       {bodyParagraphs.length > 0 && (
         <div className="mt-4 space-y-3">
           {bodyParagraphs.map((p, i) => (
-            <p
-              key={i}
-              className="text-white/85"
-              style={{
-                fontSize: '0.95rem',
-                lineHeight: 1.5,
-                overflowWrap: 'anywhere',
-                wordBreak: 'break-word',
-              }}
-            >
-              {p}
-            </p>
+            <LessonBodyBlock key={i} block={p} />
           ))}
         </div>
       )}
@@ -426,6 +415,73 @@ function LessonBody({ config, draft, setDraft }) {
       )}
     </div>
   );
+}
+
+// Renders one body block inside a lesson card. Supports three shapes:
+//   - string                      → plain paragraph
+//   - { bold: 'X', text: '…' }    → paragraph with a bold lead-in span
+//   - { image: url|'', alt: '…' } → image (empty `image` → dashed placeholder)
+function LessonBodyBlock({ block }) {
+  const baseParaStyle = {
+    fontSize: '0.95rem',
+    lineHeight: 1.5,
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-word',
+  };
+
+  if (typeof block === 'string') {
+    return (
+      <p className="text-white/85" style={baseParaStyle}>
+        {block}
+      </p>
+    );
+  }
+  if (block && typeof block === 'object') {
+    if (typeof block.image !== 'undefined') {
+      if (block.image) {
+        return (
+          <div className="my-2">
+            <img
+              src={block.image}
+              alt={block.alt ?? ''}
+              style={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                borderRadius: 'var(--radius-md)',
+                background: '#fff',
+              }}
+            />
+          </div>
+        );
+      }
+      // Placeholder when no image URL is configured yet.
+      return (
+        <div
+          className="my-2 text-center text-white/65"
+          style={{
+            border: '1px dashed rgba(255,255,255,0.40)',
+            borderRadius: 'var(--radius-md)',
+            padding: '28px 16px',
+            background: 'rgba(255,255,255,0.04)',
+            fontStyle: 'italic',
+            fontSize: '0.85rem',
+          }}
+        >
+          🗺️  {block.alt || 'Image coming soon'}
+        </div>
+      );
+    }
+    if (typeof block.bold === 'string') {
+      return (
+        <p className="text-white/85" style={baseParaStyle}>
+          <span className="font-bold text-white">{block.bold}</span>
+          {block.text ?? ''}
+        </p>
+      );
+    }
+  }
+  return null;
 }
 
 // Inline numeric input for a lesson's embedded sub-task. Matches the dark

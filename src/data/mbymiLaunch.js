@@ -32,6 +32,10 @@ const processGroups = [
         id: "mbymi-00-3",
         title: "Planning Phase 01: Dream It!",
       },
+      {
+        id: "mbymi-00-4",
+        title: "Planning Phase 02: Map It",
+      },
     ],
   },
   {
@@ -47,13 +51,10 @@ const processGroups = [
       { id: "mbymi-01-1", title: "The # People Needed in Your Launch List", embedded: true },
     ],
   },
-  {
-    process: "Map It",
-    tasks: [
-      { id: "mbymi-02-1", title: "Phase 1: Momentum to Offer" },
-      { id: "mbymi-02-2", title: "Phase 2: Announcing your Beta Program" },
-    ],
-  },
+  // Map It group dissolved — its 2 tasks (mbymi-02-1 + mbymi-02-2) were
+  // superseded by the Planning Phase 02: Map It lesson (mbymi-00-4) which
+  // walks the user through the same map concept declaratively rather than
+  // asking them to draft Momentum/Announce plans from scratch.
   {
     process: "Book It",
     tasks: [
@@ -183,6 +184,7 @@ export const mbymiTasks = processGroups
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 40 tasks total across 15 process groups, organised into 10 macro-phases
+// 39 tasks total across 14 process groups, organised into 10 macro-phases
 // (3 of the tasks are `embedded: true` — they live inside the Planning Phase
-// 01 lesson card so the user-visible count is 37 standalone steps + 3 lessons).
+// 01 lesson card so the user-visible count is 33 standalone steps + 4 lessons
+// = 37 total visible, with the 3 Dream It numbers captured inside lesson #3).

@@ -109,7 +109,7 @@ function formatAnswerSummary(task, config) {
     case 'date':
       return ans ? formatDateShort(ans) : '— no date set —';
     case 'lesson':
-      return 'Watched';
+      return 'Completed';
     case 'acknowledge':
     default:
       return 'Marked complete';

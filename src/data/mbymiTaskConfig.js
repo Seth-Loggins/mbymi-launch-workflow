@@ -100,6 +100,32 @@ export const taskConfig = {
       },
     ],
   },
+  'mbymi-00-4': {
+    inputType: 'lesson',
+    lessonNumber: '02',
+    // `body` items can be:
+    //   - a string         → renders as a paragraph
+    //   - { image, alt }   → renders as an image (empty `image` → placeholder)
+    //   - { bold, text }   → paragraph with a bold lead-in span
+    body: [
+      'In this Step, you\'ll "Map Out" all the moving pieces in your "Monetize Before You Make it" Launch Plan. Below is a sample MAP that shows you how I would run this promotion.',
+      // Image placeholder — swap `image` to a public URL or '/launch-map.png'
+      // once the file is added to the repo's public/ folder.
+      { image: '', alt: "James Wedmore's 'Monetize Before You Make It' Launch Map" },
+      "Notice there are two PRIMARY phases (and one third optional phase if you didn't fill your beta).",
+      {
+        bold: 'Phase #1',
+        text:
+          ' is to build momentum of your offer by "teasing" your audience and sending them to a Priority Waitlist Page. You can do this through your emails, content, and social media posts.',
+      },
+      {
+        bold: 'Phase #2',
+        text:
+          ' is the Phase of actually announcing your Beta Program and opening up a limited amount of seats. If you have successfully built out a Priority Waitlist, then writing emails to these individuals may be the only step you need to take.  But in Phase 2, you can also use your social media assets to get the word out.',
+      },
+      "If you haven't filled your BETA through this process, you can transition to the optional Phase #3, and invite your audience to an informative webinar. And... we have an entire Webinar Launch Process you can follow to turn attendees into customers!",
+    ],
+  },
   'mbymi-00-2': {
     inputType: 'lesson',
     lessonNumber: '0.5',
@@ -153,25 +179,8 @@ export const taskConfig = {
     playbookField: 'offer.foundingMembersTarget',
   },
 
-  // ---- Map It -------------------------------------------------------------
-  'mbymi-02-1': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Describe how you will build momentum leading up to the offer announcement…',
-    helper: 'Phase 1 is the lead-up: content, conversations, warming up your audience before you mention the offer.',
-    example:
-      'Three weeks of weekly podcasts + daily IG stories around the core problem, hosting one free live Q&A to surface objections.',
-    playbookField: 'mapIt.momentumPlan',
-  },
-  'mbymi-02-2': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Describe how you will announce the beta program…',
-    helper: 'Phase 2 is the public announcement that the beta exists and how to get on the waitlist.',
-    example:
-      'Hard pivot in week 4: dedicated podcast episode + email blast + IG live announcing the beta and pointing at the waitlist page.',
-    playbookField: 'mapIt.announcementPlan',
-  },
+  // Map It tasks (mbymi-02-1 + mbymi-02-2) removed — superseded by the
+  // Planning Phase 02: Map It lesson (mbymi-00-4).
 
   // ---- Book It ------------------------------------------------------------
   'mbymi-03-1': {

@@ -86,8 +86,9 @@ export default function PlaybookView() {
   const offerDef = answerOf(tasks, 'mbymi-09-1');
   const productOutline = answerOf(tasks, 'mbymi-09-2');
 
-  const momentum = answerOf(tasks, 'mbymi-02-1');
-  const announcement = answerOf(tasks, 'mbymi-02-2');
+  // Map It tasks (mbymi-02-*) were deleted — the Planning Phase 02 lesson
+  // captures the same content declaratively, so there's no per-launch answer
+  // to display in the playbook.
 
   const contentSched = answerOf(tasks, 'mbymi-03-1');
   const regDeadline = answerOf(tasks, 'mbymi-03-2');
@@ -183,13 +184,6 @@ export default function PlaybookView() {
           </Section>
         );
       })()}
-
-      <Section title="Map It · Momentum + Announcement" filled={momentum || announcement}>
-        <div className="space-y-2">
-          {momentum ? <Quote>{momentum}</Quote> : <Empty>Phase 1 plan not filled yet.</Empty>}
-          {announcement ? <Quote>{announcement}</Quote> : <Empty>Phase 2 plan not filled yet.</Empty>}
-        </div>
-      </Section>
 
       <Section
         title="Waitlist sequence"

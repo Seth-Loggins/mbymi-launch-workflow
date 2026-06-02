@@ -10,7 +10,7 @@ export const mbymiPhases = [
     label: 'Plan',
     short: 'PLAN',
     blurb: 'Decide the offer, the audience, and the framework.',
-    groups: ['Foundations', 'Dream It', 'Map It', 'Book It'],
+    groups: ['Foundations', 'Dream It', 'Book It'],
   },
   {
     id: 'waitlist',
