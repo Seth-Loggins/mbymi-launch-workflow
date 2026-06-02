@@ -43,6 +43,21 @@ export const BOT_URLS = {
 };
 
 export const taskConfig = {
+  // ---- Foundations (teaching lessons) -------------------------------------
+  // 'lesson' inputType renders an embedded video + plain-block bonus + a
+  // "Mark complete →" button. No text/number/date input is collected. Title
+  // and body strings are James's verbatim copy — do not rewrite.
+  'mbymi-00-1': {
+    inputType: 'lesson',
+    intro: 'Watch the Quick Video Below for a basic understanding of this strategy:',
+    videoUrl: 'https://www.youtube.com/watch?v=Tbm3BCKZ4Es&t=2s',
+    bonus: {
+      title: 'BONUS: The Course Chronicles: Sold Out in 30 Seconds',
+      body: "Listen along on this 8-Part Series that documents MY journey in Beta Launching a brand new product that sold out in less than 30 Seconds!",
+      linkUrl: 'https://www.jameswedmoretraining.com/thecoursechroniclesplaylist',
+    },
+  },
+
   // ---- Dream It -----------------------------------------------------------
   'mbymi-01-1': {
     inputType: 'number',

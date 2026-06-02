@@ -14,6 +14,19 @@
 const processGroups = [
   // ===== PLAN PHASE ========================================================
   {
+    process: "Foundations",
+    // Teaching lessons that bookend the framework. No action required — these
+    // are watch-and-acknowledge style steps that wrap embedded video / linked
+    // training content.
+    tasks: [
+      {
+        id: "mbymi-00-1",
+        title:
+          "STEP 00: Understand What 'Monetize Before You Make It' ™ Is & How Does it Work:",
+      },
+    ],
+  },
+  {
     process: "Dream It",
     tasks: [
       { id: "mbymi-01-3", title: "The # of Founding Members You'll Accept" },
@@ -153,4 +166,4 @@ export const mbymiTasks = processGroups
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 37 tasks total across 14 process groups, organised into 10 macro-phases.
+// 38 tasks total across 15 process groups, organised into 10 macro-phases.

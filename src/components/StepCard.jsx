@@ -100,15 +100,19 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
           {config.helper}
         </p>
       )}
-      {config.videoUrl && (
+      {config.inputType !== 'lesson' && config.videoUrl && (
         <div className="mt-3">
           <TrainingVideoLink url={config.videoUrl} />
         </div>
       )}
 
-      <div className="mt-5 max-w-2xl">
-        <StepInput config={config} draft={draft} setDraft={setDraft} task={task} />
-      </div>
+      {config.inputType === 'lesson' ? (
+        <LessonBody config={config} />
+      ) : (
+        <div className="mt-5 max-w-2xl">
+          <StepInput config={config} draft={draft} setDraft={setDraft} task={task} />
+        </div>
+      )}
 
       {config.promptMetricsUpdate && (
         <div
@@ -168,7 +172,9 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
           onClick={handleContinue}
           disabled={!valid}
         >
-          {config.inputType === 'acknowledge' ? 'Mark complete →' : 'Continue →'}
+          {config.inputType === 'acknowledge' || config.inputType === 'lesson'
+            ? 'Mark complete →'
+            : 'Continue →'}
         </button>
 
         {config.aiBot && (
@@ -225,6 +231,102 @@ function TrainingVideoLink({ url }) {
       Watch the training
     </a>
   );
+}
+
+/* ---------- Lesson body (video + bonus block) ------------------------- */
+
+function LessonBody({ config }) {
+  return (
+    <div className="mt-5 max-w-2xl">
+      {config.intro && (
+        <p
+          className="font-semibold text-white"
+          style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+        >
+          {config.intro}
+        </p>
+      )}
+
+      {config.videoUrl && (
+        <div className="mt-3" style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+          <iframe
+            src={youtubeEmbedUrl(config.videoUrl)}
+            title="Training video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              border: 0,
+              borderRadius: 'var(--radius-md)',
+              background: '#000',
+            }}
+          />
+        </div>
+      )}
+
+      {config.bonus && (
+        <div className="mt-5">
+          <div
+            className="font-bold text-white"
+            style={{ fontSize: '1rem', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+          >
+            {config.bonus.title}
+          </div>
+          {config.bonus.body && (
+            <p
+              className="mt-1 text-sm text-white/85"
+              style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+            >
+              {config.bonus.body}
+            </p>
+          )}
+          {config.bonus.linkUrl && (
+            <a
+              href={config.bonus.linkUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="mt-2 inline-block text-sm font-semibold hover:underline"
+              style={{ color: '#83CCBD', overflowWrap: 'anywhere', wordBreak: 'break-all' }}
+            >
+              {config.bonus.linkUrl}
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Convert a watch-style YouTube URL to its /embed/ form, preserving start time.
+function youtubeEmbedUrl(url) {
+  if (typeof url !== 'string') return '';
+  try {
+    const u = new URL(url);
+    // Already an embed URL — pass through.
+    if (u.pathname.startsWith('/embed/')) return url;
+    const id =
+      u.searchParams.get('v') ||
+      (u.hostname.includes('youtu.be') ? u.pathname.slice(1) : '');
+    if (!id) return url;
+    const t = u.searchParams.get('t') || u.searchParams.get('start');
+    // Parse "2s" / "1m30s" / "90" into raw seconds for the embed param.
+    let start = 0;
+    if (t) {
+      if (/^\d+$/.test(t)) start = Number(t);
+      else {
+        const m = t.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s?)?/);
+        if (m) start = (Number(m[1]) || 0) * 3600 + (Number(m[2]) || 0) * 60 + (Number(m[3]) || 0);
+      }
+    }
+    const query = start ? `?start=${start}&rel=0` : '?rel=0';
+    return `https://www.youtube.com/embed/${id}${query}`;
+  } catch {
+    return url;
+  }
 }
 
 /* ---------- input renderers per type ----------------------------------- */
@@ -342,6 +444,7 @@ function validate(draft, config) {
       return Number(draft.number) > 0;
     case 'date':
       return true; // optional
+    case 'lesson':
     case 'acknowledge':
     default:
       return true;
@@ -357,6 +460,7 @@ function serializeAnswer(draft, config) {
       return Number(draft.number) || 0;
     case 'date':
       return draft.date || null;
+    case 'lesson':
     case 'acknowledge':
     default:
       return null;

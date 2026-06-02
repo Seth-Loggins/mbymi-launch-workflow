@@ -90,6 +90,8 @@ function formatAnswerSummary(task, config) {
       return `${formatNumber(ans)}${config.unit ? ` ${config.unit}` : ''}`;
     case 'date':
       return ans ? formatDateShort(ans) : '— no date set —';
+    case 'lesson':
+      return 'Watched';
     case 'acknowledge':
     default:
       return 'Marked complete';
