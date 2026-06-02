@@ -109,9 +109,7 @@ export const taskConfig = {
     //   - { bold, text }   → paragraph with a bold lead-in span
     body: [
       'In this Step, you\'ll "Map Out" all the moving pieces in your "Monetize Before You Make it" Launch Plan. Below is a sample MAP that shows you how I would run this promotion.',
-      // Image placeholder — swap `image` to a public URL or '/launch-map.png'
-      // once the file is added to the repo's public/ folder.
-      { image: '', alt: "James Wedmore's 'Monetize Before You Make It' Launch Map" },
+      { image: './launch-map.png', alt: "James Wedmore's 'Monetize Before You Make It' Launch Map" },
       "Notice there are two PRIMARY phases (and one third optional phase if you didn't fill your beta).",
       {
         bold: 'Phase #1',
