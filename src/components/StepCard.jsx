@@ -80,10 +80,19 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
   return (
     <div className="card" style={{ background: '#1D203F', color: '#fff' }}>
       <div className="flex items-center gap-2 mb-3 flex-wrap">
-        <span className="chip bg-brand-pink text-white">
-          Step {phaseStepIndex} of {stats.total} · {phase.label}
-        </span>
-        <span className="chip bg-white/10 text-white">{task.process}</span>
+        {config.inputType === 'lesson' ? (
+          // Lessons just show the phase. The "Step X of Y" + process-group
+          // chips would feel redundant on a teaching screen where there's no
+          // task input.
+          <span className="chip bg-brand-pink text-white">{phase.label}</span>
+        ) : (
+          <>
+            <span className="chip bg-brand-pink text-white">
+              Step {phaseStepIndex} of {stats.total} · {phase.label}
+            </span>
+            <span className="chip bg-white/10 text-white">{task.process}</span>
+          </>
+        )}
       </div>
 
       <h2
