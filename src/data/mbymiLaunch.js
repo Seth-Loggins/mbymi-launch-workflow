@@ -36,6 +36,10 @@ const processGroups = [
         id: "mbymi-00-4",
         title: "Planning Phase 02: Map It",
       },
+      {
+        id: "mbymi-00-5",
+        title: "Planning Phase 03: Book It",
+      },
     ],
   },
   {
@@ -57,11 +61,15 @@ const processGroups = [
   // asking them to draft Momentum/Announce plans from scratch.
   {
     process: "Book It",
+    // All 4 Book It dates are now captured inside the Planning Phase 03 lesson
+    // card (mbymi-00-5). They stay in this data file so math/playbook can
+    // continue to look them up by id, but `embedded: true` hides them from
+    // the user-facing step list.
     tasks: [
-      { id: "mbymi-03-4", title: "Initial Announcement of Beta Offer" },
-      { id: "mbymi-03-3", title: "All Follow-Up Announcements on Beta Offer" },
-      { id: "mbymi-03-2", title: "Deadline to register (optional)" },
-      { id: "mbymi-03-1", title: "Content-Posting Schedule (to build Priority List)" },
+      { id: "mbymi-03-4", title: "Initial Announcement of Beta Offer", embedded: true },
+      { id: "mbymi-03-3", title: "All Follow-Up Announcements on Beta Offer", embedded: true },
+      { id: "mbymi-03-2", title: "Deadline to register (optional)", embedded: true },
+      { id: "mbymi-03-1", title: "Content-Posting Schedule (to build Priority List)", embedded: true },
     ],
   },
 

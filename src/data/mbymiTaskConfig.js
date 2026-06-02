@@ -100,6 +100,50 @@ export const taskConfig = {
       },
     ],
   },
+  'mbymi-00-5': {
+    inputType: 'lesson',
+    lessonNumber: '03',
+    body: [
+      "In this planning phase, we must identify all of your key dates and events, and then LOCK them into your calendar. Remember... if you don't schedule it... you won't do it!",
+      { bold: 'Monetize Before You Make It Key Dates:', text: '' },
+      'Inside this Launch Process, there are a few key dates that you must put on the calendar:',
+      // The 4 numbered key dates render as plain paragraphs so the body reads
+      // exactly as the source. The actual date pickers come right below via
+      // the {subtasks: true} marker so the user fills them in context.
+      '1. Initial Announcement of Beta Offer',
+      '2. All Follow-Up Announcements on Beta Offer',
+      '3. Deadline to register (optional)',
+      '4. Content-Posting Schedule (to build Priority List)',
+      { subtasks: true },
+      'Below is a SAMPLE calendar that uses those KEY DATES:',
+      // Image placeholders — swap to '/book-it-calendar.png' once URL is back.
+      { image: '', alt: "MBYMI Launch Calendar — primary sample" },
+      'If you follow the above calendar and do not fill your beta, you can move onto the optional PHASE 03 and run a webinar(s) to get more Founding Members. If you follow that third phase, below is a SAMPLE calendar to run from:',
+      { image: '', alt: "MBYMI Launch Calendar — optional Phase 03 webinar variant" },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-03-4',
+        label: '1. Initial Announcement of Beta Offer',
+        inputType: 'date',
+      },
+      {
+        id: 'mbymi-03-3',
+        label: '2. All Follow-Up Announcements on Beta Offer',
+        inputType: 'date',
+      },
+      {
+        id: 'mbymi-03-2',
+        label: '3. Deadline to register (optional)',
+        inputType: 'date',
+      },
+      {
+        id: 'mbymi-03-1',
+        label: '4. Content-Posting Schedule (to build Priority List)',
+        inputType: 'date',
+      },
+    ],
+  },
   'mbymi-00-4': {
     inputType: 'lesson',
     lessonNumber: '02',

@@ -90,10 +90,16 @@ function ActiveStep({
   function handleContinue() {
     if (!valid) return;
     if (config.inputType === 'lesson' && Array.isArray(config.subTasks)) {
-      // Compound lesson: fan answers out to each embedded sub-task.
+      // Compound lesson: fan answers out to each embedded sub-task. Numbers
+      // get cast; dates stay as YYYY-MM-DD strings (or empty/null).
       const subTaskAnswers = {};
       config.subTasks.forEach((sub) => {
-        subTaskAnswers[sub.id] = Number(draft.subTasks?.[sub.id]) || 0;
+        const raw = draft.subTasks?.[sub.id];
+        if (sub.inputType === 'date') {
+          subTaskAnswers[sub.id] = raw || null;
+        } else {
+          subTaskAnswers[sub.id] = Number(raw) || 0;
+        }
       });
       onCompleteLesson(task.id, subTaskAnswers);
       return;
@@ -318,42 +324,32 @@ function LessonBody({ config, draft, setDraft }) {
 
       {bodyParagraphs.length > 0 && (
         <div className="mt-4 space-y-3">
-          {bodyParagraphs.map((p, i) => (
-            <LessonBodyBlock key={i} block={p} />
-          ))}
+          {bodyParagraphs.map((p, i) => {
+            // A `{ subtasks: true }` block in the body inserts the input
+            // fields at that exact position — lets lessons interleave teaching
+            // copy → inputs → more copy.
+            if (p && typeof p === 'object' && p.subtasks === true) {
+              return (
+                <SubTaskInputs
+                  key={`subtasks-${i}`}
+                  config={config}
+                  draft={draft}
+                  onChange={setSubTaskValue}
+                />
+              );
+            }
+            return <LessonBodyBlock key={i} block={p} />;
+          })}
         </div>
       )}
 
-      {/* Embedded sub-tasks: heading + numbered input rows. */}
-      {Array.isArray(config.subTasks) && config.subTasks.length > 0 && (
-        <div className="mt-5">
-          {config.inputsHeading && (
-            <div
-              className="font-bold text-white mb-3"
-              style={{ fontSize: '1rem', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-            >
-              {config.inputsHeading}
-            </div>
-          )}
-          <div className="space-y-4">
-            {config.subTasks.map((sub) => (
-              <div key={sub.id}>
-                <label
-                  className="block font-bold text-white mb-1.5"
-                  style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-                >
-                  {sub.label}
-                </label>
-                <SubTaskNumberInput
-                  sub={sub}
-                  value={draft?.subTasks?.[sub.id] ?? ''}
-                  onChange={(v) => setSubTaskValue(sub.id, v)}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {/* Embedded sub-tasks at the end (only when the body didn't already
+          place them via a `{ subtasks: true }` marker). */}
+      {Array.isArray(config.subTasks) &&
+        config.subTasks.length > 0 &&
+        !hasInlineSubtaskMarker(bodyParagraphs) && (
+          <SubTaskInputs config={config} draft={draft} onChange={setSubTaskValue} />
+        )}
 
       {Array.isArray(config.resources) && config.resources.length > 0 && (
         <div className="mt-4 space-y-3">
@@ -484,9 +480,73 @@ function LessonBodyBlock({ block }) {
   return null;
 }
 
-// Inline numeric input for a lesson's embedded sub-task. Matches the dark
-// theme of the lesson card and supports optional $ prefix / unit suffix.
-function SubTaskNumberInput({ sub, value, onChange }) {
+// Renders the whole sub-task block — heading + labeled inputs. Used both
+// at the end of a lesson (default) and inline when the body has a
+// `{ subtasks: true }` marker.
+function SubTaskInputs({ config, draft, onChange }) {
+  if (!Array.isArray(config.subTasks) || config.subTasks.length === 0) return null;
+  return (
+    <div className="mt-5">
+      {config.inputsHeading && (
+        <div
+          className="font-bold text-white mb-3"
+          style={{ fontSize: '1rem', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+        >
+          {config.inputsHeading}
+        </div>
+      )}
+      <div className="space-y-4">
+        {config.subTasks.map((sub) => (
+          <div key={sub.id}>
+            <label
+              className="block font-bold text-white mb-1.5"
+              style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+            >
+              {sub.label}
+            </label>
+            <SubTaskInput
+              sub={sub}
+              value={draft?.subTasks?.[sub.id] ?? ''}
+              onChange={(v) => onChange(sub.id, v)}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function hasInlineSubtaskMarker(bodyBlocks) {
+  return (
+    Array.isArray(bodyBlocks) &&
+    bodyBlocks.some((b) => b && typeof b === 'object' && b.subtasks === true)
+  );
+}
+
+// Single input field for a sub-task. Handles number (with $ prefix / unit
+// suffix) and date types. All inputs share the dark lesson-card styling.
+function SubTaskInput({ sub, value, onChange }) {
+  const baseInputStyle = {
+    border: '1px solid rgba(255,255,255,0.18)',
+    borderRadius: 'var(--radius-md)',
+    padding: '10px 12px',
+  };
+  const baseInputClass =
+    'w-full bg-white/10 text-white placeholder-white/40 text-base outline-none transition focus:bg-white/15';
+
+  if (sub.inputType === 'date') {
+    return (
+      <input
+        type="date"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={baseInputClass}
+        style={baseInputStyle}
+      />
+    );
+  }
+
+  // Default: number input with optional prefix/unit affordances.
   return (
     <div className="flex items-center gap-2">
       {sub.prefix && (
@@ -504,17 +564,11 @@ function SubTaskNumberInput({ sub, value, onChange }) {
         value={value}
         placeholder={sub.placeholder ?? '0'}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-white/10 text-white placeholder-white/40 text-base outline-none transition focus:bg-white/15"
-        style={{
-          border: '1px solid rgba(255,255,255,0.18)',
-          borderRadius: 'var(--radius-md)',
-          padding: '10px 12px',
-        }}
+        className={baseInputClass}
+        style={baseInputStyle}
       />
       {sub.unit && (
-        <span className="text-sm uppercase tracking-wider text-white/60">
-          {sub.unit}
-        </span>
+        <span className="text-sm uppercase tracking-wider text-white/60">{sub.unit}</span>
       )}
     </div>
   );
@@ -675,12 +729,14 @@ function validate(draft, config) {
     case 'date':
       return true; // optional
     case 'lesson': {
-      // Compound lessons require every sub-task input to be a positive number.
+      // Compound lessons require every NUMBER sub-task to be > 0. Date sub-
+      // tasks are optional (consistent with how standalone date inputs work).
       // Pure (no sub-task) lessons need no validation — just acknowledge.
       if (!Array.isArray(config.subTasks) || config.subTasks.length === 0) return true;
-      return config.subTasks.every(
-        (sub) => Number(draft.subTasks?.[sub.id]) > 0,
-      );
+      return config.subTasks.every((sub) => {
+        if (sub.inputType === 'date') return true;
+        return Number(draft.subTasks?.[sub.id]) > 0;
+      });
     }
     case 'acknowledge':
     default:
