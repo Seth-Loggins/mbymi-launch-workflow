@@ -44,11 +44,14 @@ export const BOT_URLS = {
 
 export const taskConfig = {
   // ---- Foundations (teaching lessons) -------------------------------------
-  // 'lesson' inputType renders an embedded video + plain-block bonus + a
-  // "Mark complete →" button. No text/number/date input is collected. Title
-  // and body strings are James's verbatim copy — do not rewrite.
+  // 'lesson' inputType renders an embedded video / body paragraph / inline
+  // resource links / plain-block bonus + a "Mark complete →" button. No
+  // text/number/date input is collected. All copy is James's verbatim — do
+  // not rewrite. `lessonNumber` drives the "STEP {n}: PLAN" label shown on
+  // the completed-step card.
   'mbymi-00-1': {
     inputType: 'lesson',
+    lessonNumber: '00',
     intro: 'Watch the Quick Video Below for a basic understanding of this strategy:',
     videoUrl: 'https://www.youtube.com/watch?v=Tbm3BCKZ4Es&t=2s',
     bonus: {
@@ -56,6 +59,29 @@ export const taskConfig = {
       body: "Listen along on this 8-Part Series that documents MY journey in Beta Launching a brand new product that sold out in less than 30 Seconds!",
       linkUrl: 'https://www.jameswedmoretraining.com/thecoursechroniclesplaylist',
     },
+  },
+  'mbymi-00-2': {
+    inputType: 'lesson',
+    lessonNumber: '0.5',
+    body:
+      "Before diving in, it's crucial, to begin with the 5-Step Planning Process, so you have a clear picture of the entire map! Remember! There are just 5 easy steps: Dream it, Map it, Book it, Chunk it & Do it!",
+    // Each resource renders as a sentence with an inline hyperlinked label
+    // (linkText) replacing the raw URL.
+    resources: [
+      {
+        label:
+          "If you haven't learned WHAT our \"5 Step Launch Planning Process\" is, you can visit it",
+        linkText: 'HERE',
+        linkUrl:
+          'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/1545212/posts/5205202',
+        trailing: '.',
+      },
+      {
+        label: "Download the 'Monetize Before You Make it' Planning Sheet",
+        linkText: 'HERE',
+        linkUrl: 'https://drive.google.com/file/d/1rNJsE0Gdf9SBj_SQ4p8qkF-HhdnboYf4/view',
+      },
+    ],
   },
 
   // ---- Dream It -----------------------------------------------------------

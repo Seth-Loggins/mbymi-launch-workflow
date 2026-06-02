@@ -24,6 +24,10 @@ const processGroups = [
         title:
           "STEP 00: Understand What 'Monetize Before You Make It' ™ Is & How Does it Work:",
       },
+      {
+        id: "mbymi-00-2",
+        title: "STEP 0.5: Follow The 5-Step Planning Process:",
+      },
     ],
   },
   {
@@ -166,4 +170,4 @@ export const mbymiTasks = processGroups
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 38 tasks total across 15 process groups, organised into 10 macro-phases.
+// 39 tasks total across 15 process groups, organised into 10 macro-phases.

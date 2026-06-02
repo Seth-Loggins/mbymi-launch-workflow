@@ -277,6 +277,49 @@ function LessonBody({ config }) {
         </div>
       )}
 
+      {config.body && (
+        <p
+          className="mt-4 text-white/85"
+          style={{
+            fontSize: '0.95rem',
+            lineHeight: 1.5,
+            overflowWrap: 'anywhere',
+            wordBreak: 'break-word',
+          }}
+        >
+          {config.body}
+        </p>
+      )}
+
+      {Array.isArray(config.resources) && config.resources.length > 0 && (
+        <div className="mt-4 space-y-3">
+          {config.resources.map((r, i) => (
+            <p
+              key={i}
+              className="text-white/85"
+              style={{
+                fontSize: '0.95rem',
+                lineHeight: 1.5,
+                overflowWrap: 'anywhere',
+                wordBreak: 'break-word',
+              }}
+            >
+              {r.label}{' '}
+              <a
+                href={r.linkUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="font-bold hover:underline"
+                style={{ color: '#83CCBD', textDecoration: 'underline' }}
+              >
+                {r.linkText ?? 'HERE'}
+              </a>
+              {r.trailing ?? ''}
+            </p>
+          ))}
+        </div>
+      )}
+
       {config.bonus && (
         <div className="mt-5">
           <div
