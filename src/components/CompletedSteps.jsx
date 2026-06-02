@@ -3,7 +3,23 @@ import { getTaskConfig } from '../data/mbymiTaskConfig.js';
 import { formatCurrency, formatDateShort, formatNumber } from '../lib/format.js';
 
 export default function CompletedSteps() {
-  const { completedTasksInCurrentPhase, tasksByPhase, currentPhase, uncompleteTask } = useLaunch();
+  const {
+    completedTasksInCurrentPhase,
+    tasksByPhase,
+    currentPhase,
+    uncompleteTask,
+    uncompleteLesson,
+  } = useLaunch();
+
+  function handleEdit(taskId, taskConfig) {
+    // Compound lessons need to un-mark every embedded sub-task too, otherwise
+    // those values would remain "done" while the parent reopens.
+    if (taskConfig.inputType === 'lesson' && Array.isArray(taskConfig.subTasks)) {
+      uncompleteLesson(taskId, taskConfig.subTasks.map((s) => s.id));
+    } else {
+      uncompleteTask(taskId);
+    }
+  }
 
   if (completedTasksInCurrentPhase.length === 0) return null;
 
@@ -65,7 +81,7 @@ export default function CompletedSteps() {
             </div>
 
             <button
-              onClick={() => uncompleteTask(t.id)}
+              onClick={() => handleEdit(t.id, config)}
               title="Edit this step"
               className="shrink-0 text-brand-navy/40 hover:text-brand-pink transition-colors"
               style={{ fontSize: '1rem' }}

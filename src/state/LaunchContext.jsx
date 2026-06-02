@@ -138,6 +138,30 @@ export function LaunchProvider({ children }) {
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: false } : t)));
   }, []);
 
+  // Mark a compound lesson done AND fan out its sub-task answers to the
+  // embedded tasks. `subTaskAnswers` is { [taskId]: numericValue }.
+  const completeLesson = useCallback((lessonId, subTaskAnswers = {}) => {
+    setTasks((prev) =>
+      prev.map((t) => {
+        if (t.id === lessonId) return { ...t, done: true, answer: null };
+        if (Object.prototype.hasOwnProperty.call(subTaskAnswers, t.id)) {
+          return { ...t, done: true, answer: subTaskAnswers[t.id] };
+        }
+        return t;
+      }),
+    );
+  }, []);
+
+  // Reverse of completeLesson — undo the parent + every embedded sub-task in
+  // one pass so the user can edit the form again. Sub-task answers are kept
+  // so they pre-fill when the lesson card re-renders.
+  const uncompleteLesson = useCallback((lessonId, subTaskIds = []) => {
+    const idSet = new Set([lessonId, ...subTaskIds]);
+    setTasks((prev) =>
+      prev.map((t) => (idSet.has(t.id) ? { ...t, done: false } : t)),
+    );
+  }, []);
+
   const setTaskAnswer = useCallback((id, answer) => {
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, answer } : t)));
   }, []);
@@ -355,17 +379,22 @@ export function LaunchProvider({ children }) {
 
   /* ---------- derived selectors ---------------------------------------- */
 
+  // User-facing task list: hides tasks flagged `embedded: true` (whose values
+  // are captured inside a compound lesson card). Math + playbook still read
+  // the full `tasks` array directly when they need to look up by id.
+  const visibleTasks = useMemo(() => tasks.filter((t) => !t.embedded), [tasks]);
+
   const tasksByPhase = useMemo(() => {
     const map = {};
     mbymiPhases.forEach((p) => (map[p.id] = []));
-    [...tasks]
+    [...visibleTasks]
       .sort((a, b) => a.order - b.order)
       .forEach((t) => {
         const phaseId = processToPhase[t.process];
         if (phaseId) map[phaseId].push(t);
       });
     return map;
-  }, [tasks]);
+  }, [visibleTasks]);
 
   const phaseStats = useMemo(() => {
     const out = {};
@@ -418,8 +447,10 @@ export function LaunchProvider({ children }) {
     return list.findIndex((t) => t.id === currentTask.id) + 1;
   }, [tasksByPhase, currentPhaseId, currentTask]);
 
-  const totalDone = useMemo(() => tasks.filter((t) => t.done).length, [tasks]);
-  const overallProgress = tasks.length === 0 ? 0 : totalDone / tasks.length;
+  // Progress is measured against user-visible tasks (so the embedded sub-tasks
+  // captured inside a lesson card don't inflate the count).
+  const totalDone = useMemo(() => visibleTasks.filter((t) => t.done).length, [visibleTasks]);
+  const overallProgress = visibleTasks.length === 0 ? 0 : totalDone / visibleTasks.length;
 
   /* ---------- public value -------------------------------------------- */
 
@@ -455,7 +486,7 @@ export function LaunchProvider({ children }) {
       completedTasksInCurrentPhase,
       phaseStepIndex,
       totalDone,
-      totalTasks: tasks.length,
+      totalTasks: visibleTasks.length,
       overallProgress,
       isPhaseUnlocked,
 
@@ -464,6 +495,8 @@ export function LaunchProvider({ children }) {
       setDates,
       completeTask,
       uncompleteTask,
+      completeLesson,
+      uncompleteLesson,
       setTaskAnswer,
       updateMetrics,
       goToPhase,
@@ -527,6 +560,8 @@ export function LaunchProvider({ children }) {
       setDates,
       completeTask,
       uncompleteTask,
+      completeLesson,
+      uncompleteLesson,
       setTaskAnswer,
       updateMetrics,
       goToPhase,

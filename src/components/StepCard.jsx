@@ -10,10 +10,12 @@ export default function StepCard() {
     phaseStepIndex,
     phaseStats,
     completeTask,
+    completeLesson,
     goToPhase,
     phases,
     openBot,
     openMetricsDrawer,
+    tasks: allTasks,
   } = useLaunch();
 
   if (!currentTask) {
@@ -49,30 +51,53 @@ export default function StepCard() {
       phaseStepIndex={phaseStepIndex}
       phaseStats={phaseStats}
       onComplete={completeTask}
+      onCompleteLesson={completeLesson}
       onOpenBot={openBot}
       onOpenMetrics={openMetricsDrawer}
+      allTasks={allTasks}
     />
   );
 }
 
-function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpenBot, onOpenMetrics }) {
+function ActiveStep({
+  task,
+  phase,
+  phaseStepIndex,
+  phaseStats,
+  onComplete,
+  onCompleteLesson,
+  onOpenBot,
+  onOpenMetrics,
+  allTasks,
+}) {
   const config = getTaskConfig(task.id);
   const stats = phaseStats[phase.id];
 
   // Local draft state — only commits to context when user clicks Continue.
   // We key by task.id so switching tasks resets the draft cleanly.
-  const [draft, setDraft] = useState(() => seedDraft(task, config));
+  const [draft, setDraft] = useState(() => seedDraft(task, config, allTasks));
   const [showExample, setShowExample] = useState(false);
 
   useEffect(() => {
-    setDraft(seedDraft(task, config));
+    setDraft(seedDraft(task, config, allTasks));
     setShowExample(false);
+    // We deliberately don't depend on allTasks — only re-seed on task switch.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task.id]);
 
   const valid = validate(draft, config);
 
   function handleContinue() {
     if (!valid) return;
+    if (config.inputType === 'lesson' && Array.isArray(config.subTasks)) {
+      // Compound lesson: fan answers out to each embedded sub-task.
+      const subTaskAnswers = {};
+      config.subTasks.forEach((sub) => {
+        subTaskAnswers[sub.id] = Number(draft.subTasks?.[sub.id]) || 0;
+      });
+      onCompleteLesson(task.id, subTaskAnswers);
+      return;
+    }
     const answer = serializeAnswer(draft, config);
     onComplete(task.id, answer);
   }
@@ -116,7 +141,7 @@ function ActiveStep({ task, phase, phaseStepIndex, phaseStats, onComplete, onOpe
       )}
 
       {config.inputType === 'lesson' ? (
-        <LessonBody config={config} />
+        <LessonBody config={config} draft={draft} setDraft={setDraft} />
       ) : (
         <div className="mt-5 max-w-2xl">
           <StepInput config={config} draft={draft} setDraft={setDraft} task={task} />
@@ -244,7 +269,21 @@ function TrainingVideoLink({ url }) {
 
 /* ---------- Lesson body (video + bonus block) ------------------------- */
 
-function LessonBody({ config }) {
+function LessonBody({ config, draft, setDraft }) {
+  // `body` accepts a single string OR an array of paragraphs.
+  const bodyParagraphs = Array.isArray(config.body)
+    ? config.body
+    : config.body
+      ? [config.body]
+      : [];
+
+  function setSubTaskValue(id, value) {
+    setDraft({
+      ...draft,
+      subTasks: { ...(draft?.subTasks ?? {}), [id]: value },
+    });
+  }
+
   return (
     <div className="mt-5 max-w-2xl">
       {config.intro && (
@@ -277,18 +316,54 @@ function LessonBody({ config }) {
         </div>
       )}
 
-      {config.body && (
-        <p
-          className="mt-4 text-white/85"
-          style={{
-            fontSize: '0.95rem',
-            lineHeight: 1.5,
-            overflowWrap: 'anywhere',
-            wordBreak: 'break-word',
-          }}
-        >
-          {config.body}
-        </p>
+      {bodyParagraphs.length > 0 && (
+        <div className="mt-4 space-y-3">
+          {bodyParagraphs.map((p, i) => (
+            <p
+              key={i}
+              className="text-white/85"
+              style={{
+                fontSize: '0.95rem',
+                lineHeight: 1.5,
+                overflowWrap: 'anywhere',
+                wordBreak: 'break-word',
+              }}
+            >
+              {p}
+            </p>
+          ))}
+        </div>
+      )}
+
+      {/* Embedded sub-tasks: heading + numbered input rows. */}
+      {Array.isArray(config.subTasks) && config.subTasks.length > 0 && (
+        <div className="mt-5">
+          {config.inputsHeading && (
+            <div
+              className="font-bold text-white mb-3"
+              style={{ fontSize: '1rem', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+            >
+              {config.inputsHeading}
+            </div>
+          )}
+          <div className="space-y-4">
+            {config.subTasks.map((sub) => (
+              <div key={sub.id}>
+                <label
+                  className="block font-bold text-white mb-1.5"
+                  style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+                >
+                  {sub.label}
+                </label>
+                <SubTaskNumberInput
+                  sub={sub}
+                  value={draft?.subTasks?.[sub.id] ?? ''}
+                  onChange={(v) => setSubTaskValue(sub.id, v)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       )}
 
       {Array.isArray(config.resources) && config.resources.length > 0 && (
@@ -348,6 +423,42 @@ function LessonBody({ config }) {
             </a>
           )}
         </div>
+      )}
+    </div>
+  );
+}
+
+// Inline numeric input for a lesson's embedded sub-task. Matches the dark
+// theme of the lesson card and supports optional $ prefix / unit suffix.
+function SubTaskNumberInput({ sub, value, onChange }) {
+  return (
+    <div className="flex items-center gap-2">
+      {sub.prefix && (
+        <span
+          className="font-display text-xl"
+          style={{ color: 'rgba(255,255,255,0.6)' }}
+        >
+          {sub.prefix}
+        </span>
+      )}
+      <input
+        type="number"
+        inputMode="numeric"
+        min="0"
+        value={value}
+        placeholder={sub.placeholder ?? '0'}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-white/10 text-white placeholder-white/40 text-base outline-none transition focus:bg-white/15"
+        style={{
+          border: '1px solid rgba(255,255,255,0.18)',
+          borderRadius: 'var(--radius-md)',
+          padding: '10px 12px',
+        }}
+      />
+      {sub.unit && (
+        <span className="text-sm uppercase tracking-wider text-white/60">
+          {sub.unit}
+        </span>
       )}
     </div>
   );
@@ -471,7 +582,7 @@ function StepInput({ config, draft, setDraft }) {
 
 /* ---------- helpers ---------------------------------------------------- */
 
-function seedDraft(task, config) {
+function seedDraft(task, config, allTasks = []) {
   const answer = task.answer;
   switch (config.inputType) {
     case 'text':
@@ -481,6 +592,17 @@ function seedDraft(task, config) {
       return { number: answer != null ? String(answer) : '' };
     case 'date':
       return { date: typeof answer === 'string' ? answer : '' };
+    case 'lesson': {
+      // Compound lessons read pre-existing sub-task answers off the live task
+      // array so re-editing a completed lesson restores the inputs.
+      if (!Array.isArray(config.subTasks)) return {};
+      const subTaskValues = {};
+      config.subTasks.forEach((sub) => {
+        const t = allTasks.find((x) => x.id === sub.id);
+        subTaskValues[sub.id] = t?.answer != null ? String(t.answer) : '';
+      });
+      return { subTasks: subTaskValues };
+    }
     default:
       return {};
   }
@@ -496,7 +618,14 @@ function validate(draft, config) {
       return Number(draft.number) > 0;
     case 'date':
       return true; // optional
-    case 'lesson':
+    case 'lesson': {
+      // Compound lessons require every sub-task input to be a positive number.
+      // Pure (no sub-task) lessons need no validation — just acknowledge.
+      if (!Array.isArray(config.subTasks) || config.subTasks.length === 0) return true;
+      return config.subTasks.every(
+        (sub) => Number(draft.subTasks?.[sub.id]) > 0,
+      );
+    }
     case 'acknowledge':
     default:
       return true;

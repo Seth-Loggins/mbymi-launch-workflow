@@ -60,6 +60,46 @@ export const taskConfig = {
       linkUrl: 'https://www.jameswedmoretraining.com/thecoursechroniclesplaylist',
     },
   },
+  'mbymi-00-3': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    // Verbatim body, paragraph by paragraph.
+    body: [
+      'Phase #01 of any planning process is always about creating some goals. But if this is the first time you\'ve ever "launched," I recommend keeping your goals as light and fun as possible. In fact, one of the things that makes this process so powerful, is that you can actually LIMIT the number of people you "accept" as Founding Members.',
+      'So, we\'ll start there! How many Founding Members will you allow into your "Beta Program?" Between 5 and 20 is a good number to start with.',
+      "Then, once you have your TARGET NUMBER of Founding Members, we'll need to identify two additional numbers: The Price for Founding Members (usually discounted) and the amount of people that will need to see your offer (or get on the PRIORITY LIST) in order to hit your target number.",
+      'Please identify those three numbers now in the DREAM IT Phase:',
+    ],
+    inputsHeading: 'Your Three Metrics That Matter:',
+    // Each subTask references an existing embedded task by id. When the lesson
+    // is marked complete, the value typed here is written to that task's
+    // `answer` field and the task is set done=true. Math/playbook continue to
+    // look them up by id and see the values as if filled in standalone.
+    subTasks: [
+      {
+        id: 'mbymi-01-3',
+        label: "1. The # of Founding Members You'll Accept:",
+        inputType: 'number',
+        unit: 'members',
+        placeholder: 'e.g. 5',
+      },
+      {
+        id: 'mbymi-01-2',
+        label: '2. The Founding Member Price Point (roughly 50% discount of future price):',
+        inputType: 'number',
+        prefix: '$',
+        placeholder: 'e.g. 497',
+      },
+      {
+        id: 'mbymi-01-1',
+        label:
+          '3. The # People Needed in Your Launch List (or Registered on Priority List) (Answer #1 x 10)  ex: 5 Founding Members x 10 = 50:',
+        inputType: 'number',
+        unit: 'people',
+        placeholder: 'e.g. 50',
+      },
+    ],
+  },
   'mbymi-00-2': {
     inputType: 'lesson',
     lessonNumber: '0.5',

@@ -15,9 +15,9 @@ const processGroups = [
   // ===== PLAN PHASE ========================================================
   {
     process: "Foundations",
-    // Teaching lessons that bookend the framework. No action required — these
-    // are watch-and-acknowledge style steps that wrap embedded video / linked
-    // training content.
+    // Teaching lessons that bookend the framework. Lessons can also carry
+    // embedded sub-task inputs (see mbymi-00-3 — the Dream It numbers live
+    // inside the Planning Phase 01 lesson card).
     tasks: [
       {
         id: "mbymi-00-1",
@@ -28,14 +28,23 @@ const processGroups = [
         id: "mbymi-00-2",
         title: "STEP 0.5: Follow The 5-Step Planning Process:",
       },
+      {
+        id: "mbymi-00-3",
+        title: "Planning Phase 01: Dream It!",
+      },
     ],
   },
   {
     process: "Dream It",
+    // These 3 tasks are now CAPTURED inside the Planning Phase 01 lesson card
+    // (mbymi-00-3). They stay in this data file so math.js + PlaybookView can
+    // continue to look them up by id, but `embedded: true` hides them from the
+    // user-facing step list — they're set done + answered when the parent
+    // lesson is completed.
     tasks: [
-      { id: "mbymi-01-3", title: "The # of Founding Members You'll Accept" },
-      { id: "mbymi-01-2", title: "The Founding Member Price Point" },
-      { id: "mbymi-01-1", title: "The # People Needed in Your Launch List" },
+      { id: "mbymi-01-3", title: "The # of Founding Members You'll Accept", embedded: true },
+      { id: "mbymi-01-2", title: "The Founding Member Price Point", embedded: true },
+      { id: "mbymi-01-1", title: "The # People Needed in Your Launch List", embedded: true },
     ],
   },
   {
@@ -166,8 +175,14 @@ export const mbymiTasks = processGroups
       process: group.process,
       done: false,
       bot: null,
+      // `embedded: true` means the task's value is collected inside another
+      // task's card (a compound lesson) and it should NOT render as its own
+      // standalone step. Math/playbook still find it by id.
+      embedded: !!task.embedded,
     })),
   )
   .map((task, index) => ({ ...task, order: index + 1 }));
 
-// 39 tasks total across 15 process groups, organised into 10 macro-phases.
+// 40 tasks total across 15 process groups, organised into 10 macro-phases
+// (3 of the tasks are `embedded: true` — they live inside the Planning Phase
+// 01 lesson card so the user-visible count is 37 standalone steps + 3 lessons).
