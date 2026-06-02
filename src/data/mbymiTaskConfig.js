@@ -100,6 +100,13 @@ export const taskConfig = {
       },
     ],
   },
+  'mbymi-00-7': {
+    inputType: 'lesson',
+    lessonNumber: '05',
+    body: [
+      "Well... now it's time to do it! Follow the process below to execute on all the necessary steps! You freakin' got this!",
+    ],
+  },
   'mbymi-00-6': {
     inputType: 'lesson',
     lessonNumber: '04',

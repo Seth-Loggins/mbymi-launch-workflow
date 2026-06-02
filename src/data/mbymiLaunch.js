@@ -44,6 +44,10 @@ const processGroups = [
         id: "mbymi-00-6",
         title: "Planning Phase 04: Chunk It",
       },
+      {
+        id: "mbymi-00-7",
+        title: "Planning Phase 05: Do It",
+      },
     ],
   },
   {
