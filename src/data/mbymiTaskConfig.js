@@ -116,10 +116,12 @@ export const taskConfig = {
       '4. Content-Posting Schedule (to build Priority List)',
       { subtasks: true },
       'Below is a SAMPLE calendar that uses those KEY DATES:',
-      // Image placeholders — swap to '/book-it-calendar.png' once URL is back.
-      { image: '', alt: "MBYMI Launch Calendar — primary sample" },
+      { image: './book-it-calendar.png', alt: "MBYMI Launch Calendar — primary sample" },
       'If you follow the above calendar and do not fill your beta, you can move onto the optional PHASE 03 and run a webinar(s) to get more Founding Members. If you follow that third phase, below is a SAMPLE calendar to run from:',
-      { image: '', alt: "MBYMI Launch Calendar — optional Phase 03 webinar variant" },
+      {
+        image: './book-it-webinar-calendar.webp',
+        alt: "MBYMI Launch Calendar — optional Phase 03 webinar variant",
+      },
     ],
     subTasks: [
       {
