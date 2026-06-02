@@ -9,7 +9,7 @@ export const mbymiPhases = [
     id: 'plan',
     label: 'Plan',
     short: 'PLAN',
-    blurb: 'Decide the offer, the audience, and the framework.',
+    blurb: 'Plan your beta launch and lock in the key dates.',
     groups: ['Foundations', 'Dream It', 'Book It'],
   },
   {
