@@ -16,7 +16,7 @@ export const mbymiPhases = [
     id: 'waitlist',
     label: 'Priority Waitlist',
     short: 'PRIORITY WAITLIST',
-    blurb: 'Stand up the priority waitlist opt-in, thank-you page, CRM, and confirmation email.',
+    blurb: 'Build out the priority waitlist opt-in, thank-you page, CRM, and confirmation email.',
     groups: ['Priority Waitlist Registration'],
   },
   {

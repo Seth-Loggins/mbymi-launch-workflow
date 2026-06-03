@@ -46,9 +46,9 @@ export default function PhaseNav() {
             fontSize: '0.7rem',
             letterSpacing: '0.08em',
           }}
-          title="MBYMI AI Assisted Workflow"
+          title="MBYMI Launch Execution Experience"
         >
-          MBYMI AI Assisted Workflow
+          MBYMI Launch Execution Experience
         </div>
 
         {/* Phase nav */}

@@ -81,7 +81,7 @@ function WelcomeStep() {
           letterSpacing: '0.08em',
         }}
       >
-        MBYMI AI Assisted Workflow
+        MBYMI Launch Execution Experience
       </div>
       <h2
         className="font-display tracking-wide text-brand-navy"
