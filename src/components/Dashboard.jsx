@@ -129,7 +129,7 @@ function LaunchTitle({ launch, setOfferName, onReset, onOpenSaved }) {
         )}
       </div>
       <div className="shrink-0 flex items-center gap-2">
-        <button onClick={onOpenSaved} className="btn-ghost" title="Save or resume a workflow">
+        <button onClick={onOpenSaved} className="btn-ghost" title="Save or resume a launch">
           💾 Saved
         </button>
         <button onClick={onReset} className="btn-ghost">
@@ -166,7 +166,7 @@ function DebriefStepHeader() {
 
       <p className="mt-3 text-white/75 text-sm max-w-2xl">
         Fill in the structured debrief below. The right side mirrors back what you've entered. Hit{' '}
-        <span className="font-semibold">Save Debrief</span> at the bottom to finish the workflow.
+        <span className="font-semibold">Save Debrief</span> at the bottom to finish.
       </p>
       <div className="mt-4">
         <button

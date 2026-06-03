@@ -49,7 +49,7 @@ export default function DatesView() {
         Reserved dates — your launch calendar
       </div>
       <p className="text-xs text-brand-navy/60 mb-4">
-        Every date you reserve in the workflow shows up here, sorted chronologically. Use it as
+        Every date you reserve shows up here, sorted chronologically. Use it as
         your at-a-glance launch calendar.
       </p>
 

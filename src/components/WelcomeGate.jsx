@@ -227,7 +227,7 @@ function NameLaunchStep() {
         Name your launch
       </h2>
       <p className="mt-1 text-sm text-brand-navy/70">
-        What are you calling this beta? You can rename it any time from the workflow header.
+        What are you calling this beta? You can rename it any time from the header.
       </p>
 
       <label className="block mt-5">
@@ -263,7 +263,7 @@ function NameLaunchStep() {
           disabled={!value.trim()}
           className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Start the workflow →
+          Start the experience →
         </button>
       </div>
     </form>

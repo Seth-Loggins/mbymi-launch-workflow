@@ -90,7 +90,7 @@ export default function SavedWorkflowsDrawer() {
         <header className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink">
-              Saved workflows
+              Saved launches
             </div>
             <h2 className="font-display text-2xl text-brand-navy">Save & resume</h2>
           </div>
@@ -117,7 +117,7 @@ export default function SavedWorkflowsDrawer() {
           className="btn-primary w-full mb-5"
           style={{ padding: '12px', fontSize: '0.85rem' }}
         >
-          💾 Save current workflow
+          💾 Save current launch
         </button>
 
         <div className="flex items-center justify-between mb-2">
@@ -148,7 +148,7 @@ export default function SavedWorkflowsDrawer() {
               textAlign: 'center',
             }}
           >
-            No saved workflows yet. Hit “Save current workflow” above.
+            No saved launches yet. Hit “Save current launch” above.
           </div>
         ) : (
           <ul className="space-y-2">

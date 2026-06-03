@@ -112,7 +112,7 @@ export default function AILibraryDrawer() {
         </header>
 
         <p className="text-sm text-brand-navy/70 mb-5">
-          Every Mindpal bot wired into the workflow, in one place. Click a bot to open it — you can
+          Every Mindpal bot wired into the experience, in one place. Click a bot to open it — you can
           come back to the matching step afterwards. {bots.length} bot{bots.length === 1 ? '' : 's'}{' '}
           available.
         </p>

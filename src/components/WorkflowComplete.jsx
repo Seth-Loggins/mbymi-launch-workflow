@@ -93,7 +93,7 @@ export default function WorkflowComplete() {
           🎉
         </div>
         <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink mb-1">
-          MBYMI Workflow Complete
+          MBYMI Launch Execution Experience Complete
         </div>
         <h2
           className="font-display tracking-wide text-brand-navy"
@@ -116,7 +116,7 @@ export default function WorkflowComplete() {
         </p>
 
         <p className="mt-3 text-[0.8rem] font-semibold uppercase tracking-wider text-brand-pink">
-          💾 Saved to your workflows automatically
+          💾 Saved to your launches automatically
         </p>
 
         <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
@@ -128,14 +128,14 @@ export default function WorkflowComplete() {
             }}
             className="btn-dark"
           >
-            📂 View saved workflows
+            📂 View saved launches
           </button>
           <button
             type="button"
             onClick={dismissCelebration}
             className="btn-primary"
           >
-            Back to the workflow
+            Back to your launch
           </button>
           <button
             type="button"

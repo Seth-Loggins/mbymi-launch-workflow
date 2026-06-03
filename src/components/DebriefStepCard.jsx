@@ -45,7 +45,7 @@ export default function DebriefStepCard({ task, phase, phaseStepIndex, phaseStat
         <div className="text-white/75">
           The full 7-section debrief lives in the Live Build panel on the right. Fill it in section
           by section, then hit <span className="font-semibold">Save Debrief</span> at the bottom to
-          finish the workflow.
+          finish.
         </div>
       </div>
 
