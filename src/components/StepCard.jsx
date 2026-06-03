@@ -30,10 +30,10 @@ export default function StepCard() {
         <p className="mt-2 text-brand-navy/80 max-w-xl">{currentPhase.blurb}</p>
         {nextPhase ? (
           <button className="btn-dark mt-5" onClick={() => goToPhase(nextPhase.id)}>
-            Start phase {phaseIdx + 2} · {nextPhase.label} →
+            Start {nextPhase.label} →
           </button>
         ) : (
-          <p className="mt-5 font-semibold">All six phases complete — launch is fully scoped.</p>
+          <p className="mt-5 font-semibold">All phases complete — launch is fully scoped.</p>
         )}
       </div>
     );

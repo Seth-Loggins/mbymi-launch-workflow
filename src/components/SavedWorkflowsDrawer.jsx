@@ -107,8 +107,8 @@ export default function SavedWorkflowsDrawer() {
 
         <p className="text-sm text-brand-navy/70 mb-4">
           Save a snapshot of your whole launch — answers, dates, links, metrics and debrief — and
-          come back to it any time. (In-memory for now; a refresh still clears everything until we
-          wire persistence.)
+          come back to it any time. Your progress is also auto-saved on this device, so you can
+          stop mid-way and resume later.
         </p>
 
         <button

@@ -1,6 +1,29 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { mbymiProcessOrder, mbymiTasks } from '../data/mbymiLaunch.js';
 import { mbymiPhases, processToPhase } from '../data/mbymiPhases.js';
+
+// Best-effort persistence of the in-progress launch to localStorage so a user
+// can stop mid-way and pick up where they left off. Wrapped in try/catch
+// because a cross-origin iframe (e.g. embedded in Kajabi) may block storage —
+// in that case it silently degrades to in-memory only.
+const STORAGE_KEY = 'mbymi-launch-execution-experience-v1';
+
+function loadPersisted() {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function savePersisted(state) {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    /* storage blocked / full — degrade to in-memory */
+  }
+}
 
 const LaunchContext = createContext(null);
 
@@ -104,37 +127,82 @@ function progressFromTasks(taskList) {
 const FIRST_PHASE_ID = mbymiPhases[0].id;
 
 export function LaunchProvider({ children }) {
-  const [launch, setLaunch] = useState(EMPTY_LAUNCH);
+  // Read any persisted launch ONCE on mount, then seed state from it so the
+  // user resumes exactly where they left off.
+  const [persisted] = useState(loadPersisted);
+
+  const [launch, setLaunch] = useState(() => persisted.launch ?? EMPTY_LAUNCH);
   // Progress is the ONLY task state we persist: { [id]: { done, answer } }.
   // The full task list is DERIVED from the code (mbymiTasks) on every render,
   // so titles + structure are always current — editing a title or adding a
   // task shows up immediately, and even applies to previously saved launches
   // (which restore progress, not frozen task objects).
-  const [progress, setProgress] = useState({});
+  const [progress, setProgress] = useState(() => persisted.progress ?? {});
   const tasks = mbymiTasks.map((t) => ({
     ...t,
     done: progress[t.id]?.done ?? false,
     answer: progress[t.id]?.answer ?? null,
   }));
-  const [metrics, setMetrics] = useState(EMPTY_METRICS);
-  const [currentPhaseId, setCurrentPhaseId] = useState(FIRST_PHASE_ID);
+  const [metrics, setMetrics] = useState(() => persisted.metrics ?? EMPTY_METRICS);
+  const [currentPhaseId, setCurrentPhaseId] = useState(() => persisted.currentPhaseId ?? FIRST_PHASE_ID);
   const [metricsOpen, setMetricsOpen] = useState(false);
   const [livePanelView, setLivePanelView] = useState('playbook'); // 'playbook' | 'funnel' | 'links'
   const [openBotForTaskId, setOpenBotForTaskId] = useState(null);
   const [aiLibraryOpen, setAILibraryOpen] = useState(false);
-  const [debriefDraft, setDebriefDraft] = useState(newDebriefDraft);
-  const [debriefHistory, setDebriefHistory] = useState([]);
+  const [debriefDraft, setDebriefDraft] = useState(() => persisted.debriefDraft ?? newDebriefDraft());
+  const [debriefHistory, setDebriefHistory] = useState(() => persisted.debriefHistory ?? []);
   const [workflowComplete, setWorkflowComplete] = useState(false);
-  // gateStep: 'welcome' → 'name-launch' → 'workflow'. Lets us run a 2-step
-  // intro flow without persisting auth state (no backend yet).
-  const [gateStep, setGateStep] = useState('welcome');
-  const [savedWorkflows, setSavedWorkflows] = useState([]);
+  // gateStep: 'welcome' → 'name-launch' → 'workflow'. Resumes at 'workflow' if
+  // the user had a launch in progress.
+  const [gateStep, setGateStep] = useState(() => persisted.gateStep ?? 'welcome');
+  const [savedWorkflows, setSavedWorkflows] = useState(() => persisted.savedWorkflows ?? []);
   const [savedWorkflowsOpen, setSavedWorkflowsOpen] = useState(false);
   // userMode is 'demo' | 'google' | null — set when the user picks an entry
   // point from the welcome modal. Currently informational only; later we'll
   // hang real Google OAuth off the 'google' branch.
-  const [userMode, setUserMode] = useState(null);
-  const [userName, setUserName] = useState('');
+  const [userMode, setUserMode] = useState(() => persisted.userMode ?? null);
+  const [userName, setUserName] = useState(() => persisted.userName ?? '');
+  // Timestamp of the last explicit "Save" — drives the Save button confirmation.
+  const [lastSavedAt, setLastSavedAt] = useState(() => persisted.lastSavedAt ?? null);
+  // Stable id for the active launch so a "Save" updates THIS launch's entry in
+  // the Saved list instead of creating a duplicate every time.
+  const [currentLaunchId, setCurrentLaunchId] = useState(() => persisted.currentLaunchId ?? null);
+
+  // Auto-persist the in-progress launch whenever anything meaningful changes.
+  useEffect(() => {
+    savePersisted({
+      launch,
+      progress,
+      metrics,
+      currentPhaseId,
+      debriefDraft,
+      debriefHistory,
+      savedWorkflows,
+      gateStep,
+      userMode,
+      userName,
+      lastSavedAt,
+      currentLaunchId,
+    });
+  }, [
+    launch,
+    progress,
+    metrics,
+    currentPhaseId,
+    debriefDraft,
+    debriefHistory,
+    savedWorkflows,
+    gateStep,
+    userMode,
+    userName,
+    lastSavedAt,
+    currentLaunchId,
+  ]);
+
+  // Explicit save — stamps the time (auto-persist above flushes it to storage).
+  const saveProgress = useCallback(() => {
+    setLastSavedAt(new Date().toISOString());
+  }, []);
 
   /* ---------- mutations ------------------------------------------------ */
 
@@ -332,6 +400,8 @@ export function LaunchProvider({ children }) {
       if (typeof name === 'string') {
         setLaunch((prev) => ({ ...prev, offerName: name.trim() }));
       }
+      // A brand-new launch gets a fresh id so its saves stay one entry.
+      setCurrentLaunchId((prev) => prev ?? cryptoId());
       setGateStep('workflow');
     },
     [],
@@ -347,8 +417,12 @@ export function LaunchProvider({ children }) {
   const closeSavedWorkflows = useCallback(() => setSavedWorkflowsOpen(false), []);
 
   const saveWorkflow = useCallback(() => {
+    // Use the active launch's stable id as the snapshot id, so re-saving the
+    // same launch UPDATES its entry rather than adding a duplicate.
+    const id = currentLaunchId ?? cryptoId();
+    if (!currentLaunchId) setCurrentLaunchId(id);
     const snapshot = {
-      id: cryptoId(),
+      id,
       savedAt: new Date().toISOString(),
       launch: JSON.parse(JSON.stringify(launch)),
       progress: JSON.parse(JSON.stringify(progress)),
@@ -356,9 +430,10 @@ export function LaunchProvider({ children }) {
       debriefDraft: JSON.parse(JSON.stringify(debriefDraft)),
       debriefHistory: JSON.parse(JSON.stringify(debriefHistory)),
     };
-    setSavedWorkflows((prev) => [snapshot, ...prev]);
+    setSavedWorkflows((prev) => [snapshot, ...prev.filter((w) => w.id !== id)]);
+    setLastSavedAt(snapshot.savedAt);
     return snapshot;
-  }, [launch, progress, metrics, debriefDraft, debriefHistory]);
+  }, [currentLaunchId, launch, progress, metrics, debriefDraft, debriefHistory]);
 
   const loadWorkflow = useCallback(
     (id) => {
@@ -374,6 +449,8 @@ export function LaunchProvider({ children }) {
       setMetrics(JSON.parse(JSON.stringify(snap.metrics)));
       setDebriefDraft(JSON.parse(JSON.stringify(snap.debriefDraft ?? newDebriefDraft())));
       setDebriefHistory(JSON.parse(JSON.stringify(snap.debriefHistory ?? [])));
+      // Adopt the loaded launch's id so further saves update its entry.
+      setCurrentLaunchId(snap.id);
       setCurrentPhaseId(FIRST_PHASE_ID);
       setGateStep('workflow');
       setSavedWorkflowsOpen(false);
@@ -398,7 +475,9 @@ export function LaunchProvider({ children }) {
     setDebriefDraft(newDebriefDraft());
     setDebriefHistory([]);
     setWorkflowComplete(false);
-    // Re-run the intro flow on full reset.
+    setLastSavedAt(null);
+    setCurrentLaunchId(null);
+    // Re-run the intro flow on full reset (saved snapshots are kept).
     setGateStep('welcome');
     setUserMode(null);
     setUserName('');
@@ -500,6 +579,7 @@ export function LaunchProvider({ children }) {
       userName,
       savedWorkflows,
       savedWorkflowsOpen,
+      lastSavedAt,
 
       // static-ish
       phases: mbymiPhases,
@@ -556,6 +636,7 @@ export function LaunchProvider({ children }) {
       loadWorkflow,
       deleteSavedWorkflow,
       resetLaunch,
+      saveProgress,
     }),
     [
       launch,
@@ -574,6 +655,8 @@ export function LaunchProvider({ children }) {
       userName,
       savedWorkflows,
       savedWorkflowsOpen,
+      lastSavedAt,
+      saveProgress,
       tasksByPhase,
       phaseStats,
       currentPhase,

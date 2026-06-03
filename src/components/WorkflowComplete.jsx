@@ -12,7 +12,6 @@ export default function WorkflowComplete() {
   const {
     workflowComplete,
     dismissCelebration,
-    launch,
     resetLaunch,
     saveWorkflow,
     openSavedWorkflows,
@@ -99,21 +98,18 @@ export default function WorkflowComplete() {
           className="font-display tracking-wide text-brand-navy"
           style={{ fontSize: '2.2rem', lineHeight: 1.05 }}
         >
-          You did it.
+          Celebrate you did it!
         </h2>
-        <p className="mt-3 text-brand-navy/75 text-sm max-w-md mx-auto">
-          {launch.offerName?.trim() ? (
-            <>
-              The <span className="font-semibold">{launch.offerName}</span> launch is fully scoped,
-              executed, and debriefed. Take a beat, then ship the next one.
-            </>
-          ) : (
-            <>
-              Your launch is fully scoped, executed, and debriefed. Take a beat, then ship the next
-              one.
-            </>
-          )}
-        </p>
+        <div className="mt-3 text-brand-navy/75 text-sm max-w-md mx-auto space-y-2 text-left">
+          <p>
+            Whether or not you filled your beta, it's time to celebrate! You did it! You took
+            action. You put your offer out there. You faced your fears. You survived! THAT is a win
+            deserving of much celebration! Post in the BBD Community, let your fellow Digital CEOs
+            know!
+          </p>
+          <p className="font-semibold">Congrats!</p>
+          <p>This concludes the Monetize Before You Make It Process :-)</p>
+        </div>
 
         <p className="mt-3 text-[0.8rem] font-semibold uppercase tracking-wider text-brand-pink">
           💾 Saved to your launches automatically

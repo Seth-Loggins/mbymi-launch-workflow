@@ -85,8 +85,16 @@ export default function Dashboard() {
 }
 
 function LaunchTitle({ launch, setOfferName, onReset, onOpenSaved }) {
+  const { saveWorkflow } = useLaunch();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(launch.offerName);
+  const [justSaved, setJustSaved] = useState(false);
+
+  function handleSaveProgress() {
+    saveWorkflow();
+    setJustSaved(true);
+    setTimeout(() => setJustSaved(false), 2000);
+  }
 
   function startEdit() {
     setDraft(launch.offerName);
@@ -129,8 +137,15 @@ function LaunchTitle({ launch, setOfferName, onReset, onOpenSaved }) {
         )}
       </div>
       <div className="shrink-0 flex items-center gap-2">
-        <button onClick={onOpenSaved} className="btn-ghost" title="Save or resume a launch">
-          💾 Saved
+        <button
+          onClick={handleSaveProgress}
+          className="btn-dark"
+          title="Save your progress so you can pick up where you left off"
+        >
+          {justSaved ? '✓ Saved' : '💾 Save'}
+        </button>
+        <button onClick={onOpenSaved} className="btn-ghost" title="View your saved launches">
+          📂 Saved
         </button>
         <button onClick={onReset} className="btn-ghost">
           Reset

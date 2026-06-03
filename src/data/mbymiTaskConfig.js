@@ -881,7 +881,6 @@ export const taskConfig = {
       '1. Any trainings you already have available',
       '2. information on how to register for calls',
       '3. placeholders for replays',
-      '4.',
       'Here is an example of Jen Finley\'s completed BETA COURSE delivery. On the left side is the Kajabi "backend" design. On the right side, is the customer-facing portal.',
       { image: './members-portal.png', alt: 'Members-Only Portal example' },
     ],
