@@ -2,6 +2,22 @@ import { useEffect } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { scrollIframeIntoView } from '../lib/iframeBridge.js';
 import { formatDateShort } from '../lib/format.js';
+import { mbymiTasks } from '../data/mbymiLaunch.js';
+
+// Visible-step ids from the current workbook (embedded sub-tasks excluded).
+const VISIBLE_TASK_IDS = mbymiTasks.filter((t) => !t.embedded).map((t) => t.id);
+
+// Completed visible-step count for a snapshot. Works for new snapshots (which
+// store a `progress` map) and older ones (which stored a full `tasks` array).
+function snapshotDoneCount(snap) {
+  if (snap.progress) {
+    return VISIBLE_TASK_IDS.filter((id) => snap.progress[id]?.done).length;
+  }
+  if (Array.isArray(snap.tasks)) {
+    return snap.tasks.filter((t) => !t.embedded && t.done).length;
+  }
+  return 0;
+}
 
 /**
  * Drawer listing saved workflow snapshots. Save the current workflow, reload a
@@ -29,10 +45,6 @@ export default function SavedWorkflowsDrawer() {
   }, [savedWorkflowsOpen, closeSavedWorkflows]);
 
   if (!savedWorkflowsOpen) return null;
-
-  function doneCount(snap) {
-    return snap.tasks.filter((t) => t.done).length;
-  }
 
   function handleSave() {
     saveWorkflow();
@@ -167,7 +179,7 @@ export default function SavedWorkflowsDrawer() {
                     {w.launch.offerName?.trim() || '(untitled launch)'}
                   </div>
                   <div className="text-xs text-brand-navy/65 mt-0.5">
-                    {doneCount(w)} / {w.tasks.length} steps ·{' '}
+                    {snapshotDoneCount(w)} / {VISIBLE_TASK_IDS.length} steps ·{' '}
                     <span className="text-brand-pink font-semibold">Click to load ↑</span>
                   </div>
                 </button>

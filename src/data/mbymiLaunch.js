@@ -102,9 +102,8 @@ const processGroups = [
     process: "Facebook Group Creation",
     tasks: [
       { id: "mbymi-06-1", title: "2. Facebook Group Creation (Optional):" },
-      // Optional FB group URL captured inside card 2 → feeds the Links panel.
+      // Optional FB group URL captured inside the card → feeds the Links panel.
       { id: "mbymi-06-1-link", title: "Facebook Group URL", embedded: true },
-      { id: "mbymi-06-2", title: "2.1 FB Group Process" },
     ],
   },
   {
@@ -127,9 +126,8 @@ const processGroups = [
   {
     process: "Promote Priority Waitlist",
     tasks: [
-      { id: "mbymi-08-0", title: "4. Promote \"Early Interest\" List:" },
-      { id: "mbymi-08-1", title: "4.1 Promotion Options:" },
-      // Channels draft captured inside card 4.1.
+      { id: "mbymi-08-1", title: "4. Promote \"Early Interest\" List:" },
+      // Channels draft captured inside card 4.
       { id: "mbymi-08-1-input", title: "Promotion Channels", embedded: true },
       { id: "mbymi-08-2", title: "4.2 Promotion Formula" },
       // Promotion-content draft captured inside card 4.2.
@@ -172,9 +170,8 @@ const processGroups = [
   {
     process: "Flash Sale",
     tasks: [
-      { id: "mbymi-11-0", title: "STEP 07. Flash Sale:" },
-      { id: "mbymi-11-1", title: "7.1 48-72 Hour Flash Sale Process" },
-      // Flash sale email draft captured inside card 7.1 → feeds the Emails panel.
+      { id: "mbymi-11-1", title: "STEP 07. Flash Sale:" },
+      // Flash sale email draft captured inside the card → feeds the Emails panel.
       { id: "mbymi-11-1-email", title: "Flash Sale Announcement Email", embedded: true },
     ],
   },

@@ -318,7 +318,7 @@ export const taskConfig = {
   // opens the Sales/Landing Page Copy Bot.
   'mbymi-05-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '1.1',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
     body: [
       'Here you\'ll want to create your "Official PRIORITY Waitlist Page" for Your Future Program. There is NO need to offer anything for free here (no giveaway, pdf, etc) this is simply a place where people can "raise their hand" by submitting their email to be notified when something is coming.',
@@ -368,7 +368,7 @@ export const taskConfig = {
   // Sales/Landing Page Copy Bot.
   'mbymi-05-2': {
     inputType: 'lesson',
-    lessonNumber: '03',
+    lessonNumber: '1.2',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
     body: [
       'In this step, you\'ll need to create a simple "thank you" page for your visitors who successfully complete their registration of joining your Priority Waitlist.  The purpose of this page is:',
@@ -427,7 +427,7 @@ export const taskConfig = {
   // bulleted list, each item hyperlinked to its YouTube video.
   'mbymi-05-3': {
     inputType: 'lesson',
-    lessonNumber: '04',
+    lessonNumber: '1.3',
     body: [
       'In this step, you MUST connect your Priority Waitlist Page FORM to your Email Marketing or CRM software so that anyone who "opts in" or submits their email will immediately have their email added to your CRM with the appropriate tag applied.',
       'There are several different email marketing providers out there... each with their own set of instructions on how to integrate with your landing page.  Below is a list of simple video tutorials on the most common software applications:',
@@ -445,7 +445,7 @@ export const taskConfig = {
   // opens the Email Bot.
   'mbymi-05-4': {
     inputType: 'lesson',
-    lessonNumber: '05',
+    lessonNumber: '1.4',
     aiBot: { name: 'Email Bot', url: BOT_URLS.email },
     body: [
       'With your CRM, you\'ll want to have a confirmation email delivered to your recipient as soon as they "register" for your Priority Waitlist.',
@@ -475,9 +475,14 @@ export const taskConfig = {
   // mandatory). Images are dashed placeholders until the real assets arrive.
   'mbymi-06-1': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '2',
     body: [
       { image: '', alt: 'Facebook Group Creation' },
+      { bold: '2.1 FB Group Process' },
+      'To create more engagement and conversation around your course "topic," you can ALSO create a FB Group.',
+      'After someone joins your PRIORITY waitlist, you can direct them to a FB group to keep them engaged.',
+      'Answer questions, do Facebook Live, and overall just engage with everyone leading up to the announcement of your Pre-Release Offer.',
+      { image: '', alt: 'FB Group example' },
     ],
     // Optional URL capture — does NOT gate Mark complete (FB group is optional).
     // Feeds the Links panel via the embedded task's linkLabel.
@@ -491,16 +496,6 @@ export const taskConfig = {
       },
     ],
   },
-  'mbymi-06-2': {
-    inputType: 'lesson',
-    lessonNumber: '02',
-    body: [
-      'To create more engagement and conversation around your course "topic," you can ALSO create a FB Group.',
-      'After someone joins your PRIORITY waitlist, you can direct them to a FB group to keep them engaged.',
-      'Answer questions, do Facebook Live, and overall just engage with everyone leading up to the announcement of your Pre-Release Offer.',
-      { image: '', alt: 'FB Group example' },
-    ],
-  },
 
   // ---- Waitlist Emails phase ----------------------------------------------
   // Intro card + the Day 0–10 autoresponder sequence. Each Day card is a
@@ -509,7 +504,7 @@ export const taskConfig = {
   // emailLabel (Emails panel) + playbookField. AI Assist = Promo Campaign Bot.
   'mbymi-07-0': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '3',
     body: [
       "In this section, you can create a series of SIMPLE (key word there!) emails spread out over time in an \"email autoresponder' campaign that keeps people engaged.",
       'I have included a list of sample suggestions for email topics in this section',
@@ -517,7 +512,7 @@ export const taskConfig = {
   },
   'mbymi-07-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '3.1',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       'In this email you simply want to offer the following:',
@@ -542,7 +537,7 @@ export const taskConfig = {
   },
   'mbymi-07-2': {
     inputType: 'lesson',
-    lessonNumber: '03',
+    lessonNumber: '3.2',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       'In this email, you have an opportunity to start telling a bit of YOUR story... your ORIGIN STORY of how you came to do what you do. You can follow a very simple structure:',
@@ -567,7 +562,7 @@ export const taskConfig = {
   },
   'mbymi-07-3': {
     inputType: 'lesson',
-    lessonNumber: '04',
+    lessonNumber: '3.3',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       'In this email, you want to appease to any logic that shows people that what you are teaching is IMPORTANT.',
@@ -589,7 +584,7 @@ export const taskConfig = {
   },
   'mbymi-07-4': {
     inputType: 'lesson',
-    lessonNumber: '05',
+    lessonNumber: '3.4',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       'Any specific client case study stories you can share in email is gong to be fantastic.',
@@ -638,17 +633,12 @@ export const taskConfig = {
   // copy) that KEEP their drafting inputs as required textareas, fanned out to
   // embedded `…-input` tasks (preserving the playbook fields). AI Assist on 4.2
   // = Promo Campaign Bot. Images are dashed placeholders until assets arrive.
-  'mbymi-08-0': {
-    inputType: 'lesson',
-    lessonNumber: '01',
-    body: [
-      { image: '', alt: 'Promote Early Interest List' },
-    ],
-  },
   'mbymi-08-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '4',
     body: [
+      { image: '', alt: 'Promote Early Interest List' },
+      { bold: '4.1 Promotion Options:' },
       'Now it\'s time to "tease" your "Early-Interest" List. Explore your Options for Promotion: Your Podcast, Being a Guest on Other Podcasts, a Popular Blog, or other platforms you can leverage.This is your chance to get the word out about your brand new upcoming program.',
       { image: '', alt: 'Promotion Options' },
     ],
@@ -664,7 +654,7 @@ export const taskConfig = {
   },
   'mbymi-08-2': {
     inputType: 'lesson',
-    lessonNumber: '03',
+    lessonNumber: '4.2',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       'The Following is a Simple "Copy Formula" to get people excited to join your Priority Waitlist in anticipation for your program\'s release!',
@@ -714,14 +704,14 @@ export const taskConfig = {
   // Bot, 5.2 = Product Outline Bot.
   'mbymi-09-0': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '05',
     body: [
       "In this step, you'll get clear on WHAT you're selling and what's included!",
     ],
   },
   'mbymi-09-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '5.1',
     aiBot: { name: 'Irresistible Offer Bot', url: BOT_URLS.offer },
     body: [
       {
@@ -755,7 +745,7 @@ export const taskConfig = {
   },
   'mbymi-09-2': {
     inputType: 'lesson',
-    lessonNumber: '03',
+    lessonNumber: '5.2',
     aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
     body: [
       "Once you have gained clarity on your OFFER, it's time to create a general Outline of the content deliverables. My advice here is to create a timeline for the delivery of your course (2-8 weeks) and have ONE TOPIC delivered per week.",
@@ -815,7 +805,7 @@ export const taskConfig = {
   // 6.5 keeps the Sales/Landing Page Copy Bot. Images are dashed placeholders.
   'mbymi-10-0': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '06',
     body: [
       "In this step, you'll need to set up a way for people to PAY YOU and a way to deliver ACCESS to your Beta Program.",
       'The Deliverables needed to call this step complete include:',
@@ -828,7 +818,7 @@ export const taskConfig = {
   },
   'mbymi-10-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '6.1',
     body: [
       'Inside Business By Design, there is a step-by-step process for designing and building your checkout page. For us, we use and recommend KAJABI. Samcart is another option we use and recommend.',
       {
@@ -849,7 +839,7 @@ export const taskConfig = {
   },
   'mbymi-10-5': {
     inputType: 'lesson',
-    lessonNumber: '03',
+    lessonNumber: '6.2',
     body: [
       "In this step, you'll need to make sure you have connected your checkout page to STRIPE and/or Paypal. Whatever software you are using, will have instructions on this.  We use Kajabi.",
       {
@@ -865,7 +855,7 @@ export const taskConfig = {
   },
   'mbymi-10-2': {
     inputType: 'lesson',
-    lessonNumber: '04',
+    lessonNumber: '6.3',
     body: [
       'This is the page your founding members will see as soon as they submit their credit card information. Here are the essential ingredients I recommend having on this page.',
       '1. A headline that confirms their purchase, thanks them for their investment, and directs them on next step',
@@ -887,7 +877,7 @@ export const taskConfig = {
   },
   'mbymi-10-3': {
     inputType: 'lesson',
-    lessonNumber: '05',
+    lessonNumber: '6.4',
     body: [
       "We use Kajabi to house all of our products, courses and trainings.  You'll want to build out a simple course inside Kajabi that will have the following:",
       '1. Any trainings you already have available',
@@ -903,7 +893,7 @@ export const taskConfig = {
   },
   'mbymi-10-4': {
     inputType: 'lesson',
-    lessonNumber: '06',
+    lessonNumber: '6.5',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
     body: [
       {
@@ -931,18 +921,13 @@ export const taskConfig = {
   // Intro card + the flash-sale lesson (verbatim copy). 7.1 keeps its email
   // draft as a required textarea → embedded mbymi-11-1-email (Emails panel).
   // AI Assist = Promo Campaign Bot. Images are dashed placeholders.
-  'mbymi-11-0': {
-    inputType: 'lesson',
-    lessonNumber: '01',
-    body: [
-      { image: '', alt: 'Flash Sale' },
-    ],
-  },
   'mbymi-11-1': {
     inputType: 'lesson',
-    lessonNumber: '02',
+    lessonNumber: '07',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
+      { image: '', alt: 'Flash Sale' },
+      { bold: '7.1 48-72 Hour Flash Sale Process' },
       'The "FLASH SALE" step is the phase where you actually PITCH and SELL your Beta OFFER to everyone on your Priority List.  (note, feel free to also mirror the same messaging across Social Media for more reach).',
       "If you have been following all the steps, and things have been working, then you should have a good amount of quality leads that have registered to that Priority List. These leads have said YES to learning more about this program. So now... it's time to make the offer and fill your beta!",
       'There are two things that make this work:',
@@ -984,7 +969,7 @@ export const taskConfig = {
   // field. AI Assist = Webinar Outline Bot. Image is a dashed placeholder.
   'mbymi-12-1': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '08',
     aiBot: { name: 'Webinar Outline Bot', url: BOT_URLS.webinar },
     body: [
       "If you didn't fill out your beta with the emails, you have an option to now go and run a webinar or two. This is a strategy of inviting your entire audience to register and attend a free training class where you pitch your beta at the end of the webinar.",
@@ -1022,7 +1007,7 @@ export const taskConfig = {
   // panel via embedded mbymi-13-2-email. AI Assist = Promo Campaign Bot.
   'mbymi-13-2': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '09',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
       "If you do decide to offer a webinar or two, you'll also want to create a  a 4- to 7-Day follow up campaign with a DEADLINE.",
@@ -1062,7 +1047,7 @@ export const taskConfig = {
   // prompts a metrics check (final numbers).
   'mbymi-14-1': {
     inputType: 'lesson',
-    lessonNumber: '01',
+    lessonNumber: '10',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     promptMetricsUpdate: true,
     body: [
@@ -1102,6 +1087,7 @@ export const taskConfig = {
   // copy, and the Launch Debrief Analyzer AI button on the card itself.
   'mbymi-15-1': {
     inputType: 'debrief',
+    lessonNumber: '11',
     aiBot: { name: 'Launch Debrief Analyzer', url: BOT_URLS.debrief },
     body: [
       { image: '', alt: 'Launch Debrief' },

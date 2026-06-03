@@ -62,7 +62,7 @@ export default function CompletedSteps() {
 
             <div className="flex-1 min-w-0">
               <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/60">
-                {config.inputType === 'lesson' && config.lessonNumber
+                {config.lessonNumber
                   ? `Step ${config.lessonNumber}: ${currentPhase.label}`
                   : `Step ${stepNum} · ${t.process}`}
               </div>

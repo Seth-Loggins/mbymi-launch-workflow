@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import confetti from 'canvas-confetti';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import CenteredOverlay from './CenteredOverlay.jsx';
@@ -9,8 +9,27 @@ import CenteredOverlay from './CenteredOverlay.jsx';
  * corners using the BBD brand palette.
  */
 export default function WorkflowComplete() {
-  const { workflowComplete, dismissCelebration, launch, resetLaunch, saveWorkflow } = useLaunch();
-  const [saved, setSaved] = useState(false);
+  const {
+    workflowComplete,
+    dismissCelebration,
+    launch,
+    resetLaunch,
+    saveWorkflow,
+    openSavedWorkflows,
+  } = useLaunch();
+  const autoSavedRef = useRef(false);
+
+  // Auto-save the finished launch to "Saved workflows" the moment the debrief
+  // is completed (the celebration appears). Guarded so it saves exactly once
+  // per completion, and resets when the celebration is dismissed.
+  useEffect(() => {
+    if (workflowComplete && !autoSavedRef.current) {
+      saveWorkflow();
+      autoSavedRef.current = true;
+    } else if (!workflowComplete) {
+      autoSavedRef.current = false;
+    }
+  }, [workflowComplete, saveWorkflow]);
 
   useEffect(() => {
     if (!workflowComplete) return;
@@ -96,17 +115,20 @@ export default function WorkflowComplete() {
           )}
         </p>
 
+        <p className="mt-3 text-[0.8rem] font-semibold uppercase tracking-wider text-brand-pink">
+          💾 Saved to your workflows automatically
+        </p>
+
         <div className="mt-6 flex items-center justify-center gap-3 flex-wrap">
           <button
             type="button"
             onClick={() => {
-              saveWorkflow();
-              setSaved(true);
-              setTimeout(() => setSaved(false), 2000);
+              dismissCelebration();
+              openSavedWorkflows();
             }}
             className="btn-dark"
           >
-            {saved ? '✓ Saved' : '💾 Save this workflow'}
+            📂 View saved workflows
           </button>
           <button
             type="button"

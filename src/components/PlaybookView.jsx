@@ -83,8 +83,8 @@ export default function PlaybookView() {
   const conversionGoal =
     view.launchListTarget > 0 ? view.foundingMembersTarget / view.launchListTarget : 0;
 
-  const offerDef = answerOf(tasks, 'mbymi-09-1');
-  const productOutline = answerOf(tasks, 'mbymi-09-2');
+  const offerDef = answerOf(tasks, 'mbymi-09-1-input');
+  const productOutline = answerOf(tasks, 'mbymi-09-2-input');
 
   // Map It tasks (mbymi-02-*) were deleted — the Planning Phase 02 lesson
   // captures the same content declaratively, so there's no per-launch answer
@@ -95,19 +95,21 @@ export default function PlaybookView() {
   const followUps = answerOf(tasks, 'mbymi-03-3');
   const initialAnnouncement = answerOf(tasks, 'mbymi-03-4');
 
-  const confirmEmail = answerOf(tasks, 'mbymi-05-4');
-  const day0 = answerOf(tasks, 'mbymi-07-1');
-  const day2 = answerOf(tasks, 'mbymi-07-2');
-  const day4 = answerOf(tasks, 'mbymi-07-3');
-  const caseStudies = answerOf(tasks, 'mbymi-07-4');
+  // These drafts are captured inside lesson cards now, so read the embedded
+  // sub-task ids (…-email / …-input) the lessons fan their answers out to.
+  const confirmEmail = answerOf(tasks, 'mbymi-05-4-email');
+  const day0 = answerOf(tasks, 'mbymi-07-1-email');
+  const day2 = answerOf(tasks, 'mbymi-07-2-email');
+  const day4 = answerOf(tasks, 'mbymi-07-3-email');
+  const caseStudies = answerOf(tasks, 'mbymi-07-4-email');
 
-  const promoChannels = answerOf(tasks, 'mbymi-08-1');
-  const promoCopy = answerOf(tasks, 'mbymi-08-2');
+  const promoChannels = answerOf(tasks, 'mbymi-08-1-input');
+  const promoCopy = answerOf(tasks, 'mbymi-08-2-input');
 
-  const flashAnnouncement = answerOf(tasks, 'mbymi-11-1');
-  const webinarPlan = answerOf(tasks, 'mbymi-12-1');
-  const followUpSeq = answerOf(tasks, 'mbymi-13-2');
-  const closeDayEmail = answerOf(tasks, 'mbymi-14-1');
+  const flashAnnouncement = answerOf(tasks, 'mbymi-11-1-email');
+  const webinarPlan = answerOf(tasks, 'mbymi-12-1-input');
+  const followUpSeq = answerOf(tasks, 'mbymi-13-2-email');
+  const closeDayEmail = answerOf(tasks, 'mbymi-14-1-email');
   const debrief = answerOf(tasks, 'mbymi-15-1');
 
   return (
