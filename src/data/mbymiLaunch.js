@@ -85,25 +85,41 @@ const processGroups = [
   {
     process: "Priority Waitlist Registration",
     tasks: [
-      { id: "mbymi-05-1", title: "Create Priority Waitlist Opt-In Page" },
-      { id: "mbymi-05-2", title: "Create Thank You / Redirect Page" },
-      { id: "mbymi-05-3", title: "Connect CRM to Priority Waitlist Form" },
-      { id: "mbymi-05-4", title: "Create Priority Waitlist Confirmation Email" },
+      { id: "mbymi-05-0", title: "STEP 01. Create Your PRIORITY LIST:" },
+      { id: "mbymi-05-1", title: "1.1 Create the Priority Waitlist Page" },
+      // URL captured inside the 1.1 lesson card → feeds the Links panel.
+      { id: "mbymi-05-1-link", title: "Priority Waitlist Page URL", embedded: true },
+      { id: "mbymi-05-2", title: "1.2 Redirect Thank You Page" },
+      // URL captured inside the 1.2 lesson card → feeds the Links panel.
+      { id: "mbymi-05-2-link", title: "Thank You Page URL", embedded: true },
+      { id: "mbymi-05-3", title: "1.3 Connect Your CRM to Priority Waitlist Form" },
+      { id: "mbymi-05-4", title: "1.4 Create a Priority Waitlist Confirmation Email" },
+      // Email draft captured inside the 1.4 lesson card → feeds the Emails panel.
+      { id: "mbymi-05-4-email", title: "Priority Waitlist Confirmation Email", embedded: true },
     ],
   },
   {
     process: "Facebook Group Creation",
     tasks: [
-      { id: "mbymi-06-1", title: "Set Up Facebook Group" },
+      { id: "mbymi-06-1", title: "2. Facebook Group Creation (Optional):" },
+      // Optional FB group URL captured inside card 2 → feeds the Links panel.
+      { id: "mbymi-06-1-link", title: "Facebook Group URL", embedded: true },
+      { id: "mbymi-06-2", title: "2.1 FB Group Process" },
     ],
   },
   {
-    process: "Waitlist",
+    process: "Waitlist Emails",
     tasks: [
-      { id: "mbymi-07-1", title: "Write Day 0 Thank You Email" },
-      { id: "mbymi-07-2", title: "Write Day 2 Origin Story Email" },
-      { id: "mbymi-07-3", title: "Write Day 4 Industry Stats/Trends Email" },
-      { id: "mbymi-07-4", title: "Write Day 6-10 Case Study Email(s)" },
+      { id: "mbymi-07-0", title: "3. The Waitlist Emails:" },
+      { id: "mbymi-07-1", title: "3.1 Day 0 Email - Thank You (see example above in 1.4)" },
+      // Email drafts captured inside each lesson card → feed the Emails panel.
+      { id: "mbymi-07-1-email", title: "Day 0 Thank You Email", embedded: true },
+      { id: "mbymi-07-2", title: "3.2 Day 2 Email - the Origin Story" },
+      { id: "mbymi-07-2-email", title: "Day 2 Origin Story Email", embedded: true },
+      { id: "mbymi-07-3", title: "3.3 Day 4 Email - Industry Stats/Trends" },
+      { id: "mbymi-07-3-email", title: "Day 4 Industry Stats/Trends Email", embedded: true },
+      { id: "mbymi-07-4", title: "3.4 Day 6 -10 Emails - Share Case Studies" },
+      { id: "mbymi-07-4-email", title: "Day 6-10 Case Study Email(s)", embedded: true },
     ],
   },
 
@@ -111,8 +127,13 @@ const processGroups = [
   {
     process: "Promote Priority Waitlist",
     tasks: [
-      { id: "mbymi-08-1", title: "Choose Promotion Channels (Podcast/Social/Email)" },
-      { id: "mbymi-08-2", title: "Create Promotion Content Using Copy Formula" },
+      { id: "mbymi-08-0", title: "4. Promote \"Early Interest\" List:" },
+      { id: "mbymi-08-1", title: "4.1 Promotion Options:" },
+      // Channels draft captured inside card 4.1.
+      { id: "mbymi-08-1-input", title: "Promotion Channels", embedded: true },
+      { id: "mbymi-08-2", title: "4.2 Promotion Formula" },
+      // Promotion-content draft captured inside card 4.2.
+      { id: "mbymi-08-2-input", title: "Promotion Content", embedded: true },
       { id: "mbymi-08-3", title: "Schedule & Post Promotion Content" },
     ],
   },

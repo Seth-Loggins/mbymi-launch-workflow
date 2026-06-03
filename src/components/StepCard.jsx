@@ -95,10 +95,12 @@ function ActiveStep({
       const subTaskAnswers = {};
       config.subTasks.forEach((sub) => {
         const raw = draft.subTasks?.[sub.id];
-        if (sub.inputType === 'date') {
-          subTaskAnswers[sub.id] = raw || null;
-        } else {
+        if (sub.inputType === 'number') {
           subTaskAnswers[sub.id] = Number(raw) || 0;
+        } else {
+          // date / url / text → store the trimmed string (or null when empty)
+          const v = (raw ?? '').trim();
+          subTaskAnswers[sub.id] = v || null;
         }
       });
       onCompleteLesson(task.id, subTaskAnswers);
@@ -413,10 +415,13 @@ function LessonBody({ config, draft, setDraft }) {
   );
 }
 
-// Renders one body block inside a lesson card. Supports three shapes:
+// Renders one body block inside a lesson card. Supports these shapes:
 //   - string                      → plain paragraph
 //   - { bold: 'X', text: '…' }    → paragraph with a bold lead-in span
+//   - { parts: [...] }            → paragraph with inline hyperlinked spans
 //   - { image: url|'', alt: '…' } → image (empty `image` → dashed placeholder)
+//   - { video: 'youtube url' }    → inline embedded YouTube video (16:9)
+//   - { bullet: '…', link?: 'url' } → bulleted list item (optional hyperlink)
 function LessonBodyBlock({ block }) {
   const baseParaStyle = {
     fontSize: '0.95rem',
@@ -454,6 +459,53 @@ function LessonBodyBlock({ block }) {
             }
             return <span key={i}>{part?.text ?? ''}</span>;
           })}
+        </p>
+      );
+    }
+    if (typeof block.video === 'string') {
+      // Inline embedded YouTube video (same 16:9 frame as the top-of-card
+      // videoUrl, but placed wherever it sits in the body).
+      return (
+        <div className="my-2" style={{ position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+          <iframe
+            src={youtubeEmbedUrl(block.video)}
+            title="Embedded video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              border: 0,
+              borderRadius: 'var(--radius-md)',
+              background: '#000',
+            }}
+          />
+        </div>
+      );
+    }
+    if (typeof block.bullet === 'string') {
+      // Bulleted list item — • marker with a hanging indent so wrapped lines
+      // stay aligned under the text. An optional `link` turns the item text
+      // into a hyperlink (used for the video-tutorial lists).
+      return (
+        <p className="text-white/85 flex gap-2" style={baseParaStyle}>
+          <span aria-hidden="true" className="text-white/60">•</span>
+          {block.link ? (
+            <a
+              href={block.link}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-bold hover:underline"
+              style={{ color: '#83CCBD', textDecoration: 'underline' }}
+            >
+              {block.bullet}
+            </a>
+          ) : (
+            <span>{block.bullet}</span>
+          )}
         </p>
       );
     }
@@ -548,7 +600,8 @@ function hasInlineSubtaskMarker(bodyBlocks) {
 }
 
 // Single input field for a sub-task. Handles number (with $ prefix / unit
-// suffix) and date types. All inputs share the dark lesson-card styling.
+// suffix), date, and url/text types. All inputs share the dark lesson-card
+// styling.
 function SubTaskInput({ sub, value, onChange }) {
   const baseInputStyle = {
     border: '1px solid rgba(255,255,255,0.18)',
@@ -557,6 +610,32 @@ function SubTaskInput({ sub, value, onChange }) {
   };
   const baseInputClass =
     'w-full bg-white/10 text-white placeholder-white/40 text-base outline-none transition focus:bg-white/15';
+
+  if (sub.inputType === 'textarea') {
+    return (
+      <textarea
+        rows={sub.rows ?? 6}
+        value={value}
+        placeholder={sub.placeholder ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+        className={baseInputClass}
+        style={{ ...baseInputStyle, resize: 'vertical', minHeight: 120 }}
+      />
+    );
+  }
+
+  if (sub.inputType === 'url' || sub.inputType === 'text') {
+    return (
+      <input
+        type={sub.inputType === 'url' ? 'url' : 'text'}
+        value={value}
+        placeholder={sub.placeholder ?? ''}
+        onChange={(e) => onChange(e.target.value)}
+        className={baseInputClass}
+        style={baseInputStyle}
+      />
+    );
+  }
 
   if (sub.inputType === 'date') {
     return (
@@ -758,8 +837,11 @@ function validate(draft, config) {
       // Pure (no sub-task) lessons need no validation — just acknowledge.
       if (!Array.isArray(config.subTasks) || config.subTasks.length === 0) return true;
       return config.subTasks.every((sub) => {
-        if (sub.inputType === 'date') return true;
-        return Number(draft.subTasks?.[sub.id]) > 0;
+        if (sub.optional) return true; // optional input — never gates completion
+        if (sub.inputType === 'date') return true; // optional
+        if (sub.inputType === 'number') return Number(draft.subTasks?.[sub.id]) > 0;
+        // url / text / textarea → required; gates Mark complete (optional minChars).
+        return (draft.subTasks?.[sub.id] ?? '').trim().length >= (sub.minChars ?? 1);
       });
     }
     case 'acknowledge':

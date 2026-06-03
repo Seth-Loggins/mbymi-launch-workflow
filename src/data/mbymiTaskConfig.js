@@ -42,6 +42,10 @@ export const BOT_URLS = {
   productOutline: 'https://chatbot.getmindpal.com/offer-product-builder-bot-vwj',
 };
 
+// Shared resource link reused across the Waitlist-Email lesson cards.
+const CHATGPT_PROMPTS_URL =
+  'https://scribehow.com/page/MBYMI_PROCESS__ChatGPT_Prompts__cAQquPq1RYm6sGoyowjOZg?referrer=page&slug=/page-embed/Monetize_Before_You_Make_It_tm__IlWMuS3PSTO4UGVm8K7x9w?removeLogo=true';
+
 export const taskConfig = {
   // ---- Foundations (teaching lessons) -------------------------------------
   // 'lesson' inputType renders an embedded video / body paragraph / inline
@@ -297,101 +301,410 @@ export const taskConfig = {
   },
 
   // ---- Priority Waitlist Registration -------------------------------------
+  // First task in the phase is a teaching lesson (same pattern as the Plan
+  // phase). Verbatim copy — do not rewrite. Image is a dashed placeholder
+  // (empty `image`) until the real asset is supplied.
+  'mbymi-05-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      "Ok, it's time to get to work! In this first step, I recommend building a completed and working Priority List Page and Thank You Page. Make sure it is complete and connected to your email CRM software.",
+      { image: '', alt: 'Priority List Page' },
+    ],
+  },
+  // Step 2 of 10 ("Create Priority Waitlist Opt-In Page") is now folded into
+  // this teaching card — verbatim copy, do not rewrite. The 4 images are dashed
+  // placeholders (empty `image`) until the real assets are supplied. AI Assist
+  // opens the Sales/Landing Page Copy Bot.
   'mbymi-05-1': {
-    inputType: 'note',
-    placeholder: 'Paste your opt-in page URL (optional)',
-    helper: 'External build in Kajabi/your funnel tool — use the AI bot for the opt-in page copy, then drop the live URL here.',
-    linkLabel: 'Priority Waitlist Opt-in Page',
+    inputType: 'lesson',
+    lessonNumber: '02',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
+    body: [
+      'Here you\'ll want to create your "Official PRIORITY Waitlist Page" for Your Future Program. There is NO need to offer anything for free here (no giveaway, pdf, etc) this is simply a place where people can "raise their hand" by submitting their email to be notified when something is coming.',
+      {
+        bold: 'IMPORTANT:',
+        text: " if you DO decide to give away something for free... you are having people join for the wrong reasons, and won't have a TRUE segmented list of interest buyers.",
+      },
+      {
+        parts: [
+          { text: 'To execute on the Priority Waitlist Page, simply follow the ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/218956/posts/763212',
+            text: '"Waitlist Creation"',
+          },
+          { text: ' Process.' },
+        ],
+      },
+      'Priority Waitlist Page Examples:',
+      { image: '', alt: 'Priority Waitlist Page example' },
+      { image: '', alt: 'Priority Waitlist Page example' },
+      { image: '', alt: 'Priority Waitlist Page example' },
+      'PREVIOUS VERSION EXAMPLE',
+      { image: '', alt: 'Priority Waitlist Page — previous version example' },
+      {
+        parts: [
+          { text: 'The examples above is our Priority Waitlist Page. (' },
+          { link: 'https://www.BusinessbyDesign.net', text: 'www.BusinessbyDesign.net' },
+          { text: ') Notice there is nothing we are giving away here, just asking people to "get in the line".' },
+        ],
+      },
+    ],
+    // Required URL capture — Mark complete stays disabled until it's filled,
+    // and the link flows to the Links tab (via the embedded task's linkLabel).
+    subTasks: [
+      {
+        id: 'mbymi-05-1-link',
+        label: 'Priority Waitlist Page URL:',
+        inputType: 'url',
+        placeholder: 'https://...',
+      },
+    ],
   },
+  // Step 3 of 10 ("Create Thank You / Redirect Page") folded into a teaching
+  // card — verbatim copy, do not rewrite. Image is a dashed placeholder until
+  // the real asset is supplied. The training video embeds inline; the closing
+  // sentence is one full hyperlink to the transcript PDF. AI Assist opens the
+  // Sales/Landing Page Copy Bot.
   'mbymi-05-2': {
-    inputType: 'note',
-    placeholder: 'Paste your thank-you page URL (optional)',
-    helper: 'The page they land on after opting in. Use the AI bot for the copy, then drop the URL.',
-    linkLabel: 'Waitlist Thank-You Page',
+    inputType: 'lesson',
+    lessonNumber: '03',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
+    body: [
+      'In this step, you\'ll need to create a simple "thank you" page for your visitors who successfully complete their registration of joining your Priority Waitlist.  The purpose of this page is:',
+      { bullet: 'Confirm their registration' },
+      { bullet: 'Create more excitement and anticipation for your upcoming product launch' },
+      { bullet: 'Learn more about YOU' },
+      { bullet: '...and take a next step (like save the date, or join a private group)' },
+      'Below is an example of the Thank You Page I use when people "opt in" for MY BBD Priority Waitlist',
+      { image: '', alt: 'BBD Priority Waitlist Thank You Page' },
+      'Below is the ACTUAL video I use on the Priority List Thank You Page:',
+      { video: 'https://www.youtube.com/watch?v=zLzArmXS3DM' },
+      {
+        parts: [
+          {
+            link: 'https://drive.google.com/file/d/1ojO9WRYwSA1DeQw2UDZpI46p1Dvsy0pf/view',
+            text: 'And here is a PDF of the exact transcript of that above video.',
+          },
+        ],
+      },
+    ],
+    // Required URL capture — Mark complete stays disabled until it's filled,
+    // and the link flows to the Links tab (via the embedded task's linkLabel).
+    subTasks: [
+      {
+        id: 'mbymi-05-2-link',
+        label: 'Thank You Page URL:',
+        inputType: 'url',
+        placeholder: 'https://...',
+      },
+    ],
   },
+  // Embedded URL-capture tasks for the 1.1 / 1.2 lesson cards. They render
+  // inline as a sub-task input; `linkLabel` surfaces the saved URL in the
+  // Links tab of the Live Build panel (same as the old standalone note steps).
+  'mbymi-05-1-link': {
+    inputType: 'url',
+    linkLabel: 'Priority Waitlist Opt-in Page',
+  },
+  'mbymi-05-2-link': {
+    inputType: 'url',
+    linkLabel: 'Waitlist Thank-You Page',
+  },
+  'mbymi-06-1-link': {
+    inputType: 'url',
+    linkLabel: 'Facebook Group',
+  },
+  // Email draft captured inside the 1.4 lesson card → surfaces in the Emails
+  // panel via emailLabel (same as the old standalone email step).
+  'mbymi-05-4-email': {
+    inputType: 'textarea',
+    emailLabel: 'Waitlist Confirmation Email',
+    playbookField: 'waitlistSequence.confirmation',
+  },
+  // Step 4 of 10 ("Connect CRM to Priority Waitlist Form") folded into a
+  // teaching card — verbatim copy, do not rewrite. The 5 tutorials render as a
+  // bulleted list, each item hyperlinked to its YouTube video.
   'mbymi-05-3': {
-    inputType: 'acknowledge',
-    helper: 'Verify the form pushes signups into your CRM with the right tag.',
+    inputType: 'lesson',
+    lessonNumber: '04',
+    body: [
+      'In this step, you MUST connect your Priority Waitlist Page FORM to your Email Marketing or CRM software so that anyone who "opts in" or submits their email will immediately have their email added to your CRM with the appropriate tag applied.',
+      'There are several different email marketing providers out there... each with their own set of instructions on how to integrate with your landing page.  Below is a list of simple video tutorials on the most common software applications:',
+      { bullet: 'Creating a Form with ActiveCampaign', link: 'https://www.youtube.com/watch?v=AmN-STRljCg' },
+      { bullet: 'Creating a Form with MailChimp', link: 'https://www.youtube.com/watch?v=qS4D0YIXj0E' },
+      { bullet: 'Creating a Form with Kajabi', link: 'https://www.youtube.com/watch?v=Ogr74okQWVU' },
+      { bullet: 'Creating a Form with Brevo', link: 'https://www.youtube.com/watch?v=QqEAJ90-aJQ' },
+      { bullet: 'Creating a Form with Jotform', link: 'https://www.youtube.com/watch?v=VwC6g5Ym0RQ' },
+    ],
   },
+  // Step 5 of 10 ("Create Priority Waitlist Confirmation Email") folded into a
+  // teaching card — verbatim copy, do not rewrite. The existing email-draft
+  // input is kept as a required inline textarea that fans out to the embedded
+  // mbymi-05-4-email task (which carries emailLabel → Emails panel). AI Assist
+  // opens the Email Bot.
   'mbymi-05-4': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft your confirmation email here…',
-    helper: "Sent immediately after signup. Should confirm they’re in and tease what's coming.",
+    inputType: 'lesson',
+    lessonNumber: '05',
+    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
+    body: [
+      'With your CRM, you\'ll want to have a confirmation email delivered to your recipient as soon as they "register" for your Priority Waitlist.',
+      'Below is the ACTUAL confirmation email I send:',
+      { image: '', alt: 'Priority Waitlist confirmation email' },
+      {
+        bold: 'Note:',
+        text: ' you can always add additional emails in your follow-up sequence that share your story, other valuable content, and customer case studies!',
+      },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-05-4-email',
+        label: 'Your confirmation email:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft your confirmation email here…',
+      },
+    ],
     example:
       "Subject: You're on the waitlist 🎉\nBody: Confirms their spot, sets the timeline for what they'll receive over the next X days, links to one piece of pillar content while they wait.",
-    playbookField: 'waitlistSequence.confirmation',
-    emailLabel: 'Waitlist Confirmation Email',
-    aiBot: { name: 'Email Bot', url: BOT_URLS.email },
   },
 
   // ---- Facebook Group Creation --------------------------------------------
+  // FB Group track (optional). Pure teaching cards — no inputs, so Mark
+  // complete is ALWAYS enabled (the whole FB-group section is optional, never
+  // mandatory). Images are dashed placeholders until the real assets arrive.
   'mbymi-06-1': {
-    inputType: 'note',
-    placeholder: 'Group URL (optional)',
-    helper: 'Optional — only if a FB group is part of your nurture plan.',
-    linkLabel: 'Facebook Group',
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      { image: '', alt: 'Facebook Group Creation' },
+    ],
+    // Optional URL capture — does NOT gate Mark complete (FB group is optional).
+    // Feeds the Links panel via the embedded task's linkLabel.
+    subTasks: [
+      {
+        id: 'mbymi-06-1-link',
+        label: 'Facebook Group URL (optional):',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://facebook.com/groups/...',
+      },
+    ],
+  },
+  'mbymi-06-2': {
+    inputType: 'lesson',
+    lessonNumber: '02',
+    body: [
+      'To create more engagement and conversation around your course "topic," you can ALSO create a FB Group.',
+      'After someone joins your PRIORITY waitlist, you can direct them to a FB group to keep them engaged.',
+      'Answer questions, do Facebook Live, and overall just engage with everyone leading up to the announcement of your Pre-Release Offer.',
+      { image: '', alt: 'FB Group example' },
+    ],
   },
 
-  // ---- Waitlist (the nurture sequence — high-value content tasks) ---------
+  // ---- Waitlist Emails phase ----------------------------------------------
+  // Intro card + the Day 0–10 autoresponder sequence. Each Day card is a
+  // teaching lesson (verbatim copy) that KEEPS its email-draft input as a
+  // required textarea, fanned out to an embedded `…-email` task carrying the
+  // emailLabel (Emails panel) + playbookField. AI Assist = Promo Campaign Bot.
+  'mbymi-07-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      "In this section, you can create a series of SIMPLE (key word there!) emails spread out over time in an \"email autoresponder' campaign that keeps people engaged.",
+      'I have included a list of sample suggestions for email topics in this section',
+    ],
+  },
   'mbymi-07-1': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft your Day 0 thank-you email…',
-    helper: 'The very first email after they join — the warmest moment of the whole sequence.',
-    example: "Hey [first name] — you're in. Here's what's coming over the next 10 days, and the one thing I want you to think about today…",
-    playbookField: 'waitlistSequence.day0',
-    emailLabel: 'Day 0 · Thank You Email',
+    inputType: 'lesson',
+    lessonNumber: '02',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'In this email you simply want to offer the following:',
+      '1. Thank You For Joining the List',
+      '2. Reminder of Your Domino Belief (m4)',
+      '3. Save the Date (if you have a date for your open cart)',
+      '4. A Link to your Private FB group (optional)',
+      '5. A resource or something to go consume (optional)',
+      { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-07-1-email',
+        label: 'Your Day 0 email:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft your Day 0 thank-you email…',
+      },
+    ],
+    example:
+      "Hey [first name] — you're in. Here's what's coming over the next 10 days, and the one thing I want you to think about today…",
   },
   'mbymi-07-2': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft your Day 2 origin-story email…',
-    helper: 'Your story — who you were, what changed, why this offer exists. The trust-builder.',
-    example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
-    playbookField: 'waitlistSequence.day2',
-    emailLabel: 'Day 2 · Origin Story Email',
+    inputType: 'lesson',
+    lessonNumber: '03',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'In this email, you have an opportunity to start telling a bit of YOUR story... your ORIGIN STORY of how you came to do what you do. You can follow a very simple structure:',
+      { bullet: 'Get Attention (start at the climax of the problem)' },
+      { bullet: 'Share your BEFORE, where were you, (internal, external)' },
+      { bullet: 'Share anything that shows credibility/experience' },
+      { bullet: 'Get to the LOWEST POINT of the Story' },
+      { bullet: 'Share what you DID specifically to get through that' },
+      { bullet: 'Where you are now... who you help now' },
+      { bold: 'The more specific the story the better 🙂', text: '' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-07-2-email',
+        label: 'Your Day 2 email:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft your Day 2 origin-story email…',
+      },
+    ],
+    example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
   },
   'mbymi-07-3': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft your Day 4 industry stats/trends email…',
-    helper: 'Why now? Use stats / trends to make the case that the timing matters.',
-    example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
-    playbookField: 'waitlistSequence.day4',
-    emailLabel: 'Day 4 · Stats/Trends Email',
+    inputType: 'lesson',
+    lessonNumber: '04',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'In this email, you want to appease to any logic that shows people that what you are teaching is IMPORTANT.',
+      { bullet: 'Are there recent articles about what you do?' },
+      { bullet: 'Studies?' },
+      { bullet: 'Statistics?' },
+      { bullet: 'Trends?' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-07-3-email',
+        label: 'Your Day 4 email:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft your Day 4 industry stats/trends email…',
+      },
+    ],
+    example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
   },
   'mbymi-07-4': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft your Day 6–10 case study email(s)…',
-    helper: 'Show, don’t tell. Real (or composite) before/after stories.',
-    example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
-    playbookField: 'waitlistSequence.caseStudies',
-    emailLabel: 'Day 6–10 · Case Study Email(s)',
+    inputType: 'lesson',
+    lessonNumber: '05',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'Any specific client case study stories you can share in email is gong to be fantastic.',
+      '"what if I don\'t have any case studies?"',
+      'Well... use a "big name" industry as an example.  It does NOT have to be YOUR client in order for you to show proof that what you teach is important.',
+      'ex: I use to show off how big companies were using YouTube all the time! They weren\'t my clients... but I figured, "if IBM was using YT, others should as well, right?!"',
+      'Please feel free to use the pre-designed ChatGPT prompts for assistance on your emails:',
+      { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-07-4-email',
+        label: 'Your Day 6–10 email(s):',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft your Day 6–10 case study email(s)…',
+      },
+    ],
+    example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
+  },
+  // Embedded email-draft tasks for the Day cards above — emailLabel surfaces
+  // each draft in the Emails panel (same labels as the old standalone steps).
+  'mbymi-07-1-email': {
+    inputType: 'textarea',
+    emailLabel: 'Day 0 · Thank You Email',
+    playbookField: 'waitlistSequence.day0',
+  },
+  'mbymi-07-2-email': {
+    inputType: 'textarea',
+    emailLabel: 'Day 2 · Origin Story Email',
+    playbookField: 'waitlistSequence.day2',
+  },
+  'mbymi-07-3-email': {
+    inputType: 'textarea',
+    emailLabel: 'Day 4 · Stats/Trends Email',
+    playbookField: 'waitlistSequence.day4',
+  },
+  'mbymi-07-4-email': {
+    inputType: 'textarea',
+    emailLabel: 'Day 6–10 · Case Study Email(s)',
+    playbookField: 'waitlistSequence.caseStudies',
   },
 
-  // ---- Promote Priority Waitlist ------------------------------------------
+  // ---- Promote Priority Waitlist (Promo phase) ----------------------------
+  // Intro card + the two promo lessons. 4.1 / 4.2 are teaching cards (verbatim
+  // copy) that KEEP their drafting inputs as required textareas, fanned out to
+  // embedded `…-input` tasks (preserving the playbook fields). AI Assist on 4.2
+  // = Promo Campaign Bot. Images are dashed placeholders until assets arrive.
+  'mbymi-08-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      { image: '', alt: 'Promote Early Interest List' },
+    ],
+  },
   'mbymi-08-1': {
-    inputType: 'text',
-    minChars: 10,
-    placeholder: 'List the channels you’ll use (podcast, social, email, partnerships…)',
-    helper: 'Pick the channels you actually have leverage in — better to do 2 well than 5 poorly.',
-    playbookField: 'promote.channels',
+    inputType: 'lesson',
+    lessonNumber: '02',
+    body: [
+      'Now it\'s time to "tease" your "Early-Interest" List. Explore your Options for Promotion: Your Podcast, Being a Guest on Other Podcasts, a Popular Blog, or other platforms you can leverage.This is your chance to get the word out about your brand new upcoming program.',
+      { image: '', alt: 'Promotion Options' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-08-1-input',
+        label: 'Your promotion channels:',
+        inputType: 'textarea',
+        minChars: 10,
+        placeholder: 'List the channels you’ll use (podcast, social, email, partnerships…)',
+      },
+    ],
   },
   'mbymi-08-2': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft 1–2 promotion posts/emails using James’s copy formula…',
-    helper: 'Use the copy formula from the training — hook → problem → bridge → CTA.',
-    playbookField: 'promote.copy',
+    inputType: 'lesson',
+    lessonNumber: '03',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'The Following is a Simple "Copy Formula" to get people excited to join your Priority Waitlist in anticipation for your program\'s release!',
+      { bold: 'The Problem Context:', text: ' Identify a problem others have, that you\'ve been able to solve.' },
+      { bold: 'The Big Idea:', text: ' Your Big Idea is about putting together something that can help people.' },
+      { bold: 'The Pull:', text: ' It\'s going to be an intimate, small "beta" group.' },
+      { bold: 'The Call to Action:', text: ' Tell them what to do next.' },
+      { bold: 'EXAMPLE:', text: '' },
+      '"After five years of running our own successful podcast, and seeing so many entrepreneurs struggle with theirs, I realized the big disconnect is in HOW you to put content together in away that doesn\'t just get attention and provide value, but also turns a casual listener into a lifetime loyal customer.',
+      'I\'ve decided to teach our exact process for Podcast Growth so more people with important messages like yourself can get out to more people.',
+      'This is going to be a small, intimate group that we\'ll be launching in a few weeks.  Probably limited to just 20 members.',
+      'To get on the interest list, so you are notified as soon as we open this open, click the link below."',
+      { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
+      { bold: 'EXAMPLES of INSTAGRAM Content Promoting Your Priority List', text: '' },
+      { image: '', alt: 'Instagram content examples' },
+      { parts: [{ link: 'https://www.instagram.com/p/C6o2yC-ykHd/', text: 'Instagram Content Example #1' }] },
+      { parts: [{ link: 'https://www.instagram.com/p/C6EySq3voBo/', text: 'Instagram Content Example #2' }] },
+      { parts: [{ link: 'https://www.instagram.com/p/C7DYyi7O3tx/', text: 'Instagram Content Example #3' }] },
+      { bold: 'EXAMPLE Email Promoting Your Priority List', text: '' },
+      { parts: [{ link: 'https://drive.google.com/file/d/1_Iw9s7d_hs4bR5lxX8kafJcIq9Owcu4u/view', text: 'Link to the Email Promoting Your Priority List PDF' }] },
+      { image: '', alt: 'Email promoting priority list' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-08-2-input',
+        label: 'Your promotion content:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft 1–2 promotion posts/emails using James’s copy formula…',
+      },
+    ],
+  },
+  // Embedded drafting inputs for cards 4.1 / 4.2 (preserve the playbook fields).
+  'mbymi-08-1-input': {
+    inputType: 'textarea',
+    playbookField: 'promote.channels',
+  },
+  'mbymi-08-2-input': {
+    inputType: 'textarea',
+    playbookField: 'promote.copy',
   },
   'mbymi-08-3': {
     inputType: 'acknowledge',

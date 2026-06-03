@@ -14,10 +14,24 @@ export const mbymiPhases = [
   },
   {
     id: 'waitlist',
-    label: 'Waitlist',
-    short: 'WAITLIST',
-    blurb: 'Stand up the priority waitlist, FB group, and Day 0–10 nurture emails.',
-    groups: ['Priority Waitlist Registration', 'Facebook Group Creation', 'Waitlist'],
+    label: 'Priority Waitlist',
+    short: 'PRIORITY WAITLIST',
+    blurb: 'Stand up the priority waitlist opt-in, thank-you page, CRM, and confirmation email.',
+    groups: ['Priority Waitlist Registration'],
+  },
+  {
+    id: 'fb-group',
+    label: 'FB Group',
+    short: 'FB GROUP',
+    blurb: 'Optionally spin up a Facebook Group to engage your waitlist before launch.',
+    groups: ['Facebook Group Creation'],
+  },
+  {
+    id: 'waitlist-emails',
+    label: 'Waitlist Emails',
+    short: 'WAITLIST EMAILS',
+    blurb: 'Write the simple Day 0–10 autoresponder sequence that keeps your waitlist engaged.',
+    groups: ['Waitlist Emails'],
   },
   {
     id: 'promo',

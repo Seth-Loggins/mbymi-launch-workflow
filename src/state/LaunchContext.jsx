@@ -91,15 +91,31 @@ function cryptoId() {
   return `id-${Math.random().toString(36).slice(2, 10)}-${Date.now().toString(36)}`;
 }
 
-function freshTasks() {
-  return mbymiTasks.map((t) => ({ ...t, done: false, answer: null }));
+// Backward-compat: older saved snapshots stored full task objects. Reduce one
+// to the progress-map shape we persist now ({ [id]: { done, answer } }).
+function progressFromTasks(taskList) {
+  const p = {};
+  (taskList ?? []).forEach((t) => {
+    p[t.id] = { done: !!t.done, answer: t.answer ?? null };
+  });
+  return p;
 }
 
 const FIRST_PHASE_ID = mbymiPhases[0].id;
 
 export function LaunchProvider({ children }) {
   const [launch, setLaunch] = useState(EMPTY_LAUNCH);
-  const [tasks, setTasks] = useState(freshTasks);
+  // Progress is the ONLY task state we persist: { [id]: { done, answer } }.
+  // The full task list is DERIVED from the code (mbymiTasks) on every render,
+  // so titles + structure are always current — editing a title or adding a
+  // task shows up immediately, and even applies to previously saved launches
+  // (which restore progress, not frozen task objects).
+  const [progress, setProgress] = useState({});
+  const tasks = mbymiTasks.map((t) => ({
+    ...t,
+    done: progress[t.id]?.done ?? false,
+    answer: progress[t.id]?.answer ?? null,
+  }));
   const [metrics, setMetrics] = useState(EMPTY_METRICS);
   const [currentPhaseId, setCurrentPhaseId] = useState(FIRST_PHASE_ID);
   const [metricsOpen, setMetricsOpen] = useState(false);
@@ -131,39 +147,46 @@ export function LaunchProvider({ children }) {
   }, []);
 
   const completeTask = useCallback((id, answer = null) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: true, answer } : t)));
+    setProgress((prev) => ({ ...prev, [id]: { done: true, answer } }));
   }, []);
 
   const uncompleteTask = useCallback((id) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: false } : t)));
+    setProgress((prev) => ({
+      ...prev,
+      [id]: { done: false, answer: prev[id]?.answer ?? null },
+    }));
   }, []);
 
   // Mark a compound lesson done AND fan out its sub-task answers to the
-  // embedded tasks. `subTaskAnswers` is { [taskId]: numericValue }.
+  // embedded tasks. `subTaskAnswers` is { [taskId]: value }.
   const completeLesson = useCallback((lessonId, subTaskAnswers = {}) => {
-    setTasks((prev) =>
-      prev.map((t) => {
-        if (t.id === lessonId) return { ...t, done: true, answer: null };
-        if (Object.prototype.hasOwnProperty.call(subTaskAnswers, t.id)) {
-          return { ...t, done: true, answer: subTaskAnswers[t.id] };
-        }
-        return t;
-      }),
-    );
+    setProgress((prev) => {
+      const next = { ...prev, [lessonId]: { done: true, answer: null } };
+      Object.entries(subTaskAnswers).forEach(([id, answer]) => {
+        next[id] = { done: true, answer };
+      });
+      return next;
+    });
   }, []);
 
   // Reverse of completeLesson — undo the parent + every embedded sub-task in
   // one pass so the user can edit the form again. Sub-task answers are kept
   // so they pre-fill when the lesson card re-renders.
   const uncompleteLesson = useCallback((lessonId, subTaskIds = []) => {
-    const idSet = new Set([lessonId, ...subTaskIds]);
-    setTasks((prev) =>
-      prev.map((t) => (idSet.has(t.id) ? { ...t, done: false } : t)),
-    );
+    setProgress((prev) => {
+      const next = { ...prev };
+      [lessonId, ...subTaskIds].forEach((id) => {
+        next[id] = { done: false, answer: prev[id]?.answer ?? null };
+      });
+      return next;
+    });
   }, []);
 
   const setTaskAnswer = useCallback((id, answer) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, answer } : t)));
+    setProgress((prev) => ({
+      ...prev,
+      [id]: { done: prev[id]?.done ?? false, answer },
+    }));
   }, []);
 
   const updateMetrics = useCallback((patch) => {
@@ -251,11 +274,10 @@ export function LaunchProvider({ children }) {
     };
     setDebriefHistory((prev) => [record, ...prev]);
     // Mark the Launch Debrief task as complete (stash a "saved" marker as answer).
-    setTasks((prev) =>
-      prev.map((t) =>
-        t.id === 'mbymi-15-1' ? { ...t, done: true, answer: 'debrief-saved' } : t,
-      ),
-    );
+    setProgress((prev) => ({
+      ...prev,
+      'mbymi-15-1': { done: true, answer: 'debrief-saved' },
+    }));
     // Flag workflow complete — triggers the celebration card.
     setWorkflowComplete(true);
     return record;
@@ -329,21 +351,26 @@ export function LaunchProvider({ children }) {
       id: cryptoId(),
       savedAt: new Date().toISOString(),
       launch: JSON.parse(JSON.stringify(launch)),
-      tasks: JSON.parse(JSON.stringify(tasks)),
+      progress: JSON.parse(JSON.stringify(progress)),
       metrics: JSON.parse(JSON.stringify(metrics)),
       debriefDraft: JSON.parse(JSON.stringify(debriefDraft)),
       debriefHistory: JSON.parse(JSON.stringify(debriefHistory)),
     };
     setSavedWorkflows((prev) => [snapshot, ...prev]);
     return snapshot;
-  }, [launch, tasks, metrics, debriefDraft, debriefHistory]);
+  }, [launch, progress, metrics, debriefDraft, debriefHistory]);
 
   const loadWorkflow = useCallback(
     (id) => {
       const snap = savedWorkflows.find((w) => w.id === id);
       if (!snap) return;
       setLaunch(JSON.parse(JSON.stringify(snap.launch)));
-      setTasks(JSON.parse(JSON.stringify(snap.tasks)));
+      // New snapshots store `progress`; older ones stored full `tasks` objects —
+      // reduce those to progress so titles/structure come from current code.
+      const restoredProgress = snap.progress
+        ? snap.progress
+        : progressFromTasks(snap.tasks);
+      setProgress(JSON.parse(JSON.stringify(restoredProgress)));
       setMetrics(JSON.parse(JSON.stringify(snap.metrics)));
       setDebriefDraft(JSON.parse(JSON.stringify(snap.debriefDraft ?? newDebriefDraft())));
       setDebriefHistory(JSON.parse(JSON.stringify(snap.debriefHistory ?? [])));
@@ -361,7 +388,7 @@ export function LaunchProvider({ children }) {
 
   const resetLaunch = useCallback(() => {
     setLaunch(EMPTY_LAUNCH);
-    setTasks(freshTasks());
+    setProgress({});
     setMetrics(EMPTY_METRICS);
     setCurrentPhaseId(FIRST_PHASE_ID);
     setMetricsOpen(false);
