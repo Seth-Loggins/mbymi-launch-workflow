@@ -309,7 +309,7 @@ export const taskConfig = {
     lessonNumber: '01',
     body: [
       "Ok, it's time to get to work! In this first step, I recommend building a completed and working Priority List Page and Thank You Page. Make sure it is complete and connected to your email CRM software.",
-      { image: '', alt: 'Priority List Page' },
+      { image: './step01-priority-list.png', alt: 'Priority List Page' },
     ],
   },
   // Step 2 of 10 ("Create Priority Waitlist Opt-In Page") is now folded into
@@ -337,11 +337,9 @@ export const taskConfig = {
         ],
       },
       'Priority Waitlist Page Examples:',
-      { image: '', alt: 'Priority Waitlist Page example' },
-      { image: '', alt: 'Priority Waitlist Page example' },
-      { image: '', alt: 'Priority Waitlist Page example' },
+      { image: './waitlist-page-example-1.png', alt: 'Priority Waitlist Page example' },
       'PREVIOUS VERSION EXAMPLE',
-      { image: '', alt: 'Priority Waitlist Page — previous version example' },
+      { image: './waitlist-prev-version-example.webp', alt: 'Priority Waitlist Page — previous version example' },
       {
         parts: [
           { text: 'The examples above is our Priority Waitlist Page. (' },
@@ -377,7 +375,7 @@ export const taskConfig = {
       { bullet: 'Learn more about YOU' },
       { bullet: '...and take a next step (like save the date, or join a private group)' },
       'Below is an example of the Thank You Page I use when people "opt in" for MY BBD Priority Waitlist',
-      { image: '', alt: 'BBD Priority Waitlist Thank You Page' },
+      { image: './thank-you-page.png', alt: 'BBD Priority Waitlist Thank You Page' },
       'Below is the ACTUAL video I use on the Priority List Thank You Page:',
       { video: 'https://www.youtube.com/watch?v=zLzArmXS3DM' },
       {
@@ -450,7 +448,7 @@ export const taskConfig = {
     body: [
       'With your CRM, you\'ll want to have a confirmation email delivered to your recipient as soon as they "register" for your Priority Waitlist.',
       'Below is the ACTUAL confirmation email I send:',
-      { image: '', alt: 'Priority Waitlist confirmation email' },
+      { image: './confirmation-email.png', alt: 'Priority Waitlist confirmation email' },
       {
         bold: 'Note:',
         text: ' you can always add additional emails in your follow-up sequence that share your story, other valuable content, and customer case studies!',
@@ -477,12 +475,12 @@ export const taskConfig = {
     inputType: 'lesson',
     lessonNumber: '2',
     body: [
-      { image: '', alt: 'Facebook Group Creation' },
+      { image: './fb-group-creation.jpeg', alt: 'Facebook Group Creation' },
       { bold: '2.1 FB Group Process' },
       'To create more engagement and conversation around your course "topic," you can ALSO create a FB Group.',
       'After someone joins your PRIORITY waitlist, you can direct them to a FB group to keep them engaged.',
       'Answer questions, do Facebook Live, and overall just engage with everyone leading up to the announcement of your Pre-Release Offer.',
-      { image: '', alt: 'FB Group example' },
+      { image: './fb-group-example.png', alt: 'FB Group example' },
     ],
     // Optional URL capture — does NOT gate Mark complete (FB group is optional).
     // Feeds the Links panel via the embedded task's linkLabel.
@@ -637,10 +635,10 @@ export const taskConfig = {
     inputType: 'lesson',
     lessonNumber: '4',
     body: [
-      { image: '', alt: 'Promote Early Interest List' },
+      { image: './promote-early-interest.jpeg', alt: 'Promote Early Interest List' },
       { bold: '4.1 Promotion Options:' },
       'Now it\'s time to "tease" your "Early-Interest" List. Explore your Options for Promotion: Your Podcast, Being a Guest on Other Podcasts, a Popular Blog, or other platforms you can leverage.This is your chance to get the word out about your brand new upcoming program.',
-      { image: '', alt: 'Promotion Options' },
+      { image: './promotion-options.webp', alt: 'Promotion Options' },
     ],
     subTasks: [
       {
@@ -669,13 +667,13 @@ export const taskConfig = {
       'To get on the interest list, so you are notified as soon as we open this open, click the link below."',
       { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
       { bold: 'EXAMPLES of INSTAGRAM Content Promoting Your Priority List', text: '' },
-      { image: '', alt: 'Instagram content examples' },
+      { image: './instagram-examples.png', alt: 'Instagram content examples' },
       { parts: [{ link: 'https://www.instagram.com/p/C6o2yC-ykHd/', text: 'Instagram Content Example #1' }] },
       { parts: [{ link: 'https://www.instagram.com/p/C6EySq3voBo/', text: 'Instagram Content Example #2' }] },
       { parts: [{ link: 'https://www.instagram.com/p/C7DYyi7O3tx/', text: 'Instagram Content Example #3' }] },
       { bold: 'EXAMPLE Email Promoting Your Priority List', text: '' },
       { parts: [{ link: 'https://drive.google.com/file/d/1_Iw9s7d_hs4bR5lxX8kafJcIq9Owcu4u/view', text: 'Link to the Email Promoting Your Priority List PDF' }] },
-      { image: '', alt: 'Email promoting priority list' },
+      { image: './promo-email.png', alt: 'Email promoting priority list' },
     ],
     subTasks: [
       {
@@ -756,7 +754,7 @@ export const taskConfig = {
       "2. Get a Week ahead! Turn your first week's outline into Keynote (Powerpoint) Slides",
       '3. Create a "Welcome" Video or tutorial that can be watched immediately in your course portal (Kajabi) once people join.',
       'Here is a SAMPLE Course Outline for "Podcasting"',
-      { image: '', alt: 'Sample Podcasting Course Outline' },
+      { image: './course-outline.png', alt: 'Sample Podcasting Course Outline' },
       {
         parts: [
           {
@@ -831,7 +829,7 @@ export const taskConfig = {
           { text: ', to create your Checkout Page.' },
         ],
       },
-      { image: '', alt: 'Checkout Page' },
+      { image: './checkout-page.png', alt: 'Checkout Page' },
     ],
     subTasks: [
       { id: 'mbymi-10-1-link', label: 'Checkout Page URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
@@ -850,7 +848,7 @@ export const taskConfig = {
           },
         ],
       },
-      { image: '', alt: 'Connect to Payment Process' },
+      { image: './payment-process.png', alt: 'Connect to Payment Process' },
     ],
   },
   'mbymi-10-2': {
@@ -869,7 +867,7 @@ export const taskConfig = {
           },
         ],
       },
-      { image: '', alt: 'Thank You Confirmation Page' },
+      { image: './thank-you-confirmation.png', alt: 'Thank You Confirmation Page' },
     ],
     subTasks: [
       { id: 'mbymi-10-2-link', label: 'Thank You Page URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
@@ -885,7 +883,7 @@ export const taskConfig = {
       '3. placeholders for replays',
       '4.',
       'Here is an example of Jen Finley\'s completed BETA COURSE delivery. On the left side is the Kajabi "backend" design. On the right side, is the customer-facing portal.',
-      { image: '', alt: 'Members-Only Portal example' },
+      { image: './members-portal.png', alt: 'Members-Only Portal example' },
     ],
     subTasks: [
       { id: 'mbymi-10-3-link', label: 'Member Portal URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
@@ -926,7 +924,7 @@ export const taskConfig = {
     lessonNumber: '07',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     body: [
-      { image: '', alt: 'Flash Sale' },
+      { image: './flash-sale.jpeg', alt: 'Flash Sale' },
       { bold: '7.1 48-72 Hour Flash Sale Process' },
       'The "FLASH SALE" step is the phase where you actually PITCH and SELL your Beta OFFER to everyone on your Priority List.  (note, feel free to also mirror the same messaging across Social Media for more reach).',
       "If you have been following all the steps, and things have been working, then you should have a good amount of quality leads that have registered to that Priority List. These leads have said YES to learning more about this program. So now... it's time to make the offer and fill your beta!",
@@ -937,7 +935,7 @@ export const taskConfig = {
         bold: 'Note:',
         text: ' My first one-on-one client followed this process, and sold 34 out of his 60 seats... with one email!',
       },
-      { image: '', alt: 'Sample Flash Sale Emails' },
+      { image: './flash-sale-emails.png', alt: 'Sample Flash Sale Emails' },
       {
         parts: [
           {
@@ -984,7 +982,7 @@ export const taskConfig = {
           },
         ],
       },
-      { image: '', alt: 'Webinar' },
+      { image: './webinar.jpeg', alt: 'Webinar' },
     ],
     subTasks: [
       {
@@ -1022,7 +1020,7 @@ export const taskConfig = {
           { text: '.' },
         ],
       },
-      { image: '', alt: '4-Day Follow-Up' },
+      { image: './follow-up.jpeg', alt: '4-Day Follow-Up' },
     ],
     subTasks: [
       {
@@ -1090,7 +1088,7 @@ export const taskConfig = {
     lessonNumber: '11',
     aiBot: { name: 'Launch Debrief Analyzer', url: BOT_URLS.debrief },
     body: [
-      { image: '', alt: 'Launch Debrief' },
+      { image: './launch-debrief.jpeg', alt: 'Launch Debrief' },
       { bold: '11.1 Debrief Process' },
       {
         parts: [
