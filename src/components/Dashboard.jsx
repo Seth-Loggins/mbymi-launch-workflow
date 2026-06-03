@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
+import { getTaskConfig } from '../data/mbymiTaskConfig.js';
 import PhaseNav from './PhaseNav.jsx';
-import StepCard from './StepCard.jsx';
+import StepCard, { LessonBodyBlock } from './StepCard.jsx';
 import CompletedSteps from './CompletedSteps.jsx';
 import LivePanel from './LivePanel.jsx';
 import MetricsDrawer from './MetricsDrawer.jsx';
@@ -140,21 +141,30 @@ function LaunchTitle({ launch, setOfferName, onReset, onOpenSaved }) {
 }
 
 function DebriefStepHeader() {
-  const { currentPhase, phaseStepIndex, phaseStats, currentTask, openBot } = useLaunch();
-  const stats = phaseStats[currentPhase.id];
+  const { currentPhase, currentTask, openBot } = useLaunch();
+  const config = getTaskConfig(currentTask.id);
 
   return (
     <div className="card" style={{ background: '#1D203F', color: '#fff' }}>
       <div className="flex items-center gap-2 mb-2 flex-wrap">
-        <span className="chip bg-brand-pink text-white">
-          Step {phaseStepIndex} of {stats.total} · {currentPhase.label}
-        </span>
-        <span className="chip bg-white/10 text-white">{currentTask.process}</span>
+        <span className="chip bg-brand-pink text-white">{currentPhase.label}</span>
       </div>
-      <h2 className="font-display tracking-wide" style={{ fontSize: '1.6rem', lineHeight: 1.1 }}>
-        Launch debrief
+      <h2
+        className="font-display tracking-wide"
+        style={{ fontSize: '1.6rem', lineHeight: 1.1, overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+      >
+        {currentTask.title}
       </h2>
-      <p className="mt-2 text-white/75 text-sm max-w-2xl">
+
+      {Array.isArray(config.body) && config.body.length > 0 && (
+        <div className="mt-3 space-y-3 max-w-2xl">
+          {config.body.map((b, i) => (
+            <LessonBodyBlock key={i} block={b} />
+          ))}
+        </div>
+      )}
+
+      <p className="mt-3 text-white/75 text-sm max-w-2xl">
         Fill in the structured debrief below. The right side mirrors back what you've entered. Hit{' '}
         <span className="font-semibold">Save Debrief</span> at the bottom to finish the workflow.
       </p>

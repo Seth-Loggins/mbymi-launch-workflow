@@ -706,115 +706,417 @@ export const taskConfig = {
     inputType: 'textarea',
     playbookField: 'promote.copy',
   },
-  'mbymi-08-3': {
-    inputType: 'acknowledge',
-    helper: 'Schedule the posts. Once scheduled, mark this done.',
-    promptMetricsUpdate: true,
-  },
 
-  // ---- Create Your Product ------------------------------------------------
+  // ---- Create Your Product (Offer phase) ----------------------------------
+  // Intro card + the two offer lessons (verbatim copy). 5.1 / 5.2 keep their
+  // drafting inputs as required textareas, fanned out to embedded `…-input`
+  // tasks (preserving playbook fields). AI Assist: 5.1 = Irresistible Offer
+  // Bot, 5.2 = Product Outline Bot.
+  'mbymi-09-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      "In this step, you'll get clear on WHAT you're selling and what's included!",
+    ],
+  },
   'mbymi-09-1': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Promise: …\nDeliverables: …\nPrice: …',
-    helper: 'The three pieces every offer needs. Write them in plain language.',
+    inputType: 'lesson',
+    lessonNumber: '02',
+    aiBot: { name: 'Irresistible Offer Bot', url: BOT_URLS.offer },
+    body: [
+      {
+        parts: [
+          { text: 'When following Monetize Before You Make It, you have the opportunity to launch a course or program before you create any of the content. ' },
+          { bold: 'BUT' },
+          { text: ' that does not mean you don\'t know what you\'re selling! You must get clear on your OFFER first. You can do that by following the ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/1531339/posts/2157450897',
+            text: 'Offer Creation Process',
+          },
+          { text: ' inside of Module 3.' },
+        ],
+      },
+      'Here are the "deliverables" that will tell you that you have successfully completed this step:',
+      '1. You are clear on the PROMISE of this offer. Who it is for, what problem you solve, what transformation you provide.',
+      '2. You have clarity on your deliverables. How long is the program? What else is included?',
+      '3. The Price Point. How much will it be? How much are you charging for the Beta?',
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-09-1-input',
+        label: 'Your offer (promise, deliverables, price):',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Promise: …\nDeliverables: …\nPrice: …',
+      },
+    ],
     example:
       "Promise: Launch your first paid program to 30 founding members in 6 weeks.\nDeliverables: 6 weekly live calls + Notion playbook + Slack community.\nPrice: $497 one-time.",
-    playbookField: 'offer.fullDefinition',
-    aiBot: { name: 'Irresistible Offer Bot', url: BOT_URLS.offer },
   },
   'mbymi-09-2': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Sketch the full course outline / module agenda…',
-    helper: 'Modules, lessons, sequence. Doesn’t need to be perfect — a draft is enough to start selling.',
-    playbookField: 'product.outline',
+    inputType: 'lesson',
+    lessonNumber: '03',
     aiBot: { name: 'Product Outline Bot', url: BOT_URLS.productOutline },
+    body: [
+      "Once you have gained clarity on your OFFER, it's time to create a general Outline of the content deliverables. My advice here is to create a timeline for the delivery of your course (2-8 weeks) and have ONE TOPIC delivered per week.",
+      'Here are the "deliverables" that will tell you that you have successfully completed this step:',
+      '1. You have a completed "course outline"',
+      { indent: '1. List of Modules/Weeks TOPICS' },
+      { indent: '2. a rough idea of the content covered in each module' },
+      "2. Get a Week ahead! Turn your first week's outline into Keynote (Powerpoint) Slides",
+      '3. Create a "Welcome" Video or tutorial that can be watched immediately in your course portal (Kajabi) once people join.',
+      'Here is a SAMPLE Course Outline for "Podcasting"',
+      { image: '', alt: 'Sample Podcasting Course Outline' },
+      {
+        parts: [
+          {
+            link: 'https://drive.google.com/file/d/1lbqQyQbgR3U3HCL7wF2aIXHGV5WrYEHK/view',
+            text: 'Link to the Sample Podcasting Course Outline PDF',
+          },
+        ],
+      },
+      {
+        bold: 'IMPORTANT:',
+        text: " When you are a new course creator, it's very common to get in your head and struggle with what you teach, and how you teach it. Inside Business By Design, I have included an entire MINICOURSE on how to craft the BEST program for your students. If you would like more assistance in this area, click the link below to access Program Design:",
+      },
+      {
+        parts: [
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/214968',
+            text: 'ACCESS Program Design NOW!',
+          },
+        ],
+      },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-09-2-input',
+        label: 'Your course outline / agenda:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Sketch the full course outline / module agenda…',
+      },
+    ],
   },
-  'mbymi-09-3': {
-    inputType: 'note',
-    placeholder: 'Notes on the welcome video (optional)',
-    helper: 'The first thing new members see in the portal. Sets expectations and reduces refunds.',
+  // Embedded drafting inputs for cards 5.1 / 5.2 (preserve the playbook fields).
+  'mbymi-09-1-input': {
+    inputType: 'textarea',
+    playbookField: 'offer.fullDefinition',
+  },
+  'mbymi-09-2-input': {
+    inputType: 'textarea',
+    playbookField: 'product.outline',
   },
 
-  // ---- Payment + Delivery (mostly external Kajabi work) -------------------
-  'mbymi-10-1': { inputType: 'note', placeholder: 'Checkout page URL (optional)', helper: 'External build — Kajabi / your checkout.', linkLabel: 'Checkout Page' },
-  'mbymi-10-2': { inputType: 'note', placeholder: 'Thank-you page URL (optional)', helper: 'Confirms purchase and sets the first step.', linkLabel: 'Post-Purchase Thank You' },
-  'mbymi-10-3': { inputType: 'note', placeholder: 'Portal URL (optional)', helper: 'Where members go to access the program.', linkLabel: 'Member Portal' },
+  // ---- Payment + Delivery phase -------------------------------------------
+  // Intro card + 6 build cards (verbatim copy). Each external-build card keeps
+  // its OPTIONAL URL capture (does not gate Mark complete) feeding the Links
+  // panel via an embedded `…-link` task. 6.2 has no input (was an acknowledge).
+  // 6.5 keeps the Sales/Landing Page Copy Bot. Images are dashed placeholders.
+  'mbymi-10-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      "In this step, you'll need to set up a way for people to PAY YOU and a way to deliver ACCESS to your Beta Program.",
+      'The Deliverables needed to call this step complete include:',
+      '1. A checkout page',
+      '2. The checkout page connected with Payment Processor (like Stripe)',
+      '3. A Thank You Confirmation Page Redirect AFTER Checkout Page',
+      '4. A Members-Only, Password-Protected Portal',
+      '5. A Sales Page (Optional)',
+    ],
+  },
+  'mbymi-10-1': {
+    inputType: 'lesson',
+    lessonNumber: '02',
+    body: [
+      'Inside Business By Design, there is a step-by-step process for designing and building your checkout page. For us, we use and recommend KAJABI. Samcart is another option we use and recommend.',
+      {
+        parts: [
+          { text: 'Please refer to out ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/218956/posts/750131',
+            text: 'Checkout Page Process',
+          },
+          { text: ', to create your Checkout Page.' },
+        ],
+      },
+      { image: '', alt: 'Checkout Page' },
+    ],
+    subTasks: [
+      { id: 'mbymi-10-1-link', label: 'Checkout Page URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
+    ],
+  },
+  'mbymi-10-5': {
+    inputType: 'lesson',
+    lessonNumber: '03',
+    body: [
+      "In this step, you'll need to make sure you have connected your checkout page to STRIPE and/or Paypal. Whatever software you are using, will have instructions on this.  We use Kajabi.",
+      {
+        parts: [
+          {
+            link: 'https://help.kajabi.com/articles/api-integrations/payment-integrations/connect-a-third-party-payment-gateway-to-kajabi#h_01HMSCSE8RX5EE31PPGMBBQM9D',
+            text: 'How to Connect a Third-Party Payment Gateway to Kajabi',
+          },
+        ],
+      },
+      { image: '', alt: 'Connect to Payment Process' },
+    ],
+  },
+  'mbymi-10-2': {
+    inputType: 'lesson',
+    lessonNumber: '04',
+    body: [
+      'This is the page your founding members will see as soon as they submit their credit card information. Here are the essential ingredients I recommend having on this page.',
+      '1. A headline that confirms their purchase, thanks them for their investment, and directs them on next step',
+      '2. A simple "talking head" video that thanks and welcomes your new members, and reinstates the promise',
+      '3. Simple instructions on how to get started and access all the course materials, live calls, etc.',
+      {
+        parts: [
+          {
+            link: 'https://drive.google.com/file/d/148uRfywg--sQy5FhJjI9Td-H5hXGSjMz/view',
+            text: 'Below is an actual picture of our thank you page.',
+          },
+        ],
+      },
+      { image: '', alt: 'Thank You Confirmation Page' },
+    ],
+    subTasks: [
+      { id: 'mbymi-10-2-link', label: 'Thank You Page URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
+    ],
+  },
+  'mbymi-10-3': {
+    inputType: 'lesson',
+    lessonNumber: '05',
+    body: [
+      "We use Kajabi to house all of our products, courses and trainings.  You'll want to build out a simple course inside Kajabi that will have the following:",
+      '1. Any trainings you already have available',
+      '2. information on how to register for calls',
+      '3. placeholders for replays',
+      '4.',
+      'Here is an example of Jen Finley\'s completed BETA COURSE delivery. On the left side is the Kajabi "backend" design. On the right side, is the customer-facing portal.',
+      { image: '', alt: 'Members-Only Portal example' },
+    ],
+    subTasks: [
+      { id: 'mbymi-10-3-link', label: 'Member Portal URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
+    ],
+  },
   'mbymi-10-4': {
-    inputType: 'note',
-    placeholder: 'Sales page URL (optional)',
-    helper: 'The main page that does the convincing. Use the AI bot to draft sales-page copy, then drop the published URL here.',
-    linkLabel: 'Sales Page',
+    inputType: 'lesson',
+    lessonNumber: '06',
     aiBot: { name: 'Sales/Landing Page Copy Bot', url: BOT_URLS.salesPage },
+    body: [
+      {
+        parts: [
+          { text: 'Creating your Sales Page is optional here. (Think Minimum Viable Promotion!)  It is a lot more work to create a Sales Page. If you use a webinar, this can help to sell. But even a mini sales page can be better than nothing.  You can follow our ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/218956/posts/750129',
+            text: 'Sales Page Creation Process',
+          },
+          { text: '.' },
+        ],
+      },
+    ],
+    subTasks: [
+      { id: 'mbymi-10-4-link', label: 'Sales Page URL (optional):', inputType: 'url', optional: true, placeholder: 'https://...' },
+    ],
   },
-  'mbymi-10-5': { inputType: 'acknowledge', helper: 'Test the full purchase flow with a $1 test charge before launch.' },
+  // Embedded URL captures for the Payment + Delivery build cards.
+  'mbymi-10-1-link': { inputType: 'url', linkLabel: 'Checkout Page' },
+  'mbymi-10-2-link': { inputType: 'url', linkLabel: 'Post-Purchase Thank You' },
+  'mbymi-10-3-link': { inputType: 'url', linkLabel: 'Member Portal' },
+  'mbymi-10-4-link': { inputType: 'url', linkLabel: 'Sales Page' },
 
-  // ---- Flash Sale ---------------------------------------------------------
+  // ---- Flash Sale phase ---------------------------------------------------
+  // Intro card + the flash-sale lesson (verbatim copy). 7.1 keeps its email
+  // draft as a required textarea → embedded mbymi-11-1-email (Emails panel).
+  // AI Assist = Promo Campaign Bot. Images are dashed placeholders.
+  'mbymi-11-0': {
+    inputType: 'lesson',
+    lessonNumber: '01',
+    body: [
+      { image: '', alt: 'Flash Sale' },
+    ],
+  },
   'mbymi-11-1': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft the flash sale announcement email…',
-    helper: 'A short, punchy email that creates urgency — cart is opening for X days only.',
-    playbookField: 'flashSale.announcement',
+    inputType: 'lesson',
+    lessonNumber: '02',
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      'The "FLASH SALE" step is the phase where you actually PITCH and SELL your Beta OFFER to everyone on your Priority List.  (note, feel free to also mirror the same messaging across Social Media for more reach).',
+      "If you have been following all the steps, and things have been working, then you should have a good amount of quality leads that have registered to that Priority List. These leads have said YES to learning more about this program. So now... it's time to make the offer and fill your beta!",
+      'There are two things that make this work:',
+      '#1. They raised their hand to be the first one notified when this program would become available! (So... notify them! They gave you permission!)',
+      'and #2. The scarcity of limited seats.',
+      {
+        bold: 'Note:',
+        text: ' My first one-on-one client followed this process, and sold 34 out of his 60 seats... with one email!',
+      },
+      { image: '', alt: 'Sample Flash Sale Emails' },
+      {
+        parts: [
+          {
+            link: 'https://drive.google.com/file/d/1jP7i-Cu82oapWKfVAGRKiEE65-qDUwPk/view',
+            text: 'Link to the Sample Flash Sale Emails PDF',
+          },
+        ],
+      },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-11-1-email',
+        label: 'Your flash sale announcement email:',
+        inputType: 'textarea',
+        minChars: 30,
+        placeholder: 'Draft the flash sale announcement email…',
+      },
+    ],
+  },
+  'mbymi-11-1-email': {
+    inputType: 'textarea',
     emailLabel: 'Flash Sale Announcement Email',
-    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
-  },
-  'mbymi-11-2': {
-    inputType: 'acknowledge',
-    helper: 'Once scheduled in your CRM, mark this done.',
-    promptMetricsUpdate: true,
+    playbookField: 'flashSale.announcement',
   },
 
-  // ---- Webinar ------------------------------------------------------------
+  // ---- Webinar phase (optional) -------------------------------------------
+  // Single card (verbatim copy). The whole phase is optional, so the webinar-
+  // plan input is OPTIONAL (never gates Mark complete) and feeds the playbook
+  // field. AI Assist = Webinar Outline Bot. Image is a dashed placeholder.
   'mbymi-12-1': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Title, hook, key teaching points, pitch transition…',
-    helper: 'Your webinar plan: title, hook, 2–3 key teaching points, the pitch transition.',
-    playbookField: 'webinar.plan',
+    inputType: 'lesson',
+    lessonNumber: '01',
     aiBot: { name: 'Webinar Outline Bot', url: BOT_URLS.webinar },
+    body: [
+      "If you didn't fill out your beta with the emails, you have an option to now go and run a webinar or two. This is a strategy of inviting your entire audience to register and attend a free training class where you pitch your beta at the end of the webinar.",
+      'Deliver 45 minutes of HIGH-VALUE CONTENT and make a direct invite selling spots into your Founding Members Group. Direct them straight to the Checkout Page or Sales Page.',
+      'Mention the remaining spots. Mention how the price will go up for everyone else. Note: My first one-on-one client sent people straight from the webinar to a Checkout Page. No payment plans, just one option to pay $297.',
+      'This is a SEPARATE process. Which we have laid out for you inside Business By Design. You can follow that process here:',
+      {
+        parts: [
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/720756/posts/2157450939',
+            text: 'Webinar Creation and Promotion Process.',
+          },
+        ],
+      },
+      { image: '', alt: 'Webinar' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-12-1-input',
+        label: 'Your webinar plan (optional):',
+        inputType: 'textarea',
+        optional: true,
+        placeholder: 'Title, hook, key teaching points, pitch transition…',
+      },
+    ],
   },
-  'mbymi-12-2': {
-    inputType: 'acknowledge',
-    helper: 'Show up, deliver, pitch. Mark done after the live session.',
-    promptMetricsUpdate: true,
+  'mbymi-12-1-input': {
+    inputType: 'textarea',
+    playbookField: 'webinar.plan',
   },
 
-  // ---- 4-Day Follow-Up ----------------------------------------------------
+  // ---- 4-Day Follow-Up phase (optional) -----------------------------------
+  // Single card (verbatim copy). Optional phase, so the follow-up sequence
+  // input is OPTIONAL (never gates Mark complete); it still feeds the Emails
+  // panel via embedded mbymi-13-2-email. AI Assist = Promo Campaign Bot.
   'mbymi-13-2': {
-    inputType: 'text',
-    minChars: 30,
-    placeholder: 'Draft the 4–7 day follow-up email sequence outline…',
-    helper: 'The post-webinar nurture: objections, FAQs, social proof, urgency.',
-    playbookField: 'followUp.sequence',
+    inputType: 'lesson',
+    lessonNumber: '01',
+    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
+    body: [
+      "If you do decide to offer a webinar or two, you'll also want to create a  a 4- to 7-Day follow up campaign with a DEADLINE.",
+      'Either the TOTAL spots fill up, or you hit deadline. But the promotion ends when one of those two things happen.  Send a 4-Day Follow-Up Email Series where you emphasize when the group will be closing.  Give a deadline and/or let your spots fill up - whichever comes first!',
+      {
+        parts: [
+          { text: 'For more clarity on how to execute on your Follow-Up Sequence, you can follow ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/218956/posts/750130',
+            text: 'The Ultimate Follow-Up Process',
+          },
+          { text: '.' },
+        ],
+      },
+      { image: '', alt: '4-Day Follow-Up' },
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-13-2-email',
+        label: 'Your 4-day follow-up sequence (optional):',
+        inputType: 'textarea',
+        optional: true,
+        placeholder: 'Draft the 4–7 day follow-up email sequence outline…',
+      },
+    ],
+  },
+  'mbymi-13-2-email': {
+    inputType: 'textarea',
     emailLabel: '4–7 Day Follow-Up Sequence',
-    aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
-  },
-  'mbymi-13-3': {
-    inputType: 'acknowledge',
-    helper: 'Once the sequence is scheduled to send, mark this done.',
-    promptMetricsUpdate: true,
+    playbookField: 'followUp.sequence',
   },
 
-  // ---- Close Day ----------------------------------------------------------
+  // ---- Close Day phase (optional) -----------------------------------------
+  // Single card (verbatim copy). Optional — the cart-close email input is
+  // OPTIONAL (never gates Mark complete) and feeds the Emails panel via the
+  // embedded mbymi-14-1-email task. AI Assist = Promo Campaign Bot; completing
+  // prompts a metrics check (final numbers).
   'mbymi-14-1': {
-    inputType: 'text',
-    minChars: 20,
-    placeholder: 'Draft the cart close day email…',
-    helper: 'The "this is your last chance" email. Short, urgent, direct.',
-    playbookField: 'closeDay.email',
-    emailLabel: 'Cart Close Day Email',
+    inputType: 'lesson',
+    lessonNumber: '01',
     aiBot: { name: 'Promo Campaign Bot', url: BOT_URLS.promo },
     promptMetricsUpdate: true,
+    body: [
+      "This optional step is available to you, if you still haven't filled your BETA. If it isn't filled, it still helps to have a deadline.  I had a student who filled their 60 spots at 5pm on the day of closing!",
+      {
+        parts: [
+          { text: 'Use the "Cart Close Day" Email from ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/218956/posts/750130',
+            text: 'The Ultimate Follow-Up Process',
+          },
+          { text: ' to inform your audience of this deadline and get people signed up!' },
+        ],
+      },
+      "...and if all spots still aren't filled, that's okay!",
+    ],
+    subTasks: [
+      {
+        id: 'mbymi-14-1-email',
+        label: 'Your cart close day email (optional):',
+        inputType: 'textarea',
+        optional: true,
+        placeholder: 'Draft the cart close day email…',
+      },
+    ],
+  },
+  'mbymi-14-1-email': {
+    inputType: 'textarea',
+    emailLabel: 'Cart Close Day Email',
+    playbookField: 'closeDay.email',
   },
 
-  // ---- Launch Debrief -----------------------------------------------------
+  // ---- Launch Debrief phase -----------------------------------------------
+  // Single card. Keeps the special `debrief` input type (structured 7-section
+  // form in the Debrief tab + Save Debrief celebration), and renders the
+  // placeholder image, the "11.1 Debrief Process" heading + verbatim teaching
+  // copy, and the Launch Debrief Analyzer AI button on the card itself.
   'mbymi-15-1': {
     inputType: 'debrief',
-    helper:
-      "This is the big one. Fill out the structured debrief in the Debrief tab of the Live Build panel on the right — every section captures something you'll want next launch. Hit Save Debrief when you're done.",
     aiBot: { name: 'Launch Debrief Analyzer', url: BOT_URLS.debrief },
+    body: [
+      { image: '', alt: 'Launch Debrief' },
+      { bold: '11.1 Debrief Process' },
+      {
+        parts: [
+          { text: 'Now that doors are closed and you have celebrated your launch, it is time to complete a launch debrief! Follow the steps for ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/1545212/posts/5205851',
+            text: 'The Launch Debrief Process',
+          },
+          { text: " to understand the full scope of your launch's performance and identify areas to replicate or improve for your next launch." },
+        ],
+      },
+    ],
   },
 };
 

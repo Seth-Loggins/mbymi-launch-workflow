@@ -418,11 +418,12 @@ function LessonBody({ config, draft, setDraft }) {
 // Renders one body block inside a lesson card. Supports these shapes:
 //   - string                      → plain paragraph
 //   - { bold: 'X', text: '…' }    → paragraph with a bold lead-in span
-//   - { parts: [...] }            → paragraph with inline hyperlinked spans
+//   - { parts: [...] }            → paragraph with inline plain/bold/link spans
+//   - { indent: '…' }             → indented paragraph (nested list sub-item)
 //   - { image: url|'', alt: '…' } → image (empty `image` → dashed placeholder)
 //   - { video: 'youtube url' }    → inline embedded YouTube video (16:9)
 //   - { bullet: '…', link?: 'url' } → bulleted list item (optional hyperlink)
-function LessonBodyBlock({ block }) {
+export function LessonBodyBlock({ block }) {
   const baseParaStyle = {
     fontSize: '0.95rem',
     lineHeight: 1.5,
@@ -439,7 +440,7 @@ function LessonBodyBlock({ block }) {
   }
   if (block && typeof block === 'object') {
     if (Array.isArray(block.parts)) {
-      // Paragraph with mixed plain-text and hyperlinked spans inline.
+      // Paragraph with mixed plain-text, bold, and hyperlinked spans inline.
       return (
         <p className="text-white/85" style={baseParaStyle}>
           {block.parts.map((part, i) => {
@@ -457,8 +458,23 @@ function LessonBodyBlock({ block }) {
                 </a>
               );
             }
+            if (part && typeof part === 'object' && typeof part.bold === 'string') {
+              return (
+                <span key={i} className="font-bold text-white">
+                  {part.bold}
+                </span>
+              );
+            }
             return <span key={i}>{part?.text ?? ''}</span>;
           })}
+        </p>
+      );
+    }
+    if (typeof block.indent === 'string') {
+      // Indented paragraph — used for nested numbered sub-items under a list.
+      return (
+        <p className="text-white/85" style={{ ...baseParaStyle, paddingLeft: 24 }}>
+          {block.indent}
         </p>
       );
     }

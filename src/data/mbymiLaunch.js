@@ -134,7 +134,6 @@ const processGroups = [
       { id: "mbymi-08-2", title: "4.2 Promotion Formula" },
       // Promotion-content draft captured inside card 4.2.
       { id: "mbymi-08-2-input", title: "Promotion Content", embedded: true },
-      { id: "mbymi-08-3", title: "Schedule & Post Promotion Content" },
     ],
   },
 
@@ -142,9 +141,13 @@ const processGroups = [
   {
     process: "Create Your Product",
     tasks: [
-      { id: "mbymi-09-1", title: "Define Offer Promise, Deliverables & Price" },
-      { id: "mbymi-09-2", title: "Build Full Course Outline / Agenda" },
-      { id: "mbymi-09-3", title: "Create Welcome Video/Tutorial for Members" },
+      { id: "mbymi-09-0", title: "STEP 05. Create Your Product/Course Outline:" },
+      { id: "mbymi-09-1", title: "5.1 The Offer Creation Process" },
+      // Offer-definition draft captured inside card 5.1.
+      { id: "mbymi-09-1-input", title: "Offer Definition", embedded: true },
+      { id: "mbymi-09-2", title: "5.2 Create Your Course Outline / Agenda" },
+      // Course-outline draft captured inside card 5.2.
+      { id: "mbymi-09-2-input", title: "Course Outline", embedded: true },
     ],
   },
 
@@ -152,11 +155,16 @@ const processGroups = [
   {
     process: "Payment + Delivery",
     tasks: [
-      { id: "mbymi-10-1", title: "Create Checkout Page" },
-      { id: "mbymi-10-5", title: "Connect to Payment Process" },
-      { id: "mbymi-10-2", title: "Create Post-Purchase Thank You Confirmation Page" },
-      { id: "mbymi-10-3", title: "Build Members-Only Course Portal (Kajabi)" },
-      { id: "mbymi-10-4", title: "Creating Your Sales Page" },
+      { id: "mbymi-10-0", title: "STEP 06. Payment + Delivery Process:" },
+      { id: "mbymi-10-1", title: "6.1 Creating Your Checkout Page" },
+      { id: "mbymi-10-1-link", title: "Checkout Page URL", embedded: true },
+      { id: "mbymi-10-5", title: "6.2 Connect to Payment Process" },
+      { id: "mbymi-10-2", title: "6.3 A Thank You Confirmation Page" },
+      { id: "mbymi-10-2-link", title: "Thank You Page URL", embedded: true },
+      { id: "mbymi-10-3", title: "6.4 A Members-Only Password-Protected PORTAL" },
+      { id: "mbymi-10-3-link", title: "Member Portal URL", embedded: true },
+      { id: "mbymi-10-4", title: "6.5 Creating Your Sales Page (Optional)" },
+      { id: "mbymi-10-4-link", title: "Sales Page URL", embedded: true },
     ],
   },
 
@@ -164,8 +172,10 @@ const processGroups = [
   {
     process: "Flash Sale",
     tasks: [
-      { id: "mbymi-11-1", title: "Write Flash Sale Announcement Email" },
-      { id: "mbymi-11-2", title: "Send Flash Sale Emails to Waitlist" },
+      { id: "mbymi-11-0", title: "STEP 07. Flash Sale:" },
+      { id: "mbymi-11-1", title: "7.1 48-72 Hour Flash Sale Process" },
+      // Flash sale email draft captured inside card 7.1 → feeds the Emails panel.
+      { id: "mbymi-11-1-email", title: "Flash Sale Announcement Email", embedded: true },
     ],
   },
 
@@ -173,8 +183,9 @@ const processGroups = [
   {
     process: "Webinar",
     tasks: [
-      { id: "mbymi-12-1", title: "Create & Promote Webinar" },
-      { id: "mbymi-12-2", title: "Deliver Webinar & Pitch Beta Offer" },
+      { id: "mbymi-12-1", title: "STEP 08. Rock Your Webinars (OPTIONAL)" },
+      // Optional webinar plan captured inside the card.
+      { id: "mbymi-12-1-input", title: "Webinar Plan", embedded: true },
     ],
   },
 
@@ -182,21 +193,28 @@ const processGroups = [
   {
     process: "4-Day Follow-Up",
     tasks: [
-      { id: "mbymi-13-2", title: "Write 4-7 Day Follow-Up Email Sequence" },
-      { id: "mbymi-13-3", title: "Send Follow-Up Sequence" },
+      { id: "mbymi-13-2", title: "STEP 09. The 4-Day Follow-Up: (OPTIONAL)" },
+      // Optional follow-up sequence draft captured inside the card → Emails panel.
+      { id: "mbymi-13-2-email", title: "4-7 Day Follow-Up Sequence", embedded: true },
     ],
   },
 
   // ===== CLOSE CART PHASE ==================================================
   {
     process: "Close Day",
-    tasks: [{ id: "mbymi-14-1", title: "Send Cart Close Day Email" }],
+    tasks: [
+      { id: "mbymi-14-1", title: "10. Close Day: (Optional)" },
+      // Optional cart-close email draft captured inside the card → Emails panel.
+      { id: "mbymi-14-1-email", title: "Cart Close Day Email", embedded: true },
+    ],
   },
 
   // ===== DEBRIEF PHASE =====================================================
   {
     process: "Launch Debrief",
-    tasks: [{ id: "mbymi-15-1", title: "Complete Launch Debrief Analysis" }],
+    tasks: [
+      { id: "mbymi-15-1", title: "STEP 11: Launch Debrief:" },
+    ],
   },
 ];
 
