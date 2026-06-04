@@ -5,7 +5,7 @@ import { copyViaParent } from '../lib/iframeBridge.js';
 
 const URL_REGEX = /\bhttps?:\/\/[^\s)]+/i;
 
-function extractUrl(value) {
+export function extractUrl(value) {
   if (typeof value !== 'string') return null;
   const match = value.match(URL_REGEX);
   return match ? match[0] : null;
@@ -128,7 +128,7 @@ export default function LinksView() {
  *   3. window.prompt() with URL pre-selected (last resort)
  * If everything fails we just leave the input selected for ⌘C.
  */
-function LinkRow({ link, copied, onCopied, onEdit }) {
+export function LinkRow({ link, copied, onCopied, onEdit }) {
   const inputRef = useRef(null);
 
   function selectAll() {

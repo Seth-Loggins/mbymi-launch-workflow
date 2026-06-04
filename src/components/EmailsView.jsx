@@ -1,206 +1,118 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLaunch } from '../state/LaunchContext.jsx';
 import { getTaskConfig } from '../data/mbymiTaskConfig.js';
-import { copyViaParent } from '../lib/iframeBridge.js';
+import { extractUrl, LinkRow } from './LinksView.jsx';
 
 /**
- * Collects every email the user has written across the workflow (tasks tagged
- * with `emailLabel`) and shows them one at a time with prev/next navigation.
- * Emails can be long, so the body scrolls and the pager sits at the bottom.
+ * Single-page list of every email slot in the launch (tasks tagged with
+ * `emailLabel`). Each email now stores a Google Doc link, so this mirrors the
+ * Links tab — saved links up top with Open/Copy, empty ones below — instead of
+ * the old one-at-a-time pager. Kept as its own "Emails" tab so the user can
+ * find these docs quickly without hunting through the general Links list.
  */
 export default function EmailsView() {
   const { tasks, goToPhase, phases } = useLaunch();
-  const [index, setIndex] = useState(0);
-  const [copied, setCopied] = useState(false);
+  const [copiedUrl, setCopiedUrl] = useState(null);
 
-  // Build the ordered list of email slots (filled + empty), sorted by task order.
   const emailSlots = [...tasks]
     .sort((a, b) => a.order - b.order)
     .map((t) => {
       const cfg = getTaskConfig(t.id);
       if (!cfg.emailLabel) return null;
+      const url = extractUrl(t.answer);
       return {
         id: t.id,
         label: cfg.emailLabel,
         process: t.process,
-        body: typeof t.answer === 'string' ? t.answer : '',
+        url,
+        rawAnswer: typeof t.answer === 'string' ? t.answer : '',
         done: t.done,
       };
     })
     .filter(Boolean);
 
-  // Keep index in range as data changes.
-  const filledCount = emailSlots.filter((e) => e.body).length;
-  const safeIndex = Math.min(index, Math.max(0, emailSlots.length - 1));
-  useEffect(() => {
-    if (index !== safeIndex) setIndex(safeIndex);
-    setCopied(false);
-  }, [safeIndex, index]);
+  const filled = emailSlots.filter((e) => e.url);
+  const empty = emailSlots.filter((e) => !e.url);
 
-  if (emailSlots.length === 0) {
-    return (
-      <div className="text-sm text-brand-navy/55 italic">No email steps in this launch yet.</div>
-    );
+  function flagCopied(url) {
+    setCopiedUrl(url);
+    setTimeout(() => setCopiedUrl((current) => (current === url ? null : current)), 1500);
   }
-
-  const current = emailSlots[safeIndex];
 
   function jumpToPhase(processName) {
     const phase = phases.find((p) => p.groups.includes(processName));
     if (phase) goToPhase(phase.id);
   }
 
-  async function handleCopy() {
-    if (!current.body) return;
-    let ok = false;
-    try {
-      ok = await copyViaParent(current.body);
-    } catch {
-      ok = false;
-    }
-    if (!ok && navigator.clipboard?.writeText) {
-      try {
-        await navigator.clipboard.writeText(current.body);
-        ok = true;
-      } catch {
-        ok = false;
-      }
-    }
-    if (ok) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-    } else {
-      window.prompt('Copy email (⌘C / Ctrl+C):', current.body);
-    }
-  }
-
   return (
     <div>
-      <div className="flex items-center justify-between mb-2">
-        <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink">
-          Your emails
-        </div>
-        <span className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/55">
-          {filledCount} written · {emailSlots.length} total
-        </span>
+      <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink mb-2">
+        Your emails — every Google Doc in one place
       </div>
+      <p className="text-xs text-brand-navy/60 mb-4">
+        Add a Google Doc link on each email step and it shows up here, so your emails are always
+        easy to find. Click a link to open it, or hit Copy.
+      </p>
 
-      {/* Current email card */}
-      <div
-        style={{
-          background: '#fff',
-          border: '1px solid rgba(29,32,63,0.10)',
-          borderRadius: 'var(--radius-md)',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          className="px-3 py-2 flex items-center justify-between gap-2"
-          style={{ background: 'rgba(29,32,63,0.04)', borderBottom: '1px solid rgba(29,32,63,0.08)' }}
-        >
-          <div className="min-w-0">
-            <div className="text-[0.6rem] font-semibold uppercase tracking-wider text-brand-navy/50">
-              {current.process} · {safeIndex + 1} of {emailSlots.length}
-            </div>
-            <div className="font-semibold text-brand-navy text-sm truncate">{current.label}</div>
+      {filled.length > 0 && (
+        <div className="mb-4">
+          <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/55 mb-2">
+            Saved ({filled.length})
           </div>
-          {current.body ? (
-            <button
-              type="button"
-              onClick={handleCopy}
-              className="shrink-0 inline-flex items-center gap-1 font-semibold uppercase tracking-wider text-[0.65rem]"
-              style={{
-                padding: '5px 10px',
-                borderRadius: 999,
-                background: copied ? '#83CCBD' : '#E1228C',
-                color: copied ? '#1D203F' : '#fff',
-                border: 'none',
-              }}
-            >
-              {copied ? '✓ Copied' : '📋 Copy'}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={() => jumpToPhase(current.process)}
-              className="shrink-0 text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink hover:underline"
-            >
-              Write →
-            </button>
-          )}
+          <ul className="space-y-2">
+            {filled.map((e) => (
+              <LinkRow
+                key={e.id}
+                link={e}
+                copied={copiedUrl === e.url}
+                onCopied={() => flagCopied(e.url)}
+                onEdit={() => jumpToPhase(e.process)}
+              />
+            ))}
+          </ul>
         </div>
+      )}
 
-        <div style={{ maxHeight: 280, overflowY: 'auto', overflowX: 'hidden', padding: '12px 14px' }}>
-          {current.body ? (
-            <div
-              className="text-sm text-brand-navy/85 whitespace-pre-line"
-              style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-            >
-              {current.body}
-            </div>
-          ) : (
-            <div className="text-sm italic text-brand-navy/40">
-              Not written yet — head to the {current.process} step to draft it.
-            </div>
-          )}
+      {empty.length > 0 && (
+        <div>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-navy/55 mb-2">
+            Waiting for link ({empty.length})
+          </div>
+          <ul className="space-y-1.5">
+            {empty.map((e) => (
+              <li
+                key={e.id}
+                className="px-3 py-2 text-sm text-brand-navy/65"
+                style={{
+                  background: 'rgba(29,32,63,0.03)',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px dashed rgba(29,32,63,0.16)',
+                }}
+              >
+                <div className="flex items-center gap-2">
+                  <span style={{ opacity: 0.5 }}>✉️</span>
+                  <span className="font-semibold">{e.label}</span>
+                  <button
+                    onClick={() => jumpToPhase(e.process)}
+                    className="ml-auto text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink hover:underline"
+                  >
+                    Add →
+                  </button>
+                </div>
+                {e.rawAnswer && !e.url && (
+                  <div className="mt-1 text-xs italic text-brand-navy/50 truncate">
+                    Note: {e.rawAnswer}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      )}
 
-      {/* Pager */}
-      <div className="mt-3 flex items-center justify-between gap-2">
-        <button
-          type="button"
-          onClick={() => setIndex((i) => Math.max(0, i - 1))}
-          disabled={safeIndex === 0}
-          className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider disabled:opacity-30"
-          style={{
-            padding: '8px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'rgba(29,32,63,0.06)',
-            color: '#1D203F',
-            border: 'none',
-            cursor: safeIndex === 0 ? 'not-allowed' : 'pointer',
-          }}
-        >
-          ← Prev
-        </button>
-        <div className="flex items-center gap-1">
-          {emailSlots.map((e, i) => (
-            <button
-              key={e.id}
-              type="button"
-              onClick={() => setIndex(i)}
-              title={e.label}
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: 999,
-                border: 'none',
-                padding: 0,
-                cursor: 'pointer',
-                background:
-                  i === safeIndex ? '#E1228C' : e.body ? 'rgba(131,204,189,0.8)' : 'rgba(29,32,63,0.15)',
-              }}
-            />
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => setIndex((i) => Math.min(emailSlots.length - 1, i + 1))}
-          disabled={safeIndex === emailSlots.length - 1}
-          className="inline-flex items-center gap-1 text-xs font-semibold uppercase tracking-wider disabled:opacity-30"
-          style={{
-            padding: '8px 14px',
-            borderRadius: 'var(--radius-md)',
-            background: 'rgba(29,32,63,0.06)',
-            color: '#1D203F',
-            border: 'none',
-            cursor: safeIndex === emailSlots.length - 1 ? 'not-allowed' : 'pointer',
-          }}
-        >
-          Next →
-        </button>
-      </div>
+      {emailSlots.length === 0 && (
+        <div className="text-sm text-brand-navy/50 italic">No email steps in this launch yet.</div>
+      )}
     </div>
   );
 }
