@@ -16,6 +16,8 @@ export default function StepCard() {
     openBot,
     openMetricsDrawer,
     tasks: allTasks,
+    canGoBack,
+    goToPreviousStep,
   } = useLaunch();
 
   if (!currentTask) {
@@ -25,12 +27,14 @@ export default function StepCard() {
       <div className="card" style={{ background: '#83CCBD', color: '#1D203F' }}>
         <div className="chip bg-brand-navy text-white mb-3">Phase complete</div>
         <h2 className="font-display tracking-wide" style={{ fontSize: '2rem', lineHeight: 1.1 }}>
-          {currentPhase.label} is done. Nice work.
+          {currentPhase.doneTitle ?? `${currentPhase.label} is done! Nice work!`}
         </h2>
-        <p className="mt-2 text-brand-navy/80 max-w-xl">{currentPhase.blurb}</p>
+        <p className="mt-2 text-brand-navy/80 max-w-xl">
+          {currentPhase.doneBlurb ?? currentPhase.blurb}
+        </p>
         {nextPhase ? (
           <button className="btn-dark mt-5" onClick={() => goToPhase(nextPhase.id)}>
-            Start {nextPhase.label} →
+            Start {currentPhase.nextLabel ?? nextPhase.label} →
           </button>
         ) : (
           <p className="mt-5 font-semibold">All phases complete — launch is fully scoped.</p>
@@ -55,6 +59,8 @@ export default function StepCard() {
       onOpenBot={openBot}
       onOpenMetrics={openMetricsDrawer}
       allTasks={allTasks}
+      canGoBack={canGoBack}
+      onBack={goToPreviousStep}
     />
   );
 }
@@ -69,6 +75,8 @@ function ActiveStep({
   onOpenBot,
   onOpenMetrics,
   allTasks,
+  canGoBack,
+  onBack,
 }) {
   const config = getTaskConfig(task.id);
   const stats = phaseStats[phase.id];
@@ -94,6 +102,13 @@ function ActiveStep({
       // get cast; dates stay as YYYY-MM-DD strings (or empty/null).
       const subTaskAnswers = {};
       config.subTasks.forEach((sub) => {
+        // Auto-derived dates (e.g. Book It #2/#4) compute off another sub-task's
+        // value rather than reading their own input.
+        if (sub.autoFrom) {
+          const src = (draft.subTasks?.[sub.autoFrom] ?? '').trim();
+          subTaskAnswers[sub.id] = addDaysISO(src, sub.autoOffsetDays ?? 0) || null;
+          return;
+        }
         const raw = draft.subTasks?.[sub.id];
         if (sub.inputType === 'number') {
           subTaskAnswers[sub.id] = Number(raw) || 0;
@@ -209,15 +224,56 @@ function ActiveStep({
       )}
 
       <div className="mt-5 flex items-center gap-3 flex-wrap">
+        {canGoBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            title="Go back to the previous step"
+            className="inline-flex items-center font-semibold uppercase tracking-wider transition-colors"
+            style={{
+              padding: '10px 18px',
+              borderRadius: 'var(--radius-md)',
+              background: 'rgba(255,255,255,0.08)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.30)',
+              fontSize: '0.78rem',
+              letterSpacing: '0.06em',
+            }}
+          >
+            ← Back
+          </button>
+        )}
         <button
           className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
           onClick={handleContinue}
           disabled={!valid}
         >
-          {config.inputType === 'acknowledge' || config.inputType === 'lesson'
-            ? 'Mark complete →'
-            : 'Continue →'}
+          {config.completeLabel
+            ? `${config.completeLabel} →`
+            : config.inputType === 'acknowledge' || config.inputType === 'lesson'
+              ? 'Mark complete →'
+              : 'Continue →'}
         </button>
+
+        {config.allowSkip && (
+          <button
+            type="button"
+            onClick={() => onCompleteLesson(task.id, {})}
+            title="Skip this optional step for now"
+            className="inline-flex items-center font-semibold uppercase tracking-wider transition-colors"
+            style={{
+              padding: '10px 18px',
+              borderRadius: 'var(--radius-md)',
+              background: 'rgba(255,255,255,0.08)',
+              color: '#fff',
+              border: '1px solid rgba(255,255,255,0.30)',
+              fontSize: '0.78rem',
+              letterSpacing: '0.06em',
+            }}
+          >
+            Skip for now →
+          </button>
+        )}
 
         {config.aiBot && (
           <button
@@ -449,8 +505,7 @@ export function LessonBodyBlock({ block }) {
                 <a
                   key={i}
                   href={part.link}
-                  target="_blank"
-                  rel="noreferrer noopener"
+                  {...(part.download ? { download: '' } : { target: '_blank', rel: 'noreferrer noopener' })}
                   className="font-bold hover:underline"
                   style={{ color: '#83CCBD', textDecoration: 'underline' }}
                 >
@@ -588,21 +643,35 @@ function SubTaskInputs({ config, draft, onChange }) {
         </div>
       )}
       <div className="space-y-4">
-        {config.subTasks.map((sub) => (
-          <div key={sub.id}>
-            <label
-              className="block font-bold text-white mb-1.5"
-              style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-            >
-              {sub.label}
-            </label>
-            <SubTaskInput
-              sub={sub}
-              value={draft?.subTasks?.[sub.id] ?? ''}
-              onChange={(v) => onChange(sub.id, v)}
-            />
-          </div>
-        ))}
+        {config.subTasks.map((sub) => {
+          // Auto-derived fields (e.g. Book It #2/#4) display a computed,
+          // read-only date off their source sub-task — the user never edits them.
+          const isAuto = !!sub.autoFrom;
+          const value = isAuto
+            ? addDaysISO(draft?.subTasks?.[sub.autoFrom] ?? '', sub.autoOffsetDays ?? 0)
+            : draft?.subTasks?.[sub.id] ?? '';
+          return (
+            <div key={sub.id}>
+              <label
+                className="block font-bold text-white mb-1.5"
+                style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}
+              >
+                {sub.label}
+              </label>
+              <SubTaskInput
+                sub={sub}
+                value={value}
+                readOnly={isAuto}
+                onChange={(v) => onChange(sub.id, v)}
+              />
+              {isAuto && (
+                <p className="mt-1 text-xs text-white/55">
+                  Auto-filled from your Initial Announcement.
+                </p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -618,7 +687,7 @@ function hasInlineSubtaskMarker(bodyBlocks) {
 // Single input field for a sub-task. Handles number (with $ prefix / unit
 // suffix), date, and url/text types. All inputs share the dark lesson-card
 // styling.
-function SubTaskInput({ sub, value, onChange }) {
+function SubTaskInput({ sub, value, onChange, readOnly = false }) {
   const baseInputStyle = {
     border: '1px solid rgba(255,255,255,0.18)',
     borderRadius: 'var(--radius-md)',
@@ -659,8 +728,10 @@ function SubTaskInput({ sub, value, onChange }) {
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        readOnly={readOnly}
+        disabled={readOnly}
         className={baseInputClass}
-        style={baseInputStyle}
+        style={{ ...baseInputStyle, ...(readOnly ? { opacity: 0.6, cursor: 'not-allowed' } : null) }}
       />
     );
   }
@@ -811,6 +882,22 @@ function StepInput({ config, draft, setDraft }) {
 
 /* ---------- helpers ---------------------------------------------------- */
 
+// Add (or subtract) whole days to a YYYY-MM-DD string, returning the same
+// format. Parsed as a LOCAL date to avoid the UTC off-by-one that `new
+// Date('2026-06-01')` would introduce. Returns '' for blank/malformed input.
+function addDaysISO(iso, days) {
+  if (typeof iso !== 'string' || !iso) return '';
+  const parts = iso.split('-').map(Number);
+  if (parts.length !== 3 || parts.some((n) => Number.isNaN(n))) return '';
+  const [y, m, d] = parts;
+  const dt = new Date(y, m - 1, d);
+  dt.setDate(dt.getDate() + (days || 0));
+  const yy = dt.getFullYear();
+  const mm = String(dt.getMonth() + 1).padStart(2, '0');
+  const dd = String(dt.getDate()).padStart(2, '0');
+  return `${yy}-${mm}-${dd}`;
+}
+
 function seedDraft(task, config, allTasks = []) {
   const answer = task.answer;
   switch (config.inputType) {
@@ -847,19 +934,10 @@ function validate(draft, config) {
       return Number(draft.number) > 0;
     case 'date':
       return true; // optional
-    case 'lesson': {
-      // Compound lessons require every NUMBER sub-task to be > 0. Date sub-
-      // tasks are optional (consistent with how standalone date inputs work).
-      // Pure (no sub-task) lessons need no validation — just acknowledge.
-      if (!Array.isArray(config.subTasks) || config.subTasks.length === 0) return true;
-      return config.subTasks.every((sub) => {
-        if (sub.optional) return true; // optional input — never gates completion
-        if (sub.inputType === 'date') return true; // optional
-        if (sub.inputType === 'number') return Number(draft.subTasks?.[sub.id]) > 0;
-        // url / text / textarea → required; gates Mark complete (optional minChars).
-        return (draft.subTasks?.[sub.id] ?? '').trim().length >= (sub.minChars ?? 1);
-      });
-    }
+    case 'lesson':
+      // All lesson inputs are optional — Mark complete is NEVER gated. Users can
+      // complete a step whether or not they filled in the action item.
+      return true;
     case 'acknowledge':
     default:
       return true;

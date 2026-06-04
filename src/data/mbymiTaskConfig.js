@@ -109,12 +109,29 @@ export const taskConfig = {
     lessonNumber: '05',
     body: [
       "Well... now it's time to do it! Follow the process below to execute on all the necessary steps! You freakin' got this!",
+      'If you have a team you must add each item to your project board and assign it to an individual with a deadline.',
+      {
+        parts: [
+          { bold: 'NOTE:' },
+          { text: ' Reference the ' },
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/720756/posts/2157450951',
+            text: 'Monetize Before You Make It',
+          },
+          { text: ' page for AI prompts to build your project board.' },
+        ],
+      },
     ],
   },
   'mbymi-00-6': {
     inputType: 'lesson',
     lessonNumber: '04',
     body: [
+      "The following is a list of all the chunked projects for this. These are the list of projects you'll need to execute in this order. In order to successfully complete your beta launch.",
+      {
+        bold: 'Action Item:',
+        text: " We suggest adding these to a project management board, a Google Doc, or somewhere so that you can keep a list of what you're working on and the progress of it.",
+      },
       // First line has TWO inline hyperlinks behind "PDF Version" and
       // "Excel Sheet Version" — the `parts` block type lets a paragraph mix
       // plain text spans with hyperlinked spans inline.
@@ -162,7 +179,6 @@ export const taskConfig = {
       '2. All Follow-Up Announcements on Beta Offer',
       '3. Deadline to register (optional)',
       '4. Content-Posting Schedule (to build Priority List)',
-      { subtasks: true },
       'Below is a SAMPLE calendar that uses those KEY DATES:',
       { image: './book-it-calendar.png', alt: "MBYMI Launch Calendar — primary sample" },
       'If you follow the above calendar and do not fill your beta, you can move onto the optional PHASE 03 and run a webinar(s) to get more Founding Members. If you follow that third phase, below is a SAMPLE calendar to run from:',
@@ -170,7 +186,14 @@ export const taskConfig = {
         image: './book-it-webinar-calendar.webp',
         alt: "MBYMI Launch Calendar — optional Phase 03 webinar variant",
       },
+      // Date entry form lives BELOW the last calendar image (per boss). The user
+      // only fills in #1; #2 and #4 auto-populate off it, #3 stays optional.
+      { subtasks: true },
     ],
+    // Only the Initial Announcement (#1) is an editable input. #2 (Follow-Up)
+    // auto-fills to +1 day, #4 (Content Schedule) auto-fills to -30 days, both
+    // derived from #1 via `autoFrom` / `autoOffsetDays`. #3 (Deadline) stays an
+    // optional manual date.
     subTasks: [
       {
         id: 'mbymi-03-4',
@@ -181,16 +204,21 @@ export const taskConfig = {
         id: 'mbymi-03-3',
         label: '2. All Follow-Up Announcements on Beta Offer',
         inputType: 'date',
+        autoFrom: 'mbymi-03-4',
+        autoOffsetDays: 1,
       },
       {
         id: 'mbymi-03-2',
         label: '3. Deadline to register (optional)',
         inputType: 'date',
+        optional: true,
       },
       {
         id: 'mbymi-03-1',
         label: '4. Content-Posting Schedule (to build Priority List)',
         inputType: 'date',
+        autoFrom: 'mbymi-03-4',
+        autoOffsetDays: -30,
       },
     ],
   },
@@ -204,6 +232,11 @@ export const taskConfig = {
     body: [
       'In this Step, you\'ll "Map Out" all the moving pieces in your "Monetize Before You Make it" Launch Plan. Below is a sample MAP that shows you how I would run this promotion.',
       { image: './launch-map.png', alt: "James Wedmore's 'Monetize Before You Make It' Launch Map" },
+      { parts: [{ link: './launch-map.png', text: 'Click here to download this MAP', download: true }] },
+      {
+        bold: 'Action Item:',
+        text: ' I also suggest drawing this map out on your own whiteboard or piece of paper.',
+      },
       "Notice there are two PRIMARY phases (and one third optional phase if you didn't fill your beta).",
       {
         bold: 'Phase #1',
@@ -227,17 +260,17 @@ export const taskConfig = {
     // (linkText) replacing the raw URL.
     resources: [
       {
-        label:
-          "If you haven't learned WHAT our \"5 Step Launch Planning Process\" is, you can visit it",
-        linkText: 'HERE',
+        label: 'Optional: If you want to learn more about our 5 Step landing Process you can visit it',
+        linkText: 'here',
         linkUrl:
           'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/1545212/posts/5205202',
         trailing: '.',
       },
       {
-        label: "Download the 'Monetize Before You Make it' Planning Sheet",
-        linkText: 'HERE',
+        label: 'Optional: you can also download a planning sheet',
+        linkText: 'here',
         linkUrl: 'https://drive.google.com/file/d/1rNJsE0Gdf9SBj_SQ4p8qkF-HhdnboYf4/view',
+        trailing: '.',
       },
     ],
   },
@@ -307,6 +340,7 @@ export const taskConfig = {
   'mbymi-05-0': {
     inputType: 'lesson',
     lessonNumber: '01',
+    completeLabel: 'Click here to start building',
     body: [
       "Ok, it's time to get to work! In this first step, I recommend building a completed and working Priority List Page and Thank You Page. Make sure it is complete and connected to your email CRM software.",
       { image: './step01-priority-list.png', alt: 'Priority List Page' },
@@ -450,21 +484,14 @@ export const taskConfig = {
       'Below is the ACTUAL confirmation email I send:',
       { image: './confirmation-email.png', alt: 'Priority Waitlist confirmation email' },
       {
+        bold: 'Just take note of this for now.',
+        text: " You'll actually write this email when you get to the Waitlist Emails.",
+      },
+      {
         bold: 'Note:',
         text: ' you can always add additional emails in your follow-up sequence that share your story, other valuable content, and customer case studies!',
       },
     ],
-    subTasks: [
-      {
-        id: 'mbymi-05-4-email',
-        label: 'Your confirmation email:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft your confirmation email here…',
-      },
-    ],
-    example:
-      "Subject: You're on the waitlist 🎉\nBody: Confirms their spot, sets the timeline for what they'll receive over the next X days, links to one piece of pillar content while they wait.",
   },
 
   // ---- Facebook Group Creation --------------------------------------------
@@ -474,6 +501,10 @@ export const taskConfig = {
   'mbymi-06-1': {
     inputType: 'lesson',
     lessonNumber: '2',
+    // Whole FB-group track is optional — surfaces a "Skip for now" button next
+    // to Mark complete (StepCard reads `allowSkip`). Either path lands on the
+    // same phase-complete screen ("Whether you created a group or skipped it…").
+    allowSkip: true,
     body: [
       { image: './fb-group-creation.jpeg', alt: 'Facebook Group Creation' },
       { bold: '2.1 FB Group Process' },
@@ -503,6 +534,7 @@ export const taskConfig = {
   'mbymi-07-0': {
     inputType: 'lesson',
     lessonNumber: '3',
+    completeLabel: 'Start Writing',
     body: [
       "In this section, you can create a series of SIMPLE (key word there!) emails spread out over time in an \"email autoresponder' campaign that keeps people engaged.",
       'I have included a list of sample suggestions for email topics in this section',
@@ -524,10 +556,10 @@ export const taskConfig = {
     subTasks: [
       {
         id: 'mbymi-07-1-email',
-        label: 'Your Day 0 email:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft your Day 0 thank-you email…',
+        label: 'Optional: Add a link to your Google Doc to keep your emails stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
     example:
@@ -546,14 +578,15 @@ export const taskConfig = {
       { bullet: 'Share what you DID specifically to get through that' },
       { bullet: 'Where you are now... who you help now' },
       { bold: 'The more specific the story the better 🙂', text: '' },
+      { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
     ],
     subTasks: [
       {
         id: 'mbymi-07-2-email',
-        label: 'Your Day 2 email:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft your Day 2 origin-story email…',
+        label: 'Optional: Add a link to your Google Doc to keep your emails stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
     example: 'A short narrative going from "I was stuck doing X" → "I figured out Y" → "that’s why I built this".',
@@ -568,14 +601,15 @@ export const taskConfig = {
       { bullet: 'Studies?' },
       { bullet: 'Statistics?' },
       { bullet: 'Trends?' },
+      { parts: [{ link: CHATGPT_PROMPTS_URL, text: 'MBYMI PROCESS: ChatGPT Prompts' }] },
     ],
     subTasks: [
       {
         id: 'mbymi-07-3-email',
-        label: 'Your Day 4 email:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft your Day 4 industry stats/trends email…',
+        label: 'Optional: Add a link to your Google Doc to keep your emails stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
     example: 'Three stats about why [the problem] is getting worse — and what most people are doing about it.',
@@ -595,10 +629,10 @@ export const taskConfig = {
     subTasks: [
       {
         id: 'mbymi-07-4-email',
-        label: 'Your Day 6–10 email(s):',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft your Day 6–10 case study email(s)…',
+        label: 'Optional: Add a link to your Google Doc to keep your emails stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
     example: 'Two short case studies from past students — one beginner, one more advanced — proving the method works.',
@@ -624,6 +658,14 @@ export const taskConfig = {
     inputType: 'textarea',
     emailLabel: 'Day 6–10 · Case Study Email(s)',
     playbookField: 'waitlistSequence.caseStudies',
+  },
+  // 3.5 — action step (no input). Reminds them to load the emails into their CRM.
+  'mbymi-07-5': {
+    inputType: 'lesson',
+    lessonNumber: '3.5',
+    body: [
+      'Once your emails are written, add them to your email autoresponder/CRM so they send automatically over the Day 0–10 timeline.',
+    ],
   },
 
   // ---- Promote Priority Waitlist (Promo phase) ----------------------------
@@ -678,10 +720,10 @@ export const taskConfig = {
     subTasks: [
       {
         id: 'mbymi-08-2-input',
-        label: 'Your promotion content:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft 1–2 promotion posts/emails using James’s copy formula…',
+        label: 'Optional: Add a link to your Google Doc to keep your Promotion Content stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
   },
@@ -703,6 +745,7 @@ export const taskConfig = {
   'mbymi-09-0': {
     inputType: 'lesson',
     lessonNumber: '05',
+    completeLabel: 'Click to get Started',
     body: [
       "In this step, you'll get clear on WHAT you're selling and what's included!",
     ],
@@ -804,6 +847,7 @@ export const taskConfig = {
   'mbymi-10-0': {
     inputType: 'lesson',
     lessonNumber: '06',
+    completeLabel: 'Click here to get started',
     body: [
       "In this step, you'll need to set up a way for people to PAY YOU and a way to deliver ACCESS to your Beta Program.",
       'The Deliverables needed to call this step complete include:',
@@ -881,7 +925,7 @@ export const taskConfig = {
       '1. Any trainings you already have available',
       '2. information on how to register for calls',
       '3. placeholders for replays',
-      'Here is an example of Jen Finley\'s completed BETA COURSE delivery. On the left side is the Kajabi "backend" design. On the right side, is the customer-facing portal.',
+      'Here is an example of Jen Wedmore\'s completed BETA COURSE delivery. On the left side is the Kajabi "backend" design. On the right side, is the customer-facing portal.',
       { image: './members-portal.png', alt: 'Members-Only Portal example' },
     ],
     subTasks: [
@@ -943,14 +987,22 @@ export const taskConfig = {
           },
         ],
       },
+      {
+        parts: [
+          {
+            link: 'https://www.jameswedmoretraining.com/products/james-wedmore-s-business-by-design/categories/720756/posts/2197571842',
+            text: 'Selling with Email Process',
+          },
+        ],
+      },
     ],
     subTasks: [
       {
         id: 'mbymi-11-1-email',
-        label: 'Your flash sale announcement email:',
-        inputType: 'textarea',
-        minChars: 30,
-        placeholder: 'Draft the flash sale announcement email…',
+        label: 'Optional: Add a link to your Google Doc to keep your Flash Sale Announcement stored',
+        inputType: 'url',
+        optional: true,
+        placeholder: 'https://docs.google.com/...',
       },
     ],
   },
@@ -1024,10 +1076,10 @@ export const taskConfig = {
     subTasks: [
       {
         id: 'mbymi-13-2-email',
-        label: 'Your 4-day follow-up sequence (optional):',
-        inputType: 'textarea',
+        label: 'Optional: Add a link to your Google Doc to keep your 4-Day Follow-Up Sequence stored',
+        inputType: 'url',
         optional: true,
-        placeholder: 'Draft the 4–7 day follow-up email sequence outline…',
+        placeholder: 'https://docs.google.com/...',
       },
     ],
   },
@@ -1064,10 +1116,10 @@ export const taskConfig = {
     subTasks: [
       {
         id: 'mbymi-14-1-email',
-        label: 'Your cart close day email (optional):',
-        inputType: 'textarea',
+        label: 'Optional: Add a link to your Google Doc to keep your Cart Close Day Email stored',
+        inputType: 'url',
         optional: true,
-        placeholder: 'Draft the cart close day email…',
+        placeholder: 'https://docs.google.com/...',
       },
     ],
   },

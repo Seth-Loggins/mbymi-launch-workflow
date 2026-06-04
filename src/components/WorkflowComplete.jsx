@@ -92,7 +92,7 @@ export default function WorkflowComplete() {
           🎉
         </div>
         <div className="text-[0.65rem] font-semibold uppercase tracking-wider text-brand-pink mb-1">
-          MBYMI Launch Execution Experience Complete
+The Monetize Before You Make It Launch Execution Guide Complete
         </div>
         <h2
           className="font-display tracking-wide text-brand-navy"

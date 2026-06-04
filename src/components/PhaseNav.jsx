@@ -31,28 +31,41 @@ export default function PhaseNav() {
         borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}
     >
-      <div
-        className="mx-auto flex items-center gap-3"
-        style={{ maxWidth: '1280px', padding: '8px 20px' }}
-      >
-        {/* Brand */}
-        <div
-          className="shrink-0 inline-flex items-center font-bold uppercase tracking-wider whitespace-nowrap"
-          style={{
-            background: '#E1228C',
-            color: '#fff',
-            padding: '4px 10px',
-            borderRadius: 999,
-            fontSize: '0.7rem',
-            letterSpacing: '0.08em',
-          }}
-          title="MBYMI Launch Execution Experience"
-        >
-          MBYMI Launch Execution Experience
+      <div className="mx-auto" style={{ maxWidth: '1280px', padding: '8px 20px' }}>
+        {/* Row 1: brand + progress + actions */}
+        <div className="flex items-center gap-3">
+          {/* Brand */}
+          <div
+            className="inline-flex items-center font-bold uppercase tracking-wider"
+            style={{
+              background: '#E1228C',
+              color: '#fff',
+              padding: '4px 10px',
+              borderRadius: 999,
+              fontSize: '0.7rem',
+              letterSpacing: '0.08em',
+            }}
+            title="The Monetize Before You Make It Launch Execution Guide"
+          >
+            The Monetize Before You Make It Launch Execution Guide
+          </div>
+
+          <div className="ml-auto shrink-0 flex items-center gap-2">
+            <ProgressPill totalDone={totalDone} totalTasks={totalTasks} pct={pct} />
+            <IconButton
+              onClick={openAILibrary}
+              icon="🤖"
+              label="AI Hub"
+              accent="#F89A2A"
+              title="AI Hub — all bots in one place"
+            />
+            <IconButton onClick={openMetricsDrawer} icon="📊" label="Metrics" title="Launch metrics" />
+          </div>
         </div>
 
-        {/* Phase nav */}
-        <nav className="flex-1 min-w-0 flex items-center gap-1 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+        {/* Row 2: phase nav — wraps so EVERY phase stays visible and clickable
+            (so you can jump back to any earlier phase). */}
+        <nav className="flex flex-wrap items-center gap-1.5 mt-2">
           {phases.map((p, i) => {
             const stats = phaseStats[p.id];
             const unlocked = isPhaseUnlocked(p.id);
@@ -73,25 +86,6 @@ export default function PhaseNav() {
             );
           })}
         </nav>
-
-        {/* Progress + actions */}
-        <div className="shrink-0 flex items-center gap-2">
-          <ProgressPill totalDone={totalDone} totalTasks={totalTasks} pct={pct} />
-
-          <IconButton
-            onClick={openAILibrary}
-            icon="🤖"
-            label="AI Hub"
-            accent="#F89A2A"
-            title="AI Hub — all bots in one place"
-          />
-          <IconButton
-            onClick={openMetricsDrawer}
-            icon="📊"
-            label="Metrics"
-            title="Launch metrics"
-          />
-        </div>
       </div>
     </header>
   );

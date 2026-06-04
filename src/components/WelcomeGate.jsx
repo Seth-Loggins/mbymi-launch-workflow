@@ -81,7 +81,7 @@ function WelcomeStep() {
           letterSpacing: '0.08em',
         }}
       >
-        MBYMI Launch Execution Experience
+        The Monetize Before You Make It Launch Execution Guide
       </div>
       <h2
         className="font-display tracking-wide text-brand-navy"
@@ -90,8 +90,7 @@ function WelcomeStep() {
         Welcome
       </h2>
       <p className="mt-2 text-brand-navy/70 text-sm">
-        Pick how you want to start. Sign in to save your launches to your account, or jump in with
-        the demo to see what it does.
+        Click the button below to sign in and save your information
       </p>
 
       <div className="mt-6 space-y-3">
@@ -252,18 +251,11 @@ function NameLaunchStep() {
 
       <div className="mt-5 flex items-center justify-end gap-2">
         <button
-          type="button"
-          onClick={() => finishNamingLaunch('')}
-          className="btn-ghost"
-        >
-          Skip
-        </button>
-        <button
           type="submit"
           disabled={!value.trim()}
           className="btn-primary disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          Start the experience →
+          Start the Process →
         </button>
       </div>
     </form>

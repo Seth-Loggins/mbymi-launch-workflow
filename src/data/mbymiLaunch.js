@@ -110,15 +110,16 @@ const processGroups = [
     process: "Waitlist Emails",
     tasks: [
       { id: "mbymi-07-0", title: "3. The Waitlist Emails:" },
-      { id: "mbymi-07-1", title: "3.1 Day 0 Email - Thank You (see example above in 1.4)" },
+      { id: "mbymi-07-1", title: "3.1 - Day 0 Email - Thank You (see example above in 1.4)" },
       // Email drafts captured inside each lesson card → feed the Emails panel.
       { id: "mbymi-07-1-email", title: "Day 0 Thank You Email", embedded: true },
-      { id: "mbymi-07-2", title: "3.2 Day 2 Email - the Origin Story" },
+      { id: "mbymi-07-2", title: "3.2 - Day 2 Email - the Origin Story" },
       { id: "mbymi-07-2-email", title: "Day 2 Origin Story Email", embedded: true },
-      { id: "mbymi-07-3", title: "3.3 Day 4 Email - Industry Stats/Trends" },
+      { id: "mbymi-07-3", title: "3.3 - Day 4 Email - Industry Stats/Trends" },
       { id: "mbymi-07-3-email", title: "Day 4 Industry Stats/Trends Email", embedded: true },
-      { id: "mbymi-07-4", title: "3.4 Day 6 -10 Emails - Share Case Studies" },
+      { id: "mbymi-07-4", title: "3.4 - Day 6 -10 Emails - Share Case Studies" },
       { id: "mbymi-07-4-email", title: "Day 6-10 Case Study Email(s)", embedded: true },
+      { id: "mbymi-07-5", title: "3.5 - Add these emails to your autoresponder" },
     ],
   },
 

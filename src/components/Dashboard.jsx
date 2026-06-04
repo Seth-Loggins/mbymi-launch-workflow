@@ -35,6 +35,25 @@ export default function Dashboard() {
     <div className="min-h-screen w-full">
       <PhaseNav />
 
+      {/* Execution-guide link strip, just below the header. */}
+      <div style={{ background: 'rgba(225,34,140,0.07)', borderBottom: '1px solid rgba(29,32,63,0.06)' }}>
+        <div
+          className="mx-auto text-sm text-brand-navy/75"
+          style={{ maxWidth: '1280px', padding: '8px 24px' }}
+        >
+          If you want the step by step execution guide{' '}
+          <a
+            href="https://scribehow.com/page-embed/Monetize_Before_You_Make_It_tm__IlWMuS3PSTO4UGVm8K7x9w?removeLogo=true"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="font-semibold text-brand-pink hover:underline"
+          >
+            click here
+          </a>
+          .
+        </div>
+      </div>
+
       <div className="mx-auto" style={{ maxWidth: '1280px', padding: '20px 24px 32px' }}>
         <LaunchTitle launch={launch} setOfferName={setOfferName} onReset={handleReset} onOpenSaved={openSavedWorkflows} />
 

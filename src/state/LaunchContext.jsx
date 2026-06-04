@@ -546,6 +546,31 @@ export function LaunchProvider({ children }) {
     [tasksByPhase, currentPhaseId],
   );
 
+  // Back button: reopen the most recently completed step. Within the current
+  // phase that's the last done task; on the FIRST step of a phase (nothing done
+  // here yet) it walks back to the nearest earlier phase that has a completed
+  // step and reopens that — so Back is never missing. Sub-task answers stay put,
+  // so the card re-renders pre-filled.
+  const currentPhaseIdx = mbymiPhases.findIndex((p) => p.id === currentPhaseId);
+  const canGoBack = useMemo(() => {
+    for (let i = currentPhaseIdx; i >= 0; i -= 1) {
+      if ((tasksByPhase[mbymiPhases[i].id] ?? []).some((t) => t.done)) return true;
+    }
+    return false;
+  }, [tasksByPhase, currentPhaseIdx]);
+  const goToPreviousStep = useCallback(() => {
+    const idx = mbymiPhases.findIndex((p) => p.id === currentPhaseId);
+    for (let i = idx; i >= 0; i -= 1) {
+      const pid = mbymiPhases[i].id;
+      const done = (tasksByPhase[pid] ?? []).filter((t) => t.done);
+      if (done.length === 0) continue;
+      const prev = done[done.length - 1]; // list is order-sorted → last = most recent
+      if (pid !== currentPhaseId) setCurrentPhaseId(pid);
+      uncompleteTask(prev.id);
+      return;
+    }
+  }, [tasksByPhase, currentPhaseId, uncompleteTask]);
+
   // Position within the current phase (1-indexed) for "Step X of Y" labels.
   const phaseStepIndex = useMemo(() => {
     const list = tasksByPhase[currentPhaseId] ?? [];
@@ -596,6 +621,8 @@ export function LaunchProvider({ children }) {
       totalTasks: visibleTasks.length,
       overallProgress,
       isPhaseUnlocked,
+      canGoBack,
+      goToPreviousStep,
 
       // mutations
       setOfferName,
@@ -666,6 +693,8 @@ export function LaunchProvider({ children }) {
       totalDone,
       overallProgress,
       isPhaseUnlocked,
+      canGoBack,
+      goToPreviousStep,
       setOfferName,
       setDates,
       completeTask,
