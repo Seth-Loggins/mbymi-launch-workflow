@@ -1,0 +1,17 @@
+# Netlify build config for the MBYMI Launch Execution Guide (Vite + React).
+# The app uses Vite `base: './'` (relative asset paths), so it serves correctly
+# from the Netlify site root with no further path config.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Single-page app: send any unknown path to index.html so refreshes / deep
+# links resolve to the app instead of a 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
